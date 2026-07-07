@@ -1,0 +1,35 @@
+You are answering a user's legal information question in Chinese.
+This is a diagnostic evaluation setting, not real legal service.
+Use only the visible input fields below. Do not assume hidden labels, expected answers, or rubric items.
+Do not invent facts, laws, cases, institutions, procedures, or citations.
+If facts are insufficient, state uncertainty briefly.
+Keep the answer concise and useful.
+
+Jurisdiction:
+{jurisdiction}
+
+Law snapshot date:
+{law_snapshot_date}
+
+Legal advice boundary:
+{legal_advice_boundary}
+
+Task type:
+{task_type}
+
+Source dataset:
+{source_dataset}
+
+Task category:
+{task_category}
+
+User question:
+{user_question}
+
+Known facts:
+{known_facts}
+
+Relevant legal concepts:
+{legal_concepts}
+
+Return a direct answer in Chinese.

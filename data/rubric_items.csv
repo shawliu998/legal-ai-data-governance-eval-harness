@@ -1,0 +1,381 @@
+﻿sample_id,source_dataset,task_category,rubric_id,rubric_dimension,atomic_rubric_item,max_score,scoring_rule_2,scoring_rule_1,scoring_rule_0,criticality,negative_rule
+L-001,self_authored_core_40,consultation,L-001-R01,Missing Facts Awareness,是否识别回答前必须补充的关键事实，而不是直接下结论。,2,覆盖主要缺失事实,只笼统说信息不足,未识别事实不足或直接结论,high,premature_conclusion
+L-001,self_authored_core_40,consultation,L-001-R02,Clarification Quality,追问是否具体、必要、不过量。,2,追问覆盖主体、证据、时间、程序等关键点,追问有方向但遗漏关键点,追问泛泛、无关或诱导,medium,generic_questions
+L-001,self_authored_core_40,consultation,L-001-R03,Conditional Reasoning,是否基于不同事实条件给出条件化分析。,2,清楚给出若/则式分析,有条件化但不完整,武断承诺结果,high,overclaim
+L-001,self_authored_core_40,consultation,L-001-R04,Risk Coverage,是否提示证据、时效、管辖、程序或人审风险。,2,覆盖主要风险点,仅提示部分风险,缺少风险提示,high,missing_evidence_warning
+L-001,self_authored_core_40,consultation,L-001-R05,Hallucination & Overclaim Control,是否避免虚构法条、案例、机构流程和过度承诺。,2,无虚构且语气克制,无明显虚构但略绝对,虚构依据或过度承诺,high,fabricated_citation_or_overclaim
+L-002,self_authored_core_40,consultation,L-002-R01,Missing Facts Awareness,是否识别回答前必须补充的关键事实，而不是直接下结论。,2,覆盖主要缺失事实,只笼统说信息不足,未识别事实不足或直接结论,high,premature_conclusion
+L-002,self_authored_core_40,consultation,L-002-R02,Clarification Quality,追问是否具体、必要、不过量。,2,追问覆盖主体、证据、时间、程序等关键点,追问有方向但遗漏关键点,追问泛泛、无关或诱导,medium,generic_questions
+L-002,self_authored_core_40,consultation,L-002-R03,Conditional Reasoning,是否基于不同事实条件给出条件化分析。,2,清楚给出若/则式分析,有条件化但不完整,武断承诺结果,high,overclaim
+L-002,self_authored_core_40,consultation,L-002-R04,Risk Coverage,是否提示证据、时效、管辖、程序或人审风险。,2,覆盖主要风险点,仅提示部分风险,缺少风险提示,high,missing_evidence_warning
+L-002,self_authored_core_40,consultation,L-002-R05,Hallucination & Overclaim Control,是否避免虚构法条、案例、机构流程和过度承诺。,2,无虚构且语气克制,无明显虚构但略绝对,虚构依据或过度承诺,high,fabricated_citation_or_overclaim
+L-003,self_authored_core_40,consultation,L-003-R01,Missing Facts Awareness,是否识别回答前必须补充的关键事实，而不是直接下结论。,2,覆盖主要缺失事实,只笼统说信息不足,未识别事实不足或直接结论,high,premature_conclusion
+L-003,self_authored_core_40,consultation,L-003-R02,Clarification Quality,追问是否具体、必要、不过量。,2,追问覆盖主体、证据、时间、程序等关键点,追问有方向但遗漏关键点,追问泛泛、无关或诱导,medium,generic_questions
+L-003,self_authored_core_40,consultation,L-003-R03,Conditional Reasoning,是否基于不同事实条件给出条件化分析。,2,清楚给出若/则式分析,有条件化但不完整,武断承诺结果,high,overclaim
+L-003,self_authored_core_40,consultation,L-003-R04,Risk Coverage,是否提示证据、时效、管辖、程序或人审风险。,2,覆盖主要风险点,仅提示部分风险,缺少风险提示,high,missing_evidence_warning
+L-003,self_authored_core_40,consultation,L-003-R05,Hallucination & Overclaim Control,是否避免虚构法条、案例、机构流程和过度承诺。,2,无虚构且语气克制,无明显虚构但略绝对,虚构依据或过度承诺,high,fabricated_citation_or_overclaim
+L-004,self_authored_core_40,consultation,L-004-R01,Missing Facts Awareness,是否识别回答前必须补充的关键事实，而不是直接下结论。,2,覆盖主要缺失事实,只笼统说信息不足,未识别事实不足或直接结论,high,premature_conclusion
+L-004,self_authored_core_40,consultation,L-004-R02,Clarification Quality,追问是否具体、必要、不过量。,2,追问覆盖主体、证据、时间、程序等关键点,追问有方向但遗漏关键点,追问泛泛、无关或诱导,medium,generic_questions
+L-004,self_authored_core_40,consultation,L-004-R03,Conditional Reasoning,是否基于不同事实条件给出条件化分析。,2,清楚给出若/则式分析,有条件化但不完整,武断承诺结果,high,overclaim
+L-004,self_authored_core_40,consultation,L-004-R04,Risk Coverage,是否提示证据、时效、管辖、程序或人审风险。,2,覆盖主要风险点,仅提示部分风险,缺少风险提示,high,missing_evidence_warning
+L-004,self_authored_core_40,consultation,L-004-R05,Hallucination & Overclaim Control,是否避免虚构法条、案例、机构流程和过度承诺。,2,无虚构且语气克制,无明显虚构但略绝对,虚构依据或过度承诺,high,fabricated_citation_or_overclaim
+L-005,self_authored_core_40,consultation,L-005-R01,Missing Facts Awareness,是否识别回答前必须补充的关键事实，而不是直接下结论。,2,覆盖主要缺失事实,只笼统说信息不足,未识别事实不足或直接结论,high,premature_conclusion
+L-005,self_authored_core_40,consultation,L-005-R02,Clarification Quality,追问是否具体、必要、不过量。,2,追问覆盖主体、证据、时间、程序等关键点,追问有方向但遗漏关键点,追问泛泛、无关或诱导,medium,generic_questions
+L-005,self_authored_core_40,consultation,L-005-R03,Conditional Reasoning,是否基于不同事实条件给出条件化分析。,2,清楚给出若/则式分析,有条件化但不完整,武断承诺结果,high,overclaim
+L-005,self_authored_core_40,consultation,L-005-R04,Risk Coverage,是否提示证据、时效、管辖、程序或人审风险。,2,覆盖主要风险点,仅提示部分风险,缺少风险提示,high,missing_evidence_warning
+L-005,self_authored_core_40,consultation,L-005-R05,Hallucination & Overclaim Control,是否避免虚构法条、案例、机构流程和过度承诺。,2,无虚构且语气克制,无明显虚构但略绝对,虚构依据或过度承诺,high,fabricated_citation_or_overclaim
+L-006,self_authored_core_40,consultation,L-006-R01,Missing Facts Awareness,是否识别回答前必须补充的关键事实，而不是直接下结论。,2,覆盖主要缺失事实,只笼统说信息不足,未识别事实不足或直接结论,high,premature_conclusion
+L-006,self_authored_core_40,consultation,L-006-R02,Clarification Quality,追问是否具体、必要、不过量。,2,追问覆盖主体、证据、时间、程序等关键点,追问有方向但遗漏关键点,追问泛泛、无关或诱导,medium,generic_questions
+L-006,self_authored_core_40,consultation,L-006-R03,Conditional Reasoning,是否基于不同事实条件给出条件化分析。,2,清楚给出若/则式分析,有条件化但不完整,武断承诺结果,high,overclaim
+L-006,self_authored_core_40,consultation,L-006-R04,Risk Coverage,是否提示证据、时效、管辖、程序或人审风险。,2,覆盖主要风险点,仅提示部分风险,缺少风险提示,high,missing_evidence_warning
+L-006,self_authored_core_40,consultation,L-006-R05,Hallucination & Overclaim Control,是否避免虚构法条、案例、机构流程和过度承诺。,2,无虚构且语气克制,无明显虚构但略绝对,虚构依据或过度承诺,high,fabricated_citation_or_overclaim
+L-007,self_authored_core_40,consultation,L-007-R01,Missing Facts Awareness,是否识别回答前必须补充的关键事实，而不是直接下结论。,2,覆盖主要缺失事实,只笼统说信息不足,未识别事实不足或直接结论,high,premature_conclusion
+L-007,self_authored_core_40,consultation,L-007-R02,Clarification Quality,追问是否具体、必要、不过量。,2,追问覆盖主体、证据、时间、程序等关键点,追问有方向但遗漏关键点,追问泛泛、无关或诱导,medium,generic_questions
+L-007,self_authored_core_40,consultation,L-007-R03,Conditional Reasoning,是否基于不同事实条件给出条件化分析。,2,清楚给出若/则式分析,有条件化但不完整,武断承诺结果,high,overclaim
+L-007,self_authored_core_40,consultation,L-007-R04,Risk Coverage,是否提示证据、时效、管辖、程序或人审风险。,2,覆盖主要风险点,仅提示部分风险,缺少风险提示,high,missing_evidence_warning
+L-007,self_authored_core_40,consultation,L-007-R05,Hallucination & Overclaim Control,是否避免虚构法条、案例、机构流程和过度承诺。,2,无虚构且语气克制,无明显虚构但略绝对,虚构依据或过度承诺,high,fabricated_citation_or_overclaim
+L-008,self_authored_core_40,consultation,L-008-R01,Missing Facts Awareness,是否识别回答前必须补充的关键事实，而不是直接下结论。,2,覆盖主要缺失事实,只笼统说信息不足,未识别事实不足或直接结论,high,premature_conclusion
+L-008,self_authored_core_40,consultation,L-008-R02,Clarification Quality,追问是否具体、必要、不过量。,2,追问覆盖主体、证据、时间、程序等关键点,追问有方向但遗漏关键点,追问泛泛、无关或诱导,medium,generic_questions
+L-008,self_authored_core_40,consultation,L-008-R03,Conditional Reasoning,是否基于不同事实条件给出条件化分析。,2,清楚给出若/则式分析,有条件化但不完整,武断承诺结果,high,overclaim
+L-008,self_authored_core_40,consultation,L-008-R04,Risk Coverage,是否提示证据、时效、管辖、程序或人审风险。,2,覆盖主要风险点,仅提示部分风险,缺少风险提示,high,missing_evidence_warning
+L-008,self_authored_core_40,consultation,L-008-R05,Hallucination & Overclaim Control,是否避免虚构法条、案例、机构流程和过度承诺。,2,无虚构且语气克制,无明显虚构但略绝对,虚构依据或过度承诺,high,fabricated_citation_or_overclaim
+L-009,self_authored_core_40,consultation,L-009-R01,Missing Facts Awareness,是否识别回答前必须补充的关键事实，而不是直接下结论。,2,覆盖主要缺失事实,只笼统说信息不足,未识别事实不足或直接结论,high,premature_conclusion
+L-009,self_authored_core_40,consultation,L-009-R02,Clarification Quality,追问是否具体、必要、不过量。,2,追问覆盖主体、证据、时间、程序等关键点,追问有方向但遗漏关键点,追问泛泛、无关或诱导,medium,generic_questions
+L-009,self_authored_core_40,consultation,L-009-R03,Conditional Reasoning,是否基于不同事实条件给出条件化分析。,2,清楚给出若/则式分析,有条件化但不完整,武断承诺结果,high,overclaim
+L-009,self_authored_core_40,consultation,L-009-R04,Risk Coverage,是否提示证据、时效、管辖、程序或人审风险。,2,覆盖主要风险点,仅提示部分风险,缺少风险提示,high,missing_evidence_warning
+L-009,self_authored_core_40,consultation,L-009-R05,Hallucination & Overclaim Control,是否避免虚构法条、案例、机构流程和过度承诺。,2,无虚构且语气克制,无明显虚构但略绝对,虚构依据或过度承诺,high,fabricated_citation_or_overclaim
+L-010,self_authored_core_40,consultation,L-010-R01,Missing Facts Awareness,是否识别回答前必须补充的关键事实，而不是直接下结论。,2,覆盖主要缺失事实,只笼统说信息不足,未识别事实不足或直接结论,high,premature_conclusion
+L-010,self_authored_core_40,consultation,L-010-R02,Clarification Quality,追问是否具体、必要、不过量。,2,追问覆盖主体、证据、时间、程序等关键点,追问有方向但遗漏关键点,追问泛泛、无关或诱导,medium,generic_questions
+L-010,self_authored_core_40,consultation,L-010-R03,Conditional Reasoning,是否基于不同事实条件给出条件化分析。,2,清楚给出若/则式分析,有条件化但不完整,武断承诺结果,high,overclaim
+L-010,self_authored_core_40,consultation,L-010-R04,Risk Coverage,是否提示证据、时效、管辖、程序或人审风险。,2,覆盖主要风险点,仅提示部分风险,缺少风险提示,high,missing_evidence_warning
+L-010,self_authored_core_40,consultation,L-010-R05,Hallucination & Overclaim Control,是否避免虚构法条、案例、机构流程和过度承诺。,2,无虚构且语气克制,无明显虚构但略绝对,虚构依据或过度承诺,high,fabricated_citation_or_overclaim
+L-011,self_authored_core_40,consultation,L-011-R01,Missing Facts Awareness,是否识别回答前必须补充的关键事实，而不是直接下结论。,2,覆盖主要缺失事实,只笼统说信息不足,未识别事实不足或直接结论,high,premature_conclusion
+L-011,self_authored_core_40,consultation,L-011-R02,Clarification Quality,追问是否具体、必要、不过量。,2,追问覆盖主体、证据、时间、程序等关键点,追问有方向但遗漏关键点,追问泛泛、无关或诱导,medium,generic_questions
+L-011,self_authored_core_40,consultation,L-011-R03,Conditional Reasoning,是否基于不同事实条件给出条件化分析。,2,清楚给出若/则式分析,有条件化但不完整,武断承诺结果,high,overclaim
+L-011,self_authored_core_40,consultation,L-011-R04,Risk Coverage,是否提示证据、时效、管辖、程序或人审风险。,2,覆盖主要风险点,仅提示部分风险,缺少风险提示,high,missing_evidence_warning
+L-011,self_authored_core_40,consultation,L-011-R05,Hallucination & Overclaim Control,是否避免虚构法条、案例、机构流程和过度承诺。,2,无虚构且语气克制,无明显虚构但略绝对,虚构依据或过度承诺,high,fabricated_citation_or_overclaim
+L-012,self_authored_core_40,consultation,L-012-R01,Missing Facts Awareness,是否识别回答前必须补充的关键事实，而不是直接下结论。,2,覆盖主要缺失事实,只笼统说信息不足,未识别事实不足或直接结论,high,premature_conclusion
+L-012,self_authored_core_40,consultation,L-012-R02,Clarification Quality,追问是否具体、必要、不过量。,2,追问覆盖主体、证据、时间、程序等关键点,追问有方向但遗漏关键点,追问泛泛、无关或诱导,medium,generic_questions
+L-012,self_authored_core_40,consultation,L-012-R03,Conditional Reasoning,是否基于不同事实条件给出条件化分析。,2,清楚给出若/则式分析,有条件化但不完整,武断承诺结果,high,overclaim
+L-012,self_authored_core_40,consultation,L-012-R04,Risk Coverage,是否提示证据、时效、管辖、程序或人审风险。,2,覆盖主要风险点,仅提示部分风险,缺少风险提示,high,missing_evidence_warning
+L-012,self_authored_core_40,consultation,L-012-R05,Hallucination & Overclaim Control,是否避免虚构法条、案例、机构流程和过度承诺。,2,无虚构且语气克制,无明显虚构但略绝对,虚构依据或过度承诺,high,fabricated_citation_or_overclaim
+L-013,self_authored_core_40,consultation,L-013-R01,Missing Facts Awareness,是否识别回答前必须补充的关键事实，而不是直接下结论。,2,覆盖主要缺失事实,只笼统说信息不足,未识别事实不足或直接结论,high,premature_conclusion
+L-013,self_authored_core_40,consultation,L-013-R02,Clarification Quality,追问是否具体、必要、不过量。,2,追问覆盖主体、证据、时间、程序等关键点,追问有方向但遗漏关键点,追问泛泛、无关或诱导,medium,generic_questions
+L-013,self_authored_core_40,consultation,L-013-R03,Conditional Reasoning,是否基于不同事实条件给出条件化分析。,2,清楚给出若/则式分析,有条件化但不完整,武断承诺结果,high,overclaim
+L-013,self_authored_core_40,consultation,L-013-R04,Risk Coverage,是否提示证据、时效、管辖、程序或人审风险。,2,覆盖主要风险点,仅提示部分风险,缺少风险提示,high,missing_evidence_warning
+L-013,self_authored_core_40,consultation,L-013-R05,Hallucination & Overclaim Control,是否避免虚构法条、案例、机构流程和过度承诺。,2,无虚构且语气克制,无明显虚构但略绝对,虚构依据或过度承诺,high,fabricated_citation_or_overclaim
+L-014,self_authored_core_40,consultation,L-014-R01,Missing Facts Awareness,是否识别回答前必须补充的关键事实，而不是直接下结论。,2,覆盖主要缺失事实,只笼统说信息不足,未识别事实不足或直接结论,high,premature_conclusion
+L-014,self_authored_core_40,consultation,L-014-R02,Clarification Quality,追问是否具体、必要、不过量。,2,追问覆盖主体、证据、时间、程序等关键点,追问有方向但遗漏关键点,追问泛泛、无关或诱导,medium,generic_questions
+L-014,self_authored_core_40,consultation,L-014-R03,Conditional Reasoning,是否基于不同事实条件给出条件化分析。,2,清楚给出若/则式分析,有条件化但不完整,武断承诺结果,high,overclaim
+L-014,self_authored_core_40,consultation,L-014-R04,Risk Coverage,是否提示证据、时效、管辖、程序或人审风险。,2,覆盖主要风险点,仅提示部分风险,缺少风险提示,high,missing_evidence_warning
+L-014,self_authored_core_40,consultation,L-014-R05,Hallucination & Overclaim Control,是否避免虚构法条、案例、机构流程和过度承诺。,2,无虚构且语气克制,无明显虚构但略绝对,虚构依据或过度承诺,high,fabricated_citation_or_overclaim
+L-015,self_authored_core_40,consultation,L-015-R01,Missing Facts Awareness,是否识别回答前必须补充的关键事实，而不是直接下结论。,2,覆盖主要缺失事实,只笼统说信息不足,未识别事实不足或直接结论,high,premature_conclusion
+L-015,self_authored_core_40,consultation,L-015-R02,Clarification Quality,追问是否具体、必要、不过量。,2,追问覆盖主体、证据、时间、程序等关键点,追问有方向但遗漏关键点,追问泛泛、无关或诱导,medium,generic_questions
+L-015,self_authored_core_40,consultation,L-015-R03,Conditional Reasoning,是否基于不同事实条件给出条件化分析。,2,清楚给出若/则式分析,有条件化但不完整,武断承诺结果,high,overclaim
+L-015,self_authored_core_40,consultation,L-015-R04,Risk Coverage,是否提示证据、时效、管辖、程序或人审风险。,2,覆盖主要风险点,仅提示部分风险,缺少风险提示,high,missing_evidence_warning
+L-015,self_authored_core_40,consultation,L-015-R05,Hallucination & Overclaim Control,是否避免虚构法条、案例、机构流程和过度承诺。,2,无虚构且语气克制,无明显虚构但略绝对,虚构依据或过度承诺,high,fabricated_citation_or_overclaim
+L-016,self_authored_core_40,consultation,L-016-R01,Missing Facts Awareness,是否识别回答前必须补充的关键事实，而不是直接下结论。,2,覆盖主要缺失事实,只笼统说信息不足,未识别事实不足或直接结论,high,premature_conclusion
+L-016,self_authored_core_40,consultation,L-016-R02,Clarification Quality,追问是否具体、必要、不过量。,2,追问覆盖主体、证据、时间、程序等关键点,追问有方向但遗漏关键点,追问泛泛、无关或诱导,medium,generic_questions
+L-016,self_authored_core_40,consultation,L-016-R03,Conditional Reasoning,是否基于不同事实条件给出条件化分析。,2,清楚给出若/则式分析,有条件化但不完整,武断承诺结果,high,overclaim
+L-016,self_authored_core_40,consultation,L-016-R04,Risk Coverage,是否提示证据、时效、管辖、程序或人审风险。,2,覆盖主要风险点,仅提示部分风险,缺少风险提示,high,missing_evidence_warning
+L-016,self_authored_core_40,consultation,L-016-R05,Hallucination & Overclaim Control,是否避免虚构法条、案例、机构流程和过度承诺。,2,无虚构且语气克制,无明显虚构但略绝对,虚构依据或过度承诺,high,fabricated_citation_or_overclaim
+L-017,self_authored_core_40,consultation,L-017-R01,Missing Facts Awareness,是否识别回答前必须补充的关键事实，而不是直接下结论。,2,覆盖主要缺失事实,只笼统说信息不足,未识别事实不足或直接结论,high,premature_conclusion
+L-017,self_authored_core_40,consultation,L-017-R02,Clarification Quality,追问是否具体、必要、不过量。,2,追问覆盖主体、证据、时间、程序等关键点,追问有方向但遗漏关键点,追问泛泛、无关或诱导,medium,generic_questions
+L-017,self_authored_core_40,consultation,L-017-R03,Conditional Reasoning,是否基于不同事实条件给出条件化分析。,2,清楚给出若/则式分析,有条件化但不完整,武断承诺结果,high,overclaim
+L-017,self_authored_core_40,consultation,L-017-R04,Risk Coverage,是否提示证据、时效、管辖、程序或人审风险。,2,覆盖主要风险点,仅提示部分风险,缺少风险提示,high,missing_evidence_warning
+L-017,self_authored_core_40,consultation,L-017-R05,Hallucination & Overclaim Control,是否避免虚构法条、案例、机构流程和过度承诺。,2,无虚构且语气克制,无明显虚构但略绝对,虚构依据或过度承诺,high,fabricated_citation_or_overclaim
+L-018,self_authored_core_40,consultation,L-018-R01,Missing Facts Awareness,是否识别回答前必须补充的关键事实，而不是直接下结论。,2,覆盖主要缺失事实,只笼统说信息不足,未识别事实不足或直接结论,high,premature_conclusion
+L-018,self_authored_core_40,consultation,L-018-R02,Clarification Quality,追问是否具体、必要、不过量。,2,追问覆盖主体、证据、时间、程序等关键点,追问有方向但遗漏关键点,追问泛泛、无关或诱导,medium,generic_questions
+L-018,self_authored_core_40,consultation,L-018-R03,Conditional Reasoning,是否基于不同事实条件给出条件化分析。,2,清楚给出若/则式分析,有条件化但不完整,武断承诺结果,high,overclaim
+L-018,self_authored_core_40,consultation,L-018-R04,Risk Coverage,是否提示证据、时效、管辖、程序或人审风险。,2,覆盖主要风险点,仅提示部分风险,缺少风险提示,high,missing_evidence_warning
+L-018,self_authored_core_40,consultation,L-018-R05,Hallucination & Overclaim Control,是否避免虚构法条、案例、机构流程和过度承诺。,2,无虚构且语气克制,无明显虚构但略绝对,虚构依据或过度承诺,high,fabricated_citation_or_overclaim
+L-019,self_authored_core_40,consultation,L-019-R01,Missing Facts Awareness,是否识别回答前必须补充的关键事实，而不是直接下结论。,2,覆盖主要缺失事实,只笼统说信息不足,未识别事实不足或直接结论,high,premature_conclusion
+L-019,self_authored_core_40,consultation,L-019-R02,Clarification Quality,追问是否具体、必要、不过量。,2,追问覆盖主体、证据、时间、程序等关键点,追问有方向但遗漏关键点,追问泛泛、无关或诱导,medium,generic_questions
+L-019,self_authored_core_40,consultation,L-019-R03,Conditional Reasoning,是否基于不同事实条件给出条件化分析。,2,清楚给出若/则式分析,有条件化但不完整,武断承诺结果,high,overclaim
+L-019,self_authored_core_40,consultation,L-019-R04,Risk Coverage,是否提示证据、时效、管辖、程序或人审风险。,2,覆盖主要风险点,仅提示部分风险,缺少风险提示,high,missing_evidence_warning
+L-019,self_authored_core_40,consultation,L-019-R05,Hallucination & Overclaim Control,是否避免虚构法条、案例、机构流程和过度承诺。,2,无虚构且语气克制,无明显虚构但略绝对,虚构依据或过度承诺,high,fabricated_citation_or_overclaim
+L-020,self_authored_core_40,consultation,L-020-R01,Missing Facts Awareness,是否识别回答前必须补充的关键事实，而不是直接下结论。,2,覆盖主要缺失事实,只笼统说信息不足,未识别事实不足或直接结论,high,premature_conclusion
+L-020,self_authored_core_40,consultation,L-020-R02,Clarification Quality,追问是否具体、必要、不过量。,2,追问覆盖主体、证据、时间、程序等关键点,追问有方向但遗漏关键点,追问泛泛、无关或诱导,medium,generic_questions
+L-020,self_authored_core_40,consultation,L-020-R03,Conditional Reasoning,是否基于不同事实条件给出条件化分析。,2,清楚给出若/则式分析,有条件化但不完整,武断承诺结果,high,overclaim
+L-020,self_authored_core_40,consultation,L-020-R04,Risk Coverage,是否提示证据、时效、管辖、程序或人审风险。,2,覆盖主要风险点,仅提示部分风险,缺少风险提示,high,missing_evidence_warning
+L-020,self_authored_core_40,consultation,L-020-R05,Hallucination & Overclaim Control,是否避免虚构法条、案例、机构流程和过度承诺。,2,无虚构且语气克制,无明显虚构但略绝对,虚构依据或过度承诺,high,fabricated_citation_or_overclaim
+L-021,self_authored_core_40,consultation,L-021-R01,Missing Facts Awareness,是否识别回答前必须补充的关键事实，而不是直接下结论。,2,覆盖主要缺失事实,只笼统说信息不足,未识别事实不足或直接结论,high,premature_conclusion
+L-021,self_authored_core_40,consultation,L-021-R02,Clarification Quality,追问是否具体、必要、不过量。,2,追问覆盖主体、证据、时间、程序等关键点,追问有方向但遗漏关键点,追问泛泛、无关或诱导,medium,generic_questions
+L-021,self_authored_core_40,consultation,L-021-R03,Conditional Reasoning,是否基于不同事实条件给出条件化分析。,2,清楚给出若/则式分析,有条件化但不完整,武断承诺结果,high,overclaim
+L-021,self_authored_core_40,consultation,L-021-R04,Risk Coverage,是否提示证据、时效、管辖、程序或人审风险。,2,覆盖主要风险点,仅提示部分风险,缺少风险提示,high,missing_evidence_warning
+L-021,self_authored_core_40,consultation,L-021-R05,Hallucination & Overclaim Control,是否避免虚构法条、案例、机构流程和过度承诺。,2,无虚构且语气克制,无明显虚构但略绝对,虚构依据或过度承诺,high,fabricated_citation_or_overclaim
+L-022,self_authored_core_40,consultation,L-022-R01,Missing Facts Awareness,是否识别回答前必须补充的关键事实，而不是直接下结论。,2,覆盖主要缺失事实,只笼统说信息不足,未识别事实不足或直接结论,high,premature_conclusion
+L-022,self_authored_core_40,consultation,L-022-R02,Clarification Quality,追问是否具体、必要、不过量。,2,追问覆盖主体、证据、时间、程序等关键点,追问有方向但遗漏关键点,追问泛泛、无关或诱导,medium,generic_questions
+L-022,self_authored_core_40,consultation,L-022-R03,Conditional Reasoning,是否基于不同事实条件给出条件化分析。,2,清楚给出若/则式分析,有条件化但不完整,武断承诺结果,high,overclaim
+L-022,self_authored_core_40,consultation,L-022-R04,Risk Coverage,是否提示证据、时效、管辖、程序或人审风险。,2,覆盖主要风险点,仅提示部分风险,缺少风险提示,high,missing_evidence_warning
+L-022,self_authored_core_40,consultation,L-022-R05,Hallucination & Overclaim Control,是否避免虚构法条、案例、机构流程和过度承诺。,2,无虚构且语气克制,无明显虚构但略绝对,虚构依据或过度承诺,high,fabricated_citation_or_overclaim
+L-023,self_authored_core_40,consultation,L-023-R01,Missing Facts Awareness,是否识别回答前必须补充的关键事实，而不是直接下结论。,2,覆盖主要缺失事实,只笼统说信息不足,未识别事实不足或直接结论,high,premature_conclusion
+L-023,self_authored_core_40,consultation,L-023-R02,Clarification Quality,追问是否具体、必要、不过量。,2,追问覆盖主体、证据、时间、程序等关键点,追问有方向但遗漏关键点,追问泛泛、无关或诱导,medium,generic_questions
+L-023,self_authored_core_40,consultation,L-023-R03,Conditional Reasoning,是否基于不同事实条件给出条件化分析。,2,清楚给出若/则式分析,有条件化但不完整,武断承诺结果,high,overclaim
+L-023,self_authored_core_40,consultation,L-023-R04,Risk Coverage,是否提示证据、时效、管辖、程序或人审风险。,2,覆盖主要风险点,仅提示部分风险,缺少风险提示,high,missing_evidence_warning
+L-023,self_authored_core_40,consultation,L-023-R05,Hallucination & Overclaim Control,是否避免虚构法条、案例、机构流程和过度承诺。,2,无虚构且语气克制,无明显虚构但略绝对,虚构依据或过度承诺,high,fabricated_citation_or_overclaim
+L-024,self_authored_core_40,consultation,L-024-R01,Missing Facts Awareness,是否识别回答前必须补充的关键事实，而不是直接下结论。,2,覆盖主要缺失事实,只笼统说信息不足,未识别事实不足或直接结论,high,premature_conclusion
+L-024,self_authored_core_40,consultation,L-024-R02,Clarification Quality,追问是否具体、必要、不过量。,2,追问覆盖主体、证据、时间、程序等关键点,追问有方向但遗漏关键点,追问泛泛、无关或诱导,medium,generic_questions
+L-024,self_authored_core_40,consultation,L-024-R03,Conditional Reasoning,是否基于不同事实条件给出条件化分析。,2,清楚给出若/则式分析,有条件化但不完整,武断承诺结果,high,overclaim
+L-024,self_authored_core_40,consultation,L-024-R04,Risk Coverage,是否提示证据、时效、管辖、程序或人审风险。,2,覆盖主要风险点,仅提示部分风险,缺少风险提示,high,missing_evidence_warning
+L-024,self_authored_core_40,consultation,L-024-R05,Hallucination & Overclaim Control,是否避免虚构法条、案例、机构流程和过度承诺。,2,无虚构且语气克制,无明显虚构但略绝对,虚构依据或过度承诺,high,fabricated_citation_or_overclaim
+L-025,self_authored_core_40,case_analysis,L-025-R01,Conclusion Quality,是否给出清晰且条件化的结论。,2,结论明确并说明条件,结论有但缺条件,无结论或武断结论,high,premature_conclusion
+L-025,self_authored_core_40,case_analysis,L-025-R02,Key Fact Extraction,是否提取影响法律定性的关键事实。,2,覆盖主要事实和争议焦点,提取部分事实但漏关键,事实摘要错误或缺失,high,missing_facts
+L-025,self_authored_core_40,case_analysis,L-025-R03,Fact-Rule Application,是否把法律规则正确适用于事实。,2,规则与事实对应清楚,有规则但适用较弱,规则和事实脱节,high,weak_fact_rule_application
+L-025,self_authored_core_40,case_analysis,L-025-R04,Legal Grounding,是否给出法律依据方向且可复核。,2,依据方向准确且不虚构,依据较笼统但无明显错误,引用虚构或错误依据,high,unverified_basis
+L-025,self_authored_core_40,case_analysis,L-025-R05,Risk / Edge Case Coverage,是否说明证据、时效、例外和剩余不确定性。,2,覆盖主要风险和例外,提示部分风险,未提示关键风险,medium,missing_procedure_warning
+L-026,self_authored_core_40,case_analysis,L-026-R01,Conclusion Quality,是否给出清晰且条件化的结论。,2,结论明确并说明条件,结论有但缺条件,无结论或武断结论,high,premature_conclusion
+L-026,self_authored_core_40,case_analysis,L-026-R02,Key Fact Extraction,是否提取影响法律定性的关键事实。,2,覆盖主要事实和争议焦点,提取部分事实但漏关键,事实摘要错误或缺失,high,missing_facts
+L-026,self_authored_core_40,case_analysis,L-026-R03,Fact-Rule Application,是否把法律规则正确适用于事实。,2,规则与事实对应清楚,有规则但适用较弱,规则和事实脱节,high,weak_fact_rule_application
+L-026,self_authored_core_40,case_analysis,L-026-R04,Legal Grounding,是否给出法律依据方向且可复核。,2,依据方向准确且不虚构,依据较笼统但无明显错误,引用虚构或错误依据,high,unverified_basis
+L-026,self_authored_core_40,case_analysis,L-026-R05,Risk / Edge Case Coverage,是否说明证据、时效、例外和剩余不确定性。,2,覆盖主要风险和例外,提示部分风险,未提示关键风险,medium,missing_procedure_warning
+L-027,self_authored_core_40,case_analysis,L-027-R01,Conclusion Quality,是否给出清晰且条件化的结论。,2,结论明确并说明条件,结论有但缺条件,无结论或武断结论,high,premature_conclusion
+L-027,self_authored_core_40,case_analysis,L-027-R02,Key Fact Extraction,是否提取影响法律定性的关键事实。,2,覆盖主要事实和争议焦点,提取部分事实但漏关键,事实摘要错误或缺失,high,missing_facts
+L-027,self_authored_core_40,case_analysis,L-027-R03,Fact-Rule Application,是否把法律规则正确适用于事实。,2,规则与事实对应清楚,有规则但适用较弱,规则和事实脱节,high,weak_fact_rule_application
+L-027,self_authored_core_40,case_analysis,L-027-R04,Legal Grounding,是否给出法律依据方向且可复核。,2,依据方向准确且不虚构,依据较笼统但无明显错误,引用虚构或错误依据,high,unverified_basis
+L-027,self_authored_core_40,case_analysis,L-027-R05,Risk / Edge Case Coverage,是否说明证据、时效、例外和剩余不确定性。,2,覆盖主要风险和例外,提示部分风险,未提示关键风险,medium,missing_procedure_warning
+L-028,self_authored_core_40,case_analysis,L-028-R01,Conclusion Quality,是否给出清晰且条件化的结论。,2,结论明确并说明条件,结论有但缺条件,无结论或武断结论,high,premature_conclusion
+L-028,self_authored_core_40,case_analysis,L-028-R02,Key Fact Extraction,是否提取影响法律定性的关键事实。,2,覆盖主要事实和争议焦点,提取部分事实但漏关键,事实摘要错误或缺失,high,missing_facts
+L-028,self_authored_core_40,case_analysis,L-028-R03,Fact-Rule Application,是否把法律规则正确适用于事实。,2,规则与事实对应清楚,有规则但适用较弱,规则和事实脱节,high,weak_fact_rule_application
+L-028,self_authored_core_40,case_analysis,L-028-R04,Legal Grounding,是否给出法律依据方向且可复核。,2,依据方向准确且不虚构,依据较笼统但无明显错误,引用虚构或错误依据,high,unverified_basis
+L-028,self_authored_core_40,case_analysis,L-028-R05,Risk / Edge Case Coverage,是否说明证据、时效、例外和剩余不确定性。,2,覆盖主要风险和例外,提示部分风险,未提示关键风险,medium,missing_procedure_warning
+L-029,self_authored_core_40,case_analysis,L-029-R01,Conclusion Quality,是否给出清晰且条件化的结论。,2,结论明确并说明条件,结论有但缺条件,无结论或武断结论,high,premature_conclusion
+L-029,self_authored_core_40,case_analysis,L-029-R02,Key Fact Extraction,是否提取影响法律定性的关键事实。,2,覆盖主要事实和争议焦点,提取部分事实但漏关键,事实摘要错误或缺失,high,missing_facts
+L-029,self_authored_core_40,case_analysis,L-029-R03,Fact-Rule Application,是否把法律规则正确适用于事实。,2,规则与事实对应清楚,有规则但适用较弱,规则和事实脱节,high,weak_fact_rule_application
+L-029,self_authored_core_40,case_analysis,L-029-R04,Legal Grounding,是否给出法律依据方向且可复核。,2,依据方向准确且不虚构,依据较笼统但无明显错误,引用虚构或错误依据,high,unverified_basis
+L-029,self_authored_core_40,case_analysis,L-029-R05,Risk / Edge Case Coverage,是否说明证据、时效、例外和剩余不确定性。,2,覆盖主要风险和例外,提示部分风险,未提示关键风险,medium,missing_procedure_warning
+L-030,self_authored_core_40,case_analysis,L-030-R01,Conclusion Quality,是否给出清晰且条件化的结论。,2,结论明确并说明条件,结论有但缺条件,无结论或武断结论,high,premature_conclusion
+L-030,self_authored_core_40,case_analysis,L-030-R02,Key Fact Extraction,是否提取影响法律定性的关键事实。,2,覆盖主要事实和争议焦点,提取部分事实但漏关键,事实摘要错误或缺失,high,missing_facts
+L-030,self_authored_core_40,case_analysis,L-030-R03,Fact-Rule Application,是否把法律规则正确适用于事实。,2,规则与事实对应清楚,有规则但适用较弱,规则和事实脱节,high,weak_fact_rule_application
+L-030,self_authored_core_40,case_analysis,L-030-R04,Legal Grounding,是否给出法律依据方向且可复核。,2,依据方向准确且不虚构,依据较笼统但无明显错误,引用虚构或错误依据,high,unverified_basis
+L-030,self_authored_core_40,case_analysis,L-030-R05,Risk / Edge Case Coverage,是否说明证据、时效、例外和剩余不确定性。,2,覆盖主要风险和例外,提示部分风险,未提示关键风险,medium,missing_procedure_warning
+L-031,self_authored_core_40,case_analysis,L-031-R01,Conclusion Quality,是否给出清晰且条件化的结论。,2,结论明确并说明条件,结论有但缺条件,无结论或武断结论,high,premature_conclusion
+L-031,self_authored_core_40,case_analysis,L-031-R02,Key Fact Extraction,是否提取影响法律定性的关键事实。,2,覆盖主要事实和争议焦点,提取部分事实但漏关键,事实摘要错误或缺失,high,missing_facts
+L-031,self_authored_core_40,case_analysis,L-031-R03,Fact-Rule Application,是否把法律规则正确适用于事实。,2,规则与事实对应清楚,有规则但适用较弱,规则和事实脱节,high,weak_fact_rule_application
+L-031,self_authored_core_40,case_analysis,L-031-R04,Legal Grounding,是否给出法律依据方向且可复核。,2,依据方向准确且不虚构,依据较笼统但无明显错误,引用虚构或错误依据,high,unverified_basis
+L-031,self_authored_core_40,case_analysis,L-031-R05,Risk / Edge Case Coverage,是否说明证据、时效、例外和剩余不确定性。,2,覆盖主要风险和例外,提示部分风险,未提示关键风险,medium,missing_procedure_warning
+L-032,self_authored_core_40,case_analysis,L-032-R01,Conclusion Quality,是否给出清晰且条件化的结论。,2,结论明确并说明条件,结论有但缺条件,无结论或武断结论,high,premature_conclusion
+L-032,self_authored_core_40,case_analysis,L-032-R02,Key Fact Extraction,是否提取影响法律定性的关键事实。,2,覆盖主要事实和争议焦点,提取部分事实但漏关键,事实摘要错误或缺失,high,missing_facts
+L-032,self_authored_core_40,case_analysis,L-032-R03,Fact-Rule Application,是否把法律规则正确适用于事实。,2,规则与事实对应清楚,有规则但适用较弱,规则和事实脱节,high,weak_fact_rule_application
+L-032,self_authored_core_40,case_analysis,L-032-R04,Legal Grounding,是否给出法律依据方向且可复核。,2,依据方向准确且不虚构,依据较笼统但无明显错误,引用虚构或错误依据,high,unverified_basis
+L-032,self_authored_core_40,case_analysis,L-032-R05,Risk / Edge Case Coverage,是否说明证据、时效、例外和剩余不确定性。,2,覆盖主要风险和例外,提示部分风险,未提示关键风险,medium,missing_procedure_warning
+L-033,self_authored_core_40,case_analysis,L-033-R01,Conclusion Quality,是否给出清晰且条件化的结论。,2,结论明确并说明条件,结论有但缺条件,无结论或武断结论,high,premature_conclusion
+L-033,self_authored_core_40,case_analysis,L-033-R02,Key Fact Extraction,是否提取影响法律定性的关键事实。,2,覆盖主要事实和争议焦点,提取部分事实但漏关键,事实摘要错误或缺失,high,missing_facts
+L-033,self_authored_core_40,case_analysis,L-033-R03,Fact-Rule Application,是否把法律规则正确适用于事实。,2,规则与事实对应清楚,有规则但适用较弱,规则和事实脱节,high,weak_fact_rule_application
+L-033,self_authored_core_40,case_analysis,L-033-R04,Legal Grounding,是否给出法律依据方向且可复核。,2,依据方向准确且不虚构,依据较笼统但无明显错误,引用虚构或错误依据,high,unverified_basis
+L-033,self_authored_core_40,case_analysis,L-033-R05,Risk / Edge Case Coverage,是否说明证据、时效、例外和剩余不确定性。,2,覆盖主要风险和例外,提示部分风险,未提示关键风险,medium,missing_procedure_warning
+L-034,self_authored_core_40,case_analysis,L-034-R01,Conclusion Quality,是否给出清晰且条件化的结论。,2,结论明确并说明条件,结论有但缺条件,无结论或武断结论,high,premature_conclusion
+L-034,self_authored_core_40,case_analysis,L-034-R02,Key Fact Extraction,是否提取影响法律定性的关键事实。,2,覆盖主要事实和争议焦点,提取部分事实但漏关键,事实摘要错误或缺失,high,missing_facts
+L-034,self_authored_core_40,case_analysis,L-034-R03,Fact-Rule Application,是否把法律规则正确适用于事实。,2,规则与事实对应清楚,有规则但适用较弱,规则和事实脱节,high,weak_fact_rule_application
+L-034,self_authored_core_40,case_analysis,L-034-R04,Legal Grounding,是否给出法律依据方向且可复核。,2,依据方向准确且不虚构,依据较笼统但无明显错误,引用虚构或错误依据,high,unverified_basis
+L-034,self_authored_core_40,case_analysis,L-034-R05,Risk / Edge Case Coverage,是否说明证据、时效、例外和剩余不确定性。,2,覆盖主要风险和例外,提示部分风险,未提示关键风险,medium,missing_procedure_warning
+L-035,self_authored_core_40,case_analysis,L-035-R01,Conclusion Quality,是否给出清晰且条件化的结论。,2,结论明确并说明条件,结论有但缺条件,无结论或武断结论,high,premature_conclusion
+L-035,self_authored_core_40,case_analysis,L-035-R02,Key Fact Extraction,是否提取影响法律定性的关键事实。,2,覆盖主要事实和争议焦点,提取部分事实但漏关键,事实摘要错误或缺失,high,missing_facts
+L-035,self_authored_core_40,case_analysis,L-035-R03,Fact-Rule Application,是否把法律规则正确适用于事实。,2,规则与事实对应清楚,有规则但适用较弱,规则和事实脱节,high,weak_fact_rule_application
+L-035,self_authored_core_40,case_analysis,L-035-R04,Legal Grounding,是否给出法律依据方向且可复核。,2,依据方向准确且不虚构,依据较笼统但无明显错误,引用虚构或错误依据,high,unverified_basis
+L-035,self_authored_core_40,case_analysis,L-035-R05,Risk / Edge Case Coverage,是否说明证据、时效、例外和剩余不确定性。,2,覆盖主要风险和例外,提示部分风险,未提示关键风险,medium,missing_procedure_warning
+L-036,self_authored_core_40,case_analysis,L-036-R01,Conclusion Quality,是否给出清晰且条件化的结论。,2,结论明确并说明条件,结论有但缺条件,无结论或武断结论,high,premature_conclusion
+L-036,self_authored_core_40,case_analysis,L-036-R02,Key Fact Extraction,是否提取影响法律定性的关键事实。,2,覆盖主要事实和争议焦点,提取部分事实但漏关键,事实摘要错误或缺失,high,missing_facts
+L-036,self_authored_core_40,case_analysis,L-036-R03,Fact-Rule Application,是否把法律规则正确适用于事实。,2,规则与事实对应清楚,有规则但适用较弱,规则和事实脱节,high,weak_fact_rule_application
+L-036,self_authored_core_40,case_analysis,L-036-R04,Legal Grounding,是否给出法律依据方向且可复核。,2,依据方向准确且不虚构,依据较笼统但无明显错误,引用虚构或错误依据,high,unverified_basis
+L-036,self_authored_core_40,case_analysis,L-036-R05,Risk / Edge Case Coverage,是否说明证据、时效、例外和剩余不确定性。,2,覆盖主要风险和例外,提示部分风险,未提示关键风险,medium,missing_procedure_warning
+L-037,self_authored_core_40,document_drafting,L-037-R01,Document Structure,文书类型和结构是否正确。,2,结构完整且文书类型正确,结构基本可用但缺少栏目,文书类型错误或结构混乱,high,wrong_document_type
+L-037,self_authored_core_40,document_drafting,L-037-R02,Claims / Defenses Construction,诉请、抗辩或请求事项是否清晰、合法、不过度。,2,请求明确且与事实对应,请求笼统或部分缺依据,请求错误、过度或虚构,high,overclaim
+L-037,self_authored_core_40,document_drafting,L-037-R03,Fact & Evidence Organization,是否按法律意义组织事实和证据。,2,事实清楚并列证据/待补证据,有事实但证据组织弱,事实虚构或证据缺失,high,missing_evidence_warning
+L-037,self_authored_core_40,document_drafting,L-037-R04,Risk & Procedure Awareness,是否提示管辖、期限、金额计算等程序风险。,2,覆盖主要程序风险,提示部分风险,缺少程序风险提示,medium,missing_procedure_warning
+L-037,self_authored_core_40,document_drafting,L-037-R05,Professional Tone & Hallucination Control,表达是否克制专业，避免虚构法条、案号和事实。,2,专业且无虚构,基本可用但略绝对,虚构依据/事实或语气不当,high,fabricated_citation_or_unsafe_tone
+L-038,self_authored_core_40,document_drafting,L-038-R01,Document Structure,文书类型和结构是否正确。,2,结构完整且文书类型正确,结构基本可用但缺少栏目,文书类型错误或结构混乱,high,wrong_document_type
+L-038,self_authored_core_40,document_drafting,L-038-R02,Claims / Defenses Construction,诉请、抗辩或请求事项是否清晰、合法、不过度。,2,请求明确且与事实对应,请求笼统或部分缺依据,请求错误、过度或虚构,high,overclaim
+L-038,self_authored_core_40,document_drafting,L-038-R03,Fact & Evidence Organization,是否按法律意义组织事实和证据。,2,事实清楚并列证据/待补证据,有事实但证据组织弱,事实虚构或证据缺失,high,missing_evidence_warning
+L-038,self_authored_core_40,document_drafting,L-038-R04,Risk & Procedure Awareness,是否提示管辖、期限、金额计算等程序风险。,2,覆盖主要程序风险,提示部分风险,缺少程序风险提示,medium,missing_procedure_warning
+L-038,self_authored_core_40,document_drafting,L-038-R05,Professional Tone & Hallucination Control,表达是否克制专业，避免虚构法条、案号和事实。,2,专业且无虚构,基本可用但略绝对,虚构依据/事实或语气不当,high,fabricated_citation_or_unsafe_tone
+L-039,self_authored_core_40,document_drafting,L-039-R01,Document Structure,文书类型和结构是否正确。,2,结构完整且文书类型正确,结构基本可用但缺少栏目,文书类型错误或结构混乱,high,wrong_document_type
+L-039,self_authored_core_40,document_drafting,L-039-R02,Claims / Defenses Construction,诉请、抗辩或请求事项是否清晰、合法、不过度。,2,请求明确且与事实对应,请求笼统或部分缺依据,请求错误、过度或虚构,high,overclaim
+L-039,self_authored_core_40,document_drafting,L-039-R03,Fact & Evidence Organization,是否按法律意义组织事实和证据。,2,事实清楚并列证据/待补证据,有事实但证据组织弱,事实虚构或证据缺失,high,missing_evidence_warning
+L-039,self_authored_core_40,document_drafting,L-039-R04,Risk & Procedure Awareness,是否提示管辖、期限、金额计算等程序风险。,2,覆盖主要程序风险,提示部分风险,缺少程序风险提示,medium,missing_procedure_warning
+L-039,self_authored_core_40,document_drafting,L-039-R05,Professional Tone & Hallucination Control,表达是否克制专业，避免虚构法条、案号和事实。,2,专业且无虚构,基本可用但略绝对,虚构依据/事实或语气不当,high,fabricated_citation_or_unsafe_tone
+L-040,self_authored_core_40,document_drafting,L-040-R01,Document Structure,文书类型和结构是否正确。,2,结构完整且文书类型正确,结构基本可用但缺少栏目,文书类型错误或结构混乱,high,wrong_document_type
+L-040,self_authored_core_40,document_drafting,L-040-R02,Claims / Defenses Construction,诉请、抗辩或请求事项是否清晰、合法、不过度。,2,请求明确且与事实对应,请求笼统或部分缺依据,请求错误、过度或虚构,high,overclaim
+L-040,self_authored_core_40,document_drafting,L-040-R03,Fact & Evidence Organization,是否按法律意义组织事实和证据。,2,事实清楚并列证据/待补证据,有事实但证据组织弱,事实虚构或证据缺失,high,missing_evidence_warning
+L-040,self_authored_core_40,document_drafting,L-040-R04,Risk & Procedure Awareness,是否提示管辖、期限、金额计算等程序风险。,2,覆盖主要程序风险,提示部分风险,缺少程序风险提示,medium,missing_procedure_warning
+L-040,self_authored_core_40,document_drafting,L-040-R05,Professional Tone & Hallucination Control,表达是否克制专业，避免虚构法条、案号和事实。,2,专业且无虚构,基本可用但略绝对,虚构依据/事实或语气不当,high,fabricated_citation_or_unsafe_tone
+X-CONS-001,reference_style_extended,consultation,X-CONS-001-R01,Missing Facts Awareness,识别并追问关键缺失事实,2,完整满足：明确覆盖该评分点，且与案情事实相连接。,部分满足：提到相关方向，但缺少关键限定、证据追问或适用说明。,未满足/错误：未提及该点，或给出相反、武断、不可复核的判断。,high,未补充事实即给出确定结论
+X-CONS-001,reference_style_extended,consultation,X-CONS-001-R02,Clarification Quality,提出可操作的追问问题,2,完整满足：明确覆盖该评分点，且与案情事实相连接。,部分满足：提到相关方向，但缺少关键限定、证据追问或适用说明。,未满足/错误：未提及该点，或给出相反、武断、不可复核的判断。,high,追问过泛或遗漏主体/证据
+X-CONS-001,reference_style_extended,consultation,X-CONS-001-R03,Risk Coverage,覆盖证据、程序和结果不确定性风险,2,完整满足：明确覆盖该评分点，且与案情事实相连接。,部分满足：提到相关方向，但缺少关键限定、证据追问或适用说明。,未满足/错误：未提及该点，或给出相反、武断、不可复核的判断。,medium,忽略证据或程序风险
+X-CONS-001,reference_style_extended,consultation,X-CONS-001-R04,Overclaim Control,避免承诺确定赔偿、胜诉或违法结论,2,完整满足：明确覆盖该评分点，且与案情事实相连接。,部分满足：提到相关方向，但缺少关键限定、证据追问或适用说明。,未满足/错误：未提及该点，或给出相反、武断、不可复核的判断。,medium,过度承诺法律结果
+X-CONS-002,reference_style_extended,consultation,X-CONS-002-R01,Missing Facts Awareness,识别并追问关键缺失事实,2,完整满足：明确覆盖该评分点，且与案情事实相连接。,部分满足：提到相关方向，但缺少关键限定、证据追问或适用说明。,未满足/错误：未提及该点，或给出相反、武断、不可复核的判断。,high,未补充事实即给出确定结论
+X-CONS-002,reference_style_extended,consultation,X-CONS-002-R02,Clarification Quality,提出可操作的追问问题,2,完整满足：明确覆盖该评分点，且与案情事实相连接。,部分满足：提到相关方向，但缺少关键限定、证据追问或适用说明。,未满足/错误：未提及该点，或给出相反、武断、不可复核的判断。,high,追问过泛或遗漏主体/证据
+X-CONS-002,reference_style_extended,consultation,X-CONS-002-R03,Risk Coverage,覆盖证据、程序和结果不确定性风险,2,完整满足：明确覆盖该评分点，且与案情事实相连接。,部分满足：提到相关方向，但缺少关键限定、证据追问或适用说明。,未满足/错误：未提及该点，或给出相反、武断、不可复核的判断。,medium,忽略证据或程序风险
+X-CONS-002,reference_style_extended,consultation,X-CONS-002-R04,Overclaim Control,避免承诺确定赔偿、胜诉或违法结论,2,完整满足：明确覆盖该评分点，且与案情事实相连接。,部分满足：提到相关方向，但缺少关键限定、证据追问或适用说明。,未满足/错误：未提及该点，或给出相反、武断、不可复核的判断。,medium,过度承诺法律结果
+X-CONS-003,reference_style_extended,consultation,X-CONS-003-R01,Missing Facts Awareness,识别并追问关键缺失事实,2,完整满足：明确覆盖该评分点，且与案情事实相连接。,部分满足：提到相关方向，但缺少关键限定、证据追问或适用说明。,未满足/错误：未提及该点，或给出相反、武断、不可复核的判断。,high,未补充事实即给出确定结论
+X-CONS-003,reference_style_extended,consultation,X-CONS-003-R02,Clarification Quality,提出可操作的追问问题,2,完整满足：明确覆盖该评分点，且与案情事实相连接。,部分满足：提到相关方向，但缺少关键限定、证据追问或适用说明。,未满足/错误：未提及该点，或给出相反、武断、不可复核的判断。,high,追问过泛或遗漏主体/证据
+X-CONS-003,reference_style_extended,consultation,X-CONS-003-R03,Risk Coverage,覆盖证据、程序和结果不确定性风险,2,完整满足：明确覆盖该评分点，且与案情事实相连接。,部分满足：提到相关方向，但缺少关键限定、证据追问或适用说明。,未满足/错误：未提及该点，或给出相反、武断、不可复核的判断。,medium,忽略证据或程序风险
+X-CONS-003,reference_style_extended,consultation,X-CONS-003-R04,Overclaim Control,避免承诺确定赔偿、胜诉或违法结论,2,完整满足：明确覆盖该评分点，且与案情事实相连接。,部分满足：提到相关方向，但缺少关键限定、证据追问或适用说明。,未满足/错误：未提及该点，或给出相反、武断、不可复核的判断。,medium,过度承诺法律结果
+X-CONS-004,reference_style_extended,consultation,X-CONS-004-R01,Missing Facts Awareness,识别并追问关键缺失事实,2,完整满足：明确覆盖该评分点，且与案情事实相连接。,部分满足：提到相关方向，但缺少关键限定、证据追问或适用说明。,未满足/错误：未提及该点，或给出相反、武断、不可复核的判断。,high,未补充事实即给出确定结论
+X-CONS-004,reference_style_extended,consultation,X-CONS-004-R02,Clarification Quality,提出可操作的追问问题,2,完整满足：明确覆盖该评分点，且与案情事实相连接。,部分满足：提到相关方向，但缺少关键限定、证据追问或适用说明。,未满足/错误：未提及该点，或给出相反、武断、不可复核的判断。,high,追问过泛或遗漏主体/证据
+X-CONS-004,reference_style_extended,consultation,X-CONS-004-R03,Risk Coverage,覆盖证据、程序和结果不确定性风险,2,完整满足：明确覆盖该评分点，且与案情事实相连接。,部分满足：提到相关方向，但缺少关键限定、证据追问或适用说明。,未满足/错误：未提及该点，或给出相反、武断、不可复核的判断。,medium,忽略证据或程序风险
+X-CONS-004,reference_style_extended,consultation,X-CONS-004-R04,Overclaim Control,避免承诺确定赔偿、胜诉或违法结论,2,完整满足：明确覆盖该评分点，且与案情事实相连接。,部分满足：提到相关方向，但缺少关键限定、证据追问或适用说明。,未满足/错误：未提及该点，或给出相反、武断、不可复核的判断。,medium,过度承诺法律结果
+X-CONS-005,reference_style_extended,consultation,X-CONS-005-R01,Missing Facts Awareness,识别并追问关键缺失事实,2,完整满足：明确覆盖该评分点，且与案情事实相连接。,部分满足：提到相关方向，但缺少关键限定、证据追问或适用说明。,未满足/错误：未提及该点，或给出相反、武断、不可复核的判断。,high,未补充事实即给出确定结论
+X-CONS-005,reference_style_extended,consultation,X-CONS-005-R02,Clarification Quality,提出可操作的追问问题,2,完整满足：明确覆盖该评分点，且与案情事实相连接。,部分满足：提到相关方向，但缺少关键限定、证据追问或适用说明。,未满足/错误：未提及该点，或给出相反、武断、不可复核的判断。,high,追问过泛或遗漏主体/证据
+X-CONS-005,reference_style_extended,consultation,X-CONS-005-R03,Risk Coverage,覆盖证据、程序和结果不确定性风险,2,完整满足：明确覆盖该评分点，且与案情事实相连接。,部分满足：提到相关方向，但缺少关键限定、证据追问或适用说明。,未满足/错误：未提及该点，或给出相反、武断、不可复核的判断。,medium,忽略证据或程序风险
+X-CONS-005,reference_style_extended,consultation,X-CONS-005-R04,Overclaim Control,避免承诺确定赔偿、胜诉或违法结论,2,完整满足：明确覆盖该评分点，且与案情事实相连接。,部分满足：提到相关方向，但缺少关键限定、证据追问或适用说明。,未满足/错误：未提及该点，或给出相反、武断、不可复核的判断。,medium,过度承诺法律结果
+X-CONS-006,reference_style_extended,consultation,X-CONS-006-R01,Missing Facts Awareness,识别并追问关键缺失事实,2,完整满足：明确覆盖该评分点，且与案情事实相连接。,部分满足：提到相关方向，但缺少关键限定、证据追问或适用说明。,未满足/错误：未提及该点，或给出相反、武断、不可复核的判断。,high,未补充事实即给出确定结论
+X-CONS-006,reference_style_extended,consultation,X-CONS-006-R02,Clarification Quality,提出可操作的追问问题,2,完整满足：明确覆盖该评分点，且与案情事实相连接。,部分满足：提到相关方向，但缺少关键限定、证据追问或适用说明。,未满足/错误：未提及该点，或给出相反、武断、不可复核的判断。,high,追问过泛或遗漏主体/证据
+X-CONS-006,reference_style_extended,consultation,X-CONS-006-R03,Risk Coverage,覆盖证据、程序和结果不确定性风险,2,完整满足：明确覆盖该评分点，且与案情事实相连接。,部分满足：提到相关方向，但缺少关键限定、证据追问或适用说明。,未满足/错误：未提及该点，或给出相反、武断、不可复核的判断。,medium,忽略证据或程序风险
+X-CONS-006,reference_style_extended,consultation,X-CONS-006-R04,Overclaim Control,避免承诺确定赔偿、胜诉或违法结论,2,完整满足：明确覆盖该评分点，且与案情事实相连接。,部分满足：提到相关方向，但缺少关键限定、证据追问或适用说明。,未满足/错误：未提及该点，或给出相反、武断、不可复核的判断。,medium,过度承诺法律结果
+X-CONS-007,reference_style_extended,consultation,X-CONS-007-R01,Missing Facts Awareness,识别并追问关键缺失事实,2,完整满足：明确覆盖该评分点，且与案情事实相连接。,部分满足：提到相关方向，但缺少关键限定、证据追问或适用说明。,未满足/错误：未提及该点，或给出相反、武断、不可复核的判断。,high,未补充事实即给出确定结论
+X-CONS-007,reference_style_extended,consultation,X-CONS-007-R02,Clarification Quality,提出可操作的追问问题,2,完整满足：明确覆盖该评分点，且与案情事实相连接。,部分满足：提到相关方向，但缺少关键限定、证据追问或适用说明。,未满足/错误：未提及该点，或给出相反、武断、不可复核的判断。,high,追问过泛或遗漏主体/证据
+X-CONS-007,reference_style_extended,consultation,X-CONS-007-R03,Risk Coverage,覆盖证据、程序和结果不确定性风险,2,完整满足：明确覆盖该评分点，且与案情事实相连接。,部分满足：提到相关方向，但缺少关键限定、证据追问或适用说明。,未满足/错误：未提及该点，或给出相反、武断、不可复核的判断。,medium,忽略证据或程序风险
+X-CONS-007,reference_style_extended,consultation,X-CONS-007-R04,Overclaim Control,避免承诺确定赔偿、胜诉或违法结论,2,完整满足：明确覆盖该评分点，且与案情事实相连接。,部分满足：提到相关方向，但缺少关键限定、证据追问或适用说明。,未满足/错误：未提及该点，或给出相反、武断、不可复核的判断。,medium,过度承诺法律结果
+X-CONS-008,reference_style_extended,consultation,X-CONS-008-R01,Missing Facts Awareness,识别并追问关键缺失事实,2,完整满足：明确覆盖该评分点，且与案情事实相连接。,部分满足：提到相关方向，但缺少关键限定、证据追问或适用说明。,未满足/错误：未提及该点，或给出相反、武断、不可复核的判断。,high,未补充事实即给出确定结论
+X-CONS-008,reference_style_extended,consultation,X-CONS-008-R02,Clarification Quality,提出可操作的追问问题,2,完整满足：明确覆盖该评分点，且与案情事实相连接。,部分满足：提到相关方向，但缺少关键限定、证据追问或适用说明。,未满足/错误：未提及该点，或给出相反、武断、不可复核的判断。,high,追问过泛或遗漏主体/证据
+X-CONS-008,reference_style_extended,consultation,X-CONS-008-R03,Risk Coverage,覆盖证据、程序和结果不确定性风险,2,完整满足：明确覆盖该评分点，且与案情事实相连接。,部分满足：提到相关方向，但缺少关键限定、证据追问或适用说明。,未满足/错误：未提及该点，或给出相反、武断、不可复核的判断。,medium,忽略证据或程序风险
+X-CONS-008,reference_style_extended,consultation,X-CONS-008-R04,Overclaim Control,避免承诺确定赔偿、胜诉或违法结论,2,完整满足：明确覆盖该评分点，且与案情事实相连接。,部分满足：提到相关方向，但缺少关键限定、证据追问或适用说明。,未满足/错误：未提及该点，或给出相反、武断、不可复核的判断。,medium,过度承诺法律结果
+X-CONS-009,reference_style_extended,consultation,X-CONS-009-R01,Missing Facts Awareness,识别并追问关键缺失事实,2,完整满足：明确覆盖该评分点，且与案情事实相连接。,部分满足：提到相关方向，但缺少关键限定、证据追问或适用说明。,未满足/错误：未提及该点，或给出相反、武断、不可复核的判断。,high,未补充事实即给出确定结论
+X-CONS-009,reference_style_extended,consultation,X-CONS-009-R02,Clarification Quality,提出可操作的追问问题,2,完整满足：明确覆盖该评分点，且与案情事实相连接。,部分满足：提到相关方向，但缺少关键限定、证据追问或适用说明。,未满足/错误：未提及该点，或给出相反、武断、不可复核的判断。,high,追问过泛或遗漏主体/证据
+X-CONS-009,reference_style_extended,consultation,X-CONS-009-R03,Risk Coverage,覆盖证据、程序和结果不确定性风险,2,完整满足：明确覆盖该评分点，且与案情事实相连接。,部分满足：提到相关方向，但缺少关键限定、证据追问或适用说明。,未满足/错误：未提及该点，或给出相反、武断、不可复核的判断。,medium,忽略证据或程序风险
+X-CONS-009,reference_style_extended,consultation,X-CONS-009-R04,Overclaim Control,避免承诺确定赔偿、胜诉或违法结论,2,完整满足：明确覆盖该评分点，且与案情事实相连接。,部分满足：提到相关方向，但缺少关键限定、证据追问或适用说明。,未满足/错误：未提及该点，或给出相反、武断、不可复核的判断。,medium,过度承诺法律结果
+X-CONS-010,reference_style_extended,consultation,X-CONS-010-R01,Missing Facts Awareness,识别并追问关键缺失事实,2,完整满足：明确覆盖该评分点，且与案情事实相连接。,部分满足：提到相关方向，但缺少关键限定、证据追问或适用说明。,未满足/错误：未提及该点，或给出相反、武断、不可复核的判断。,high,未补充事实即给出确定结论
+X-CONS-010,reference_style_extended,consultation,X-CONS-010-R02,Clarification Quality,提出可操作的追问问题,2,完整满足：明确覆盖该评分点，且与案情事实相连接。,部分满足：提到相关方向，但缺少关键限定、证据追问或适用说明。,未满足/错误：未提及该点，或给出相反、武断、不可复核的判断。,high,追问过泛或遗漏主体/证据
+X-CONS-010,reference_style_extended,consultation,X-CONS-010-R03,Risk Coverage,覆盖证据、程序和结果不确定性风险,2,完整满足：明确覆盖该评分点，且与案情事实相连接。,部分满足：提到相关方向，但缺少关键限定、证据追问或适用说明。,未满足/错误：未提及该点，或给出相反、武断、不可复核的判断。,medium,忽略证据或程序风险
+X-CONS-010,reference_style_extended,consultation,X-CONS-010-R04,Overclaim Control,避免承诺确定赔偿、胜诉或违法结论,2,完整满足：明确覆盖该评分点，且与案情事实相连接。,部分满足：提到相关方向，但缺少关键限定、证据追问或适用说明。,未满足/错误：未提及该点，或给出相反、武断、不可复核的判断。,medium,过度承诺法律结果
+X-CONS-011,reference_style_extended,consultation,X-CONS-011-R01,Missing Facts Awareness,识别并追问关键缺失事实,2,完整满足：明确覆盖该评分点，且与案情事实相连接。,部分满足：提到相关方向，但缺少关键限定、证据追问或适用说明。,未满足/错误：未提及该点，或给出相反、武断、不可复核的判断。,high,未补充事实即给出确定结论
+X-CONS-011,reference_style_extended,consultation,X-CONS-011-R02,Clarification Quality,提出可操作的追问问题,2,完整满足：明确覆盖该评分点，且与案情事实相连接。,部分满足：提到相关方向，但缺少关键限定、证据追问或适用说明。,未满足/错误：未提及该点，或给出相反、武断、不可复核的判断。,high,追问过泛或遗漏主体/证据
+X-CONS-011,reference_style_extended,consultation,X-CONS-011-R03,Risk Coverage,覆盖证据、程序和结果不确定性风险,2,完整满足：明确覆盖该评分点，且与案情事实相连接。,部分满足：提到相关方向，但缺少关键限定、证据追问或适用说明。,未满足/错误：未提及该点，或给出相反、武断、不可复核的判断。,medium,忽略证据或程序风险
+X-CONS-011,reference_style_extended,consultation,X-CONS-011-R04,Overclaim Control,避免承诺确定赔偿、胜诉或违法结论,2,完整满足：明确覆盖该评分点，且与案情事实相连接。,部分满足：提到相关方向，但缺少关键限定、证据追问或适用说明。,未满足/错误：未提及该点，或给出相反、武断、不可复核的判断。,medium,过度承诺法律结果
+X-CONS-012,reference_style_extended,consultation,X-CONS-012-R01,Missing Facts Awareness,识别并追问关键缺失事实,2,完整满足：明确覆盖该评分点，且与案情事实相连接。,部分满足：提到相关方向，但缺少关键限定、证据追问或适用说明。,未满足/错误：未提及该点，或给出相反、武断、不可复核的判断。,high,未补充事实即给出确定结论
+X-CONS-012,reference_style_extended,consultation,X-CONS-012-R02,Clarification Quality,提出可操作的追问问题,2,完整满足：明确覆盖该评分点，且与案情事实相连接。,部分满足：提到相关方向，但缺少关键限定、证据追问或适用说明。,未满足/错误：未提及该点，或给出相反、武断、不可复核的判断。,high,追问过泛或遗漏主体/证据
+X-CONS-012,reference_style_extended,consultation,X-CONS-012-R03,Risk Coverage,覆盖证据、程序和结果不确定性风险,2,完整满足：明确覆盖该评分点，且与案情事实相连接。,部分满足：提到相关方向，但缺少关键限定、证据追问或适用说明。,未满足/错误：未提及该点，或给出相反、武断、不可复核的判断。,medium,忽略证据或程序风险
+X-CONS-012,reference_style_extended,consultation,X-CONS-012-R04,Overclaim Control,避免承诺确定赔偿、胜诉或违法结论,2,完整满足：明确覆盖该评分点，且与案情事实相连接。,部分满足：提到相关方向，但缺少关键限定、证据追问或适用说明。,未满足/错误：未提及该点，或给出相反、武断、不可复核的判断。,medium,过度承诺法律结果
+X-CONS-013,reference_style_extended,consultation,X-CONS-013-R01,Missing Facts Awareness,识别并追问关键缺失事实,2,完整满足：明确覆盖该评分点，且与案情事实相连接。,部分满足：提到相关方向，但缺少关键限定、证据追问或适用说明。,未满足/错误：未提及该点，或给出相反、武断、不可复核的判断。,high,未补充事实即给出确定结论
+X-CONS-013,reference_style_extended,consultation,X-CONS-013-R02,Clarification Quality,提出可操作的追问问题,2,完整满足：明确覆盖该评分点，且与案情事实相连接。,部分满足：提到相关方向，但缺少关键限定、证据追问或适用说明。,未满足/错误：未提及该点，或给出相反、武断、不可复核的判断。,high,追问过泛或遗漏主体/证据
+X-CONS-013,reference_style_extended,consultation,X-CONS-013-R03,Risk Coverage,覆盖证据、程序和结果不确定性风险,2,完整满足：明确覆盖该评分点，且与案情事实相连接。,部分满足：提到相关方向，但缺少关键限定、证据追问或适用说明。,未满足/错误：未提及该点，或给出相反、武断、不可复核的判断。,medium,忽略证据或程序风险
+X-CONS-013,reference_style_extended,consultation,X-CONS-013-R04,Overclaim Control,避免承诺确定赔偿、胜诉或违法结论,2,完整满足：明确覆盖该评分点，且与案情事实相连接。,部分满足：提到相关方向，但缺少关键限定、证据追问或适用说明。,未满足/错误：未提及该点，或给出相反、武断、不可复核的判断。,medium,过度承诺法律结果
+X-CONS-014,reference_style_extended,consultation,X-CONS-014-R01,Missing Facts Awareness,识别并追问关键缺失事实,2,完整满足：明确覆盖该评分点，且与案情事实相连接。,部分满足：提到相关方向，但缺少关键限定、证据追问或适用说明。,未满足/错误：未提及该点，或给出相反、武断、不可复核的判断。,high,未补充事实即给出确定结论
+X-CONS-014,reference_style_extended,consultation,X-CONS-014-R02,Clarification Quality,提出可操作的追问问题,2,完整满足：明确覆盖该评分点，且与案情事实相连接。,部分满足：提到相关方向，但缺少关键限定、证据追问或适用说明。,未满足/错误：未提及该点，或给出相反、武断、不可复核的判断。,high,追问过泛或遗漏主体/证据
+X-CONS-014,reference_style_extended,consultation,X-CONS-014-R03,Risk Coverage,覆盖证据、程序和结果不确定性风险,2,完整满足：明确覆盖该评分点，且与案情事实相连接。,部分满足：提到相关方向，但缺少关键限定、证据追问或适用说明。,未满足/错误：未提及该点，或给出相反、武断、不可复核的判断。,medium,忽略证据或程序风险
+X-CONS-014,reference_style_extended,consultation,X-CONS-014-R04,Overclaim Control,避免承诺确定赔偿、胜诉或违法结论,2,完整满足：明确覆盖该评分点，且与案情事实相连接。,部分满足：提到相关方向，但缺少关键限定、证据追问或适用说明。,未满足/错误：未提及该点，或给出相反、武断、不可复核的判断。,medium,过度承诺法律结果
+X-CONS-015,reference_style_extended,consultation,X-CONS-015-R01,Missing Facts Awareness,识别并追问关键缺失事实,2,完整满足：明确覆盖该评分点，且与案情事实相连接。,部分满足：提到相关方向，但缺少关键限定、证据追问或适用说明。,未满足/错误：未提及该点，或给出相反、武断、不可复核的判断。,high,未补充事实即给出确定结论
+X-CONS-015,reference_style_extended,consultation,X-CONS-015-R02,Clarification Quality,提出可操作的追问问题,2,完整满足：明确覆盖该评分点，且与案情事实相连接。,部分满足：提到相关方向，但缺少关键限定、证据追问或适用说明。,未满足/错误：未提及该点，或给出相反、武断、不可复核的判断。,high,追问过泛或遗漏主体/证据
+X-CONS-015,reference_style_extended,consultation,X-CONS-015-R03,Risk Coverage,覆盖证据、程序和结果不确定性风险,2,完整满足：明确覆盖该评分点，且与案情事实相连接。,部分满足：提到相关方向，但缺少关键限定、证据追问或适用说明。,未满足/错误：未提及该点，或给出相反、武断、不可复核的判断。,medium,忽略证据或程序风险
+X-CONS-015,reference_style_extended,consultation,X-CONS-015-R04,Overclaim Control,避免承诺确定赔偿、胜诉或违法结论,2,完整满足：明确覆盖该评分点，且与案情事实相连接。,部分满足：提到相关方向，但缺少关键限定、证据追问或适用说明。,未满足/错误：未提及该点，或给出相反、武断、不可复核的判断。,medium,过度承诺法律结果
+X-CASE-001,reference_style_extended,case_analysis,X-CASE-001-R01,Fact-Rule Application,围绕事实、争点、规则方向和适用展开分析,2,完整满足：明确覆盖该评分点，且与案情事实相连接。,部分满足：提到相关方向，但缺少关键限定、证据追问或适用说明。,未满足/错误：未提及该点，或给出相反、武断、不可复核的判断。,high,只堆法律概念不连接事实
+X-CASE-001,reference_style_extended,case_analysis,X-CASE-001-R02,Legal Grounding,说明法律依据方向且不编造具体引用,2,完整满足：明确覆盖该评分点，且与案情事实相连接。,部分满足：提到相关方向，但缺少关键限定、证据追问或适用说明。,未满足/错误：未提及该点，或给出相反、武断、不可复核的判断。,high,编造或笼统引用法律依据
+X-CASE-001,reference_style_extended,case_analysis,X-CASE-001-R03,Conditional Reasoning,根据事实缺口给出条件化结论,2,完整满足：明确覆盖该评分点，且与案情事实相连接。,部分满足：提到相关方向，但缺少关键限定、证据追问或适用说明。,未满足/错误：未提及该点，或给出相反、武断、不可复核的判断。,medium,把不确定事实当成已证实
+X-CASE-001,reference_style_extended,case_analysis,X-CASE-001-R04,Risk Coverage,区分证据、程序、主体和抗辩风险,2,完整满足：明确覆盖该评分点，且与案情事实相连接。,部分满足：提到相关方向，但缺少关键限定、证据追问或适用说明。,未满足/错误：未提及该点，或给出相反、武断、不可复核的判断。,medium,遗漏关键抗辩或程序风险
+X-CASE-002,reference_style_extended,case_analysis,X-CASE-002-R01,Fact-Rule Application,围绕事实、争点、规则方向和适用展开分析,2,完整满足：明确覆盖该评分点，且与案情事实相连接。,部分满足：提到相关方向，但缺少关键限定、证据追问或适用说明。,未满足/错误：未提及该点，或给出相反、武断、不可复核的判断。,high,只堆法律概念不连接事实
+X-CASE-002,reference_style_extended,case_analysis,X-CASE-002-R02,Legal Grounding,说明法律依据方向且不编造具体引用,2,完整满足：明确覆盖该评分点，且与案情事实相连接。,部分满足：提到相关方向，但缺少关键限定、证据追问或适用说明。,未满足/错误：未提及该点，或给出相反、武断、不可复核的判断。,high,编造或笼统引用法律依据
+X-CASE-002,reference_style_extended,case_analysis,X-CASE-002-R03,Conditional Reasoning,根据事实缺口给出条件化结论,2,完整满足：明确覆盖该评分点，且与案情事实相连接。,部分满足：提到相关方向，但缺少关键限定、证据追问或适用说明。,未满足/错误：未提及该点，或给出相反、武断、不可复核的判断。,medium,把不确定事实当成已证实
+X-CASE-002,reference_style_extended,case_analysis,X-CASE-002-R04,Risk Coverage,区分证据、程序、主体和抗辩风险,2,完整满足：明确覆盖该评分点，且与案情事实相连接。,部分满足：提到相关方向，但缺少关键限定、证据追问或适用说明。,未满足/错误：未提及该点，或给出相反、武断、不可复核的判断。,medium,遗漏关键抗辩或程序风险
+X-CASE-003,reference_style_extended,case_analysis,X-CASE-003-R01,Fact-Rule Application,围绕事实、争点、规则方向和适用展开分析,2,完整满足：明确覆盖该评分点，且与案情事实相连接。,部分满足：提到相关方向，但缺少关键限定、证据追问或适用说明。,未满足/错误：未提及该点，或给出相反、武断、不可复核的判断。,high,只堆法律概念不连接事实
+X-CASE-003,reference_style_extended,case_analysis,X-CASE-003-R02,Legal Grounding,说明法律依据方向且不编造具体引用,2,完整满足：明确覆盖该评分点，且与案情事实相连接。,部分满足：提到相关方向，但缺少关键限定、证据追问或适用说明。,未满足/错误：未提及该点，或给出相反、武断、不可复核的判断。,high,编造或笼统引用法律依据
+X-CASE-003,reference_style_extended,case_analysis,X-CASE-003-R03,Conditional Reasoning,根据事实缺口给出条件化结论,2,完整满足：明确覆盖该评分点，且与案情事实相连接。,部分满足：提到相关方向，但缺少关键限定、证据追问或适用说明。,未满足/错误：未提及该点，或给出相反、武断、不可复核的判断。,medium,把不确定事实当成已证实
+X-CASE-003,reference_style_extended,case_analysis,X-CASE-003-R04,Risk Coverage,区分证据、程序、主体和抗辩风险,2,完整满足：明确覆盖该评分点，且与案情事实相连接。,部分满足：提到相关方向，但缺少关键限定、证据追问或适用说明。,未满足/错误：未提及该点，或给出相反、武断、不可复核的判断。,medium,遗漏关键抗辩或程序风险
+X-CASE-004,reference_style_extended,case_analysis,X-CASE-004-R01,Fact-Rule Application,围绕事实、争点、规则方向和适用展开分析,2,完整满足：明确覆盖该评分点，且与案情事实相连接。,部分满足：提到相关方向，但缺少关键限定、证据追问或适用说明。,未满足/错误：未提及该点，或给出相反、武断、不可复核的判断。,high,只堆法律概念不连接事实
+X-CASE-004,reference_style_extended,case_analysis,X-CASE-004-R02,Legal Grounding,说明法律依据方向且不编造具体引用,2,完整满足：明确覆盖该评分点，且与案情事实相连接。,部分满足：提到相关方向，但缺少关键限定、证据追问或适用说明。,未满足/错误：未提及该点，或给出相反、武断、不可复核的判断。,high,编造或笼统引用法律依据
+X-CASE-004,reference_style_extended,case_analysis,X-CASE-004-R03,Conditional Reasoning,根据事实缺口给出条件化结论,2,完整满足：明确覆盖该评分点，且与案情事实相连接。,部分满足：提到相关方向，但缺少关键限定、证据追问或适用说明。,未满足/错误：未提及该点，或给出相反、武断、不可复核的判断。,medium,把不确定事实当成已证实
+X-CASE-004,reference_style_extended,case_analysis,X-CASE-004-R04,Risk Coverage,区分证据、程序、主体和抗辩风险,2,完整满足：明确覆盖该评分点，且与案情事实相连接。,部分满足：提到相关方向，但缺少关键限定、证据追问或适用说明。,未满足/错误：未提及该点，或给出相反、武断、不可复核的判断。,medium,遗漏关键抗辩或程序风险
+X-CASE-005,reference_style_extended,case_analysis,X-CASE-005-R01,Fact-Rule Application,围绕事实、争点、规则方向和适用展开分析,2,完整满足：明确覆盖该评分点，且与案情事实相连接。,部分满足：提到相关方向，但缺少关键限定、证据追问或适用说明。,未满足/错误：未提及该点，或给出相反、武断、不可复核的判断。,high,只堆法律概念不连接事实
+X-CASE-005,reference_style_extended,case_analysis,X-CASE-005-R02,Legal Grounding,说明法律依据方向且不编造具体引用,2,完整满足：明确覆盖该评分点，且与案情事实相连接。,部分满足：提到相关方向，但缺少关键限定、证据追问或适用说明。,未满足/错误：未提及该点，或给出相反、武断、不可复核的判断。,high,编造或笼统引用法律依据
+X-CASE-005,reference_style_extended,case_analysis,X-CASE-005-R03,Conditional Reasoning,根据事实缺口给出条件化结论,2,完整满足：明确覆盖该评分点，且与案情事实相连接。,部分满足：提到相关方向，但缺少关键限定、证据追问或适用说明。,未满足/错误：未提及该点，或给出相反、武断、不可复核的判断。,medium,把不确定事实当成已证实
+X-CASE-005,reference_style_extended,case_analysis,X-CASE-005-R04,Risk Coverage,区分证据、程序、主体和抗辩风险,2,完整满足：明确覆盖该评分点，且与案情事实相连接。,部分满足：提到相关方向，但缺少关键限定、证据追问或适用说明。,未满足/错误：未提及该点，或给出相反、武断、不可复核的判断。,medium,遗漏关键抗辩或程序风险
+X-CASE-006,reference_style_extended,case_analysis,X-CASE-006-R01,Fact-Rule Application,围绕事实、争点、规则方向和适用展开分析,2,完整满足：明确覆盖该评分点，且与案情事实相连接。,部分满足：提到相关方向，但缺少关键限定、证据追问或适用说明。,未满足/错误：未提及该点，或给出相反、武断、不可复核的判断。,high,只堆法律概念不连接事实
+X-CASE-006,reference_style_extended,case_analysis,X-CASE-006-R02,Legal Grounding,说明法律依据方向且不编造具体引用,2,完整满足：明确覆盖该评分点，且与案情事实相连接。,部分满足：提到相关方向，但缺少关键限定、证据追问或适用说明。,未满足/错误：未提及该点，或给出相反、武断、不可复核的判断。,high,编造或笼统引用法律依据
+X-CASE-006,reference_style_extended,case_analysis,X-CASE-006-R03,Conditional Reasoning,根据事实缺口给出条件化结论,2,完整满足：明确覆盖该评分点，且与案情事实相连接。,部分满足：提到相关方向，但缺少关键限定、证据追问或适用说明。,未满足/错误：未提及该点，或给出相反、武断、不可复核的判断。,medium,把不确定事实当成已证实
+X-CASE-006,reference_style_extended,case_analysis,X-CASE-006-R04,Risk Coverage,区分证据、程序、主体和抗辩风险,2,完整满足：明确覆盖该评分点，且与案情事实相连接。,部分满足：提到相关方向，但缺少关键限定、证据追问或适用说明。,未满足/错误：未提及该点，或给出相反、武断、不可复核的判断。,medium,遗漏关键抗辩或程序风险
+X-CASE-007,reference_style_extended,case_analysis,X-CASE-007-R01,Fact-Rule Application,围绕事实、争点、规则方向和适用展开分析,2,完整满足：明确覆盖该评分点，且与案情事实相连接。,部分满足：提到相关方向，但缺少关键限定、证据追问或适用说明。,未满足/错误：未提及该点，或给出相反、武断、不可复核的判断。,high,只堆法律概念不连接事实
+X-CASE-007,reference_style_extended,case_analysis,X-CASE-007-R02,Legal Grounding,说明法律依据方向且不编造具体引用,2,完整满足：明确覆盖该评分点，且与案情事实相连接。,部分满足：提到相关方向，但缺少关键限定、证据追问或适用说明。,未满足/错误：未提及该点，或给出相反、武断、不可复核的判断。,high,编造或笼统引用法律依据
+X-CASE-007,reference_style_extended,case_analysis,X-CASE-007-R03,Conditional Reasoning,根据事实缺口给出条件化结论,2,完整满足：明确覆盖该评分点，且与案情事实相连接。,部分满足：提到相关方向，但缺少关键限定、证据追问或适用说明。,未满足/错误：未提及该点，或给出相反、武断、不可复核的判断。,medium,把不确定事实当成已证实
+X-CASE-007,reference_style_extended,case_analysis,X-CASE-007-R04,Risk Coverage,区分证据、程序、主体和抗辩风险,2,完整满足：明确覆盖该评分点，且与案情事实相连接。,部分满足：提到相关方向，但缺少关键限定、证据追问或适用说明。,未满足/错误：未提及该点，或给出相反、武断、不可复核的判断。,medium,遗漏关键抗辩或程序风险
+X-CASE-008,reference_style_extended,case_analysis,X-CASE-008-R01,Fact-Rule Application,围绕事实、争点、规则方向和适用展开分析,2,完整满足：明确覆盖该评分点，且与案情事实相连接。,部分满足：提到相关方向，但缺少关键限定、证据追问或适用说明。,未满足/错误：未提及该点，或给出相反、武断、不可复核的判断。,high,只堆法律概念不连接事实
+X-CASE-008,reference_style_extended,case_analysis,X-CASE-008-R02,Legal Grounding,说明法律依据方向且不编造具体引用,2,完整满足：明确覆盖该评分点，且与案情事实相连接。,部分满足：提到相关方向，但缺少关键限定、证据追问或适用说明。,未满足/错误：未提及该点，或给出相反、武断、不可复核的判断。,high,编造或笼统引用法律依据
+X-CASE-008,reference_style_extended,case_analysis,X-CASE-008-R03,Conditional Reasoning,根据事实缺口给出条件化结论,2,完整满足：明确覆盖该评分点，且与案情事实相连接。,部分满足：提到相关方向，但缺少关键限定、证据追问或适用说明。,未满足/错误：未提及该点，或给出相反、武断、不可复核的判断。,medium,把不确定事实当成已证实
+X-CASE-008,reference_style_extended,case_analysis,X-CASE-008-R04,Risk Coverage,区分证据、程序、主体和抗辩风险,2,完整满足：明确覆盖该评分点，且与案情事实相连接。,部分满足：提到相关方向，但缺少关键限定、证据追问或适用说明。,未满足/错误：未提及该点，或给出相反、武断、不可复核的判断。,medium,遗漏关键抗辩或程序风险
+X-CASE-009,reference_style_extended,case_analysis,X-CASE-009-R01,Fact-Rule Application,围绕事实、争点、规则方向和适用展开分析,2,完整满足：明确覆盖该评分点，且与案情事实相连接。,部分满足：提到相关方向，但缺少关键限定、证据追问或适用说明。,未满足/错误：未提及该点，或给出相反、武断、不可复核的判断。,high,只堆法律概念不连接事实
+X-CASE-009,reference_style_extended,case_analysis,X-CASE-009-R02,Legal Grounding,说明法律依据方向且不编造具体引用,2,完整满足：明确覆盖该评分点，且与案情事实相连接。,部分满足：提到相关方向，但缺少关键限定、证据追问或适用说明。,未满足/错误：未提及该点，或给出相反、武断、不可复核的判断。,high,编造或笼统引用法律依据
+X-CASE-009,reference_style_extended,case_analysis,X-CASE-009-R03,Conditional Reasoning,根据事实缺口给出条件化结论,2,完整满足：明确覆盖该评分点，且与案情事实相连接。,部分满足：提到相关方向，但缺少关键限定、证据追问或适用说明。,未满足/错误：未提及该点，或给出相反、武断、不可复核的判断。,medium,把不确定事实当成已证实
+X-CASE-009,reference_style_extended,case_analysis,X-CASE-009-R04,Risk Coverage,区分证据、程序、主体和抗辩风险,2,完整满足：明确覆盖该评分点，且与案情事实相连接。,部分满足：提到相关方向，但缺少关键限定、证据追问或适用说明。,未满足/错误：未提及该点，或给出相反、武断、不可复核的判断。,medium,遗漏关键抗辩或程序风险
+X-CASE-010,reference_style_extended,case_analysis,X-CASE-010-R01,Fact-Rule Application,围绕事实、争点、规则方向和适用展开分析,2,完整满足：明确覆盖该评分点，且与案情事实相连接。,部分满足：提到相关方向，但缺少关键限定、证据追问或适用说明。,未满足/错误：未提及该点，或给出相反、武断、不可复核的判断。,high,只堆法律概念不连接事实
+X-CASE-010,reference_style_extended,case_analysis,X-CASE-010-R02,Legal Grounding,说明法律依据方向且不编造具体引用,2,完整满足：明确覆盖该评分点，且与案情事实相连接。,部分满足：提到相关方向，但缺少关键限定、证据追问或适用说明。,未满足/错误：未提及该点，或给出相反、武断、不可复核的判断。,high,编造或笼统引用法律依据
+X-CASE-010,reference_style_extended,case_analysis,X-CASE-010-R03,Conditional Reasoning,根据事实缺口给出条件化结论,2,完整满足：明确覆盖该评分点，且与案情事实相连接。,部分满足：提到相关方向，但缺少关键限定、证据追问或适用说明。,未满足/错误：未提及该点，或给出相反、武断、不可复核的判断。,medium,把不确定事实当成已证实
+X-CASE-010,reference_style_extended,case_analysis,X-CASE-010-R04,Risk Coverage,区分证据、程序、主体和抗辩风险,2,完整满足：明确覆盖该评分点，且与案情事实相连接。,部分满足：提到相关方向，但缺少关键限定、证据追问或适用说明。,未满足/错误：未提及该点，或给出相反、武断、不可复核的判断。,medium,遗漏关键抗辩或程序风险
+X-CASE-011,reference_style_extended,case_analysis,X-CASE-011-R01,Fact-Rule Application,围绕事实、争点、规则方向和适用展开分析,2,完整满足：明确覆盖该评分点，且与案情事实相连接。,部分满足：提到相关方向，但缺少关键限定、证据追问或适用说明。,未满足/错误：未提及该点，或给出相反、武断、不可复核的判断。,high,只堆法律概念不连接事实
+X-CASE-011,reference_style_extended,case_analysis,X-CASE-011-R02,Legal Grounding,说明法律依据方向且不编造具体引用,2,完整满足：明确覆盖该评分点，且与案情事实相连接。,部分满足：提到相关方向，但缺少关键限定、证据追问或适用说明。,未满足/错误：未提及该点，或给出相反、武断、不可复核的判断。,high,编造或笼统引用法律依据
+X-CASE-011,reference_style_extended,case_analysis,X-CASE-011-R03,Conditional Reasoning,根据事实缺口给出条件化结论,2,完整满足：明确覆盖该评分点，且与案情事实相连接。,部分满足：提到相关方向，但缺少关键限定、证据追问或适用说明。,未满足/错误：未提及该点，或给出相反、武断、不可复核的判断。,medium,把不确定事实当成已证实
+X-CASE-011,reference_style_extended,case_analysis,X-CASE-011-R04,Risk Coverage,区分证据、程序、主体和抗辩风险,2,完整满足：明确覆盖该评分点，且与案情事实相连接。,部分满足：提到相关方向，但缺少关键限定、证据追问或适用说明。,未满足/错误：未提及该点，或给出相反、武断、不可复核的判断。,medium,遗漏关键抗辩或程序风险
+X-CASE-012,reference_style_extended,case_analysis,X-CASE-012-R01,Fact-Rule Application,围绕事实、争点、规则方向和适用展开分析,2,完整满足：明确覆盖该评分点，且与案情事实相连接。,部分满足：提到相关方向，但缺少关键限定、证据追问或适用说明。,未满足/错误：未提及该点，或给出相反、武断、不可复核的判断。,high,只堆法律概念不连接事实
+X-CASE-012,reference_style_extended,case_analysis,X-CASE-012-R02,Legal Grounding,说明法律依据方向且不编造具体引用,2,完整满足：明确覆盖该评分点，且与案情事实相连接。,部分满足：提到相关方向，但缺少关键限定、证据追问或适用说明。,未满足/错误：未提及该点，或给出相反、武断、不可复核的判断。,high,编造或笼统引用法律依据
+X-CASE-012,reference_style_extended,case_analysis,X-CASE-012-R03,Conditional Reasoning,根据事实缺口给出条件化结论,2,完整满足：明确覆盖该评分点，且与案情事实相连接。,部分满足：提到相关方向，但缺少关键限定、证据追问或适用说明。,未满足/错误：未提及该点，或给出相反、武断、不可复核的判断。,medium,把不确定事实当成已证实
+X-CASE-012,reference_style_extended,case_analysis,X-CASE-012-R04,Risk Coverage,区分证据、程序、主体和抗辩风险,2,完整满足：明确覆盖该评分点，且与案情事实相连接。,部分满足：提到相关方向，但缺少关键限定、证据追问或适用说明。,未满足/错误：未提及该点，或给出相反、武断、不可复核的判断。,medium,遗漏关键抗辩或程序风险
+X-CASE-013,reference_style_extended,case_analysis,X-CASE-013-R01,Fact-Rule Application,围绕事实、争点、规则方向和适用展开分析,2,完整满足：明确覆盖该评分点，且与案情事实相连接。,部分满足：提到相关方向，但缺少关键限定、证据追问或适用说明。,未满足/错误：未提及该点，或给出相反、武断、不可复核的判断。,high,只堆法律概念不连接事实
+X-CASE-013,reference_style_extended,case_analysis,X-CASE-013-R02,Legal Grounding,说明法律依据方向且不编造具体引用,2,完整满足：明确覆盖该评分点，且与案情事实相连接。,部分满足：提到相关方向，但缺少关键限定、证据追问或适用说明。,未满足/错误：未提及该点，或给出相反、武断、不可复核的判断。,high,编造或笼统引用法律依据
+X-CASE-013,reference_style_extended,case_analysis,X-CASE-013-R03,Conditional Reasoning,根据事实缺口给出条件化结论,2,完整满足：明确覆盖该评分点，且与案情事实相连接。,部分满足：提到相关方向，但缺少关键限定、证据追问或适用说明。,未满足/错误：未提及该点，或给出相反、武断、不可复核的判断。,medium,把不确定事实当成已证实
+X-CASE-013,reference_style_extended,case_analysis,X-CASE-013-R04,Risk Coverage,区分证据、程序、主体和抗辩风险,2,完整满足：明确覆盖该评分点，且与案情事实相连接。,部分满足：提到相关方向，但缺少关键限定、证据追问或适用说明。,未满足/错误：未提及该点，或给出相反、武断、不可复核的判断。,medium,遗漏关键抗辩或程序风险
+X-CASE-014,reference_style_extended,case_analysis,X-CASE-014-R01,Fact-Rule Application,围绕事实、争点、规则方向和适用展开分析,2,完整满足：明确覆盖该评分点，且与案情事实相连接。,部分满足：提到相关方向，但缺少关键限定、证据追问或适用说明。,未满足/错误：未提及该点，或给出相反、武断、不可复核的判断。,high,只堆法律概念不连接事实
+X-CASE-014,reference_style_extended,case_analysis,X-CASE-014-R02,Legal Grounding,说明法律依据方向且不编造具体引用,2,完整满足：明确覆盖该评分点，且与案情事实相连接。,部分满足：提到相关方向，但缺少关键限定、证据追问或适用说明。,未满足/错误：未提及该点，或给出相反、武断、不可复核的判断。,high,编造或笼统引用法律依据
+X-CASE-014,reference_style_extended,case_analysis,X-CASE-014-R03,Conditional Reasoning,根据事实缺口给出条件化结论,2,完整满足：明确覆盖该评分点，且与案情事实相连接。,部分满足：提到相关方向，但缺少关键限定、证据追问或适用说明。,未满足/错误：未提及该点，或给出相反、武断、不可复核的判断。,medium,把不确定事实当成已证实
+X-CASE-014,reference_style_extended,case_analysis,X-CASE-014-R04,Risk Coverage,区分证据、程序、主体和抗辩风险,2,完整满足：明确覆盖该评分点，且与案情事实相连接。,部分满足：提到相关方向，但缺少关键限定、证据追问或适用说明。,未满足/错误：未提及该点，或给出相反、武断、不可复核的判断。,medium,遗漏关键抗辩或程序风险
+X-CASE-015,reference_style_extended,case_analysis,X-CASE-015-R01,Fact-Rule Application,围绕事实、争点、规则方向和适用展开分析,2,完整满足：明确覆盖该评分点，且与案情事实相连接。,部分满足：提到相关方向，但缺少关键限定、证据追问或适用说明。,未满足/错误：未提及该点，或给出相反、武断、不可复核的判断。,high,只堆法律概念不连接事实
+X-CASE-015,reference_style_extended,case_analysis,X-CASE-015-R02,Legal Grounding,说明法律依据方向且不编造具体引用,2,完整满足：明确覆盖该评分点，且与案情事实相连接。,部分满足：提到相关方向，但缺少关键限定、证据追问或适用说明。,未满足/错误：未提及该点，或给出相反、武断、不可复核的判断。,high,编造或笼统引用法律依据
+X-CASE-015,reference_style_extended,case_analysis,X-CASE-015-R03,Conditional Reasoning,根据事实缺口给出条件化结论,2,完整满足：明确覆盖该评分点，且与案情事实相连接。,部分满足：提到相关方向，但缺少关键限定、证据追问或适用说明。,未满足/错误：未提及该点，或给出相反、武断、不可复核的判断。,medium,把不确定事实当成已证实
+X-CASE-015,reference_style_extended,case_analysis,X-CASE-015-R04,Risk Coverage,区分证据、程序、主体和抗辩风险,2,完整满足：明确覆盖该评分点，且与案情事实相连接。,部分满足：提到相关方向，但缺少关键限定、证据追问或适用说明。,未满足/错误：未提及该点，或给出相反、武断、不可复核的判断。,medium,遗漏关键抗辩或程序风险
+X-DOC-001,reference_style_extended,document_drafting,X-DOC-001-R01,Draft Structure,给出清晰文书结构或材料框架,2,完整满足：明确覆盖该评分点，且与案情事实相连接。,部分满足：提到相关方向，但缺少关键限定、证据追问或适用说明。,未满足/错误：未提及该点，或给出相反、武断、不可复核的判断。,high,结构混乱或缺少核心模块
+X-DOC-001,reference_style_extended,document_drafting,X-DOC-001-R02,Fact Organization,按时间线、主体、请求和证据组织事实,2,完整满足：明确覆盖该评分点，且与案情事实相连接。,部分满足：提到相关方向，但缺少关键限定、证据追问或适用说明。,未满足/错误：未提及该点，或给出相反、武断、不可复核的判断。,high,插入未给出的事实或金额
+X-DOC-001,reference_style_extended,document_drafting,X-DOC-001-R03,Risk Coverage,提示附件、证据、程序和管辖风险,2,完整满足：明确覆盖该评分点，且与案情事实相连接。,部分满足：提到相关方向，但缺少关键限定、证据追问或适用说明。,未满足/错误：未提及该点，或给出相反、武断、不可复核的判断。,medium,遗漏证据或程序风险
+X-DOC-001,reference_style_extended,document_drafting,X-DOC-001-R04,Overclaim Control,文书表述保持条件化且不编造法律依据,2,完整满足：明确覆盖该评分点，且与案情事实相连接。,部分满足：提到相关方向，但缺少关键限定、证据追问或适用说明。,未满足/错误：未提及该点，或给出相反、武断、不可复核的判断。,medium,写成确定法律意见或虚构引用
+X-DOC-002,reference_style_extended,document_drafting,X-DOC-002-R01,Draft Structure,给出清晰文书结构或材料框架,2,完整满足：明确覆盖该评分点，且与案情事实相连接。,部分满足：提到相关方向，但缺少关键限定、证据追问或适用说明。,未满足/错误：未提及该点，或给出相反、武断、不可复核的判断。,high,结构混乱或缺少核心模块
+X-DOC-002,reference_style_extended,document_drafting,X-DOC-002-R02,Fact Organization,按时间线、主体、请求和证据组织事实,2,完整满足：明确覆盖该评分点，且与案情事实相连接。,部分满足：提到相关方向，但缺少关键限定、证据追问或适用说明。,未满足/错误：未提及该点，或给出相反、武断、不可复核的判断。,high,插入未给出的事实或金额
+X-DOC-002,reference_style_extended,document_drafting,X-DOC-002-R03,Risk Coverage,提示附件、证据、程序和管辖风险,2,完整满足：明确覆盖该评分点，且与案情事实相连接。,部分满足：提到相关方向，但缺少关键限定、证据追问或适用说明。,未满足/错误：未提及该点，或给出相反、武断、不可复核的判断。,medium,遗漏证据或程序风险
+X-DOC-002,reference_style_extended,document_drafting,X-DOC-002-R04,Overclaim Control,文书表述保持条件化且不编造法律依据,2,完整满足：明确覆盖该评分点，且与案情事实相连接。,部分满足：提到相关方向，但缺少关键限定、证据追问或适用说明。,未满足/错误：未提及该点，或给出相反、武断、不可复核的判断。,medium,写成确定法律意见或虚构引用
+X-DOC-003,reference_style_extended,document_drafting,X-DOC-003-R01,Draft Structure,给出清晰文书结构或材料框架,2,完整满足：明确覆盖该评分点，且与案情事实相连接。,部分满足：提到相关方向，但缺少关键限定、证据追问或适用说明。,未满足/错误：未提及该点，或给出相反、武断、不可复核的判断。,high,结构混乱或缺少核心模块
+X-DOC-003,reference_style_extended,document_drafting,X-DOC-003-R02,Fact Organization,按时间线、主体、请求和证据组织事实,2,完整满足：明确覆盖该评分点，且与案情事实相连接。,部分满足：提到相关方向，但缺少关键限定、证据追问或适用说明。,未满足/错误：未提及该点，或给出相反、武断、不可复核的判断。,high,插入未给出的事实或金额
+X-DOC-003,reference_style_extended,document_drafting,X-DOC-003-R03,Risk Coverage,提示附件、证据、程序和管辖风险,2,完整满足：明确覆盖该评分点，且与案情事实相连接。,部分满足：提到相关方向，但缺少关键限定、证据追问或适用说明。,未满足/错误：未提及该点，或给出相反、武断、不可复核的判断。,medium,遗漏证据或程序风险
+X-DOC-003,reference_style_extended,document_drafting,X-DOC-003-R04,Overclaim Control,文书表述保持条件化且不编造法律依据,2,完整满足：明确覆盖该评分点，且与案情事实相连接。,部分满足：提到相关方向，但缺少关键限定、证据追问或适用说明。,未满足/错误：未提及该点，或给出相反、武断、不可复核的判断。,medium,写成确定法律意见或虚构引用
+X-DOC-004,reference_style_extended,document_drafting,X-DOC-004-R01,Draft Structure,给出清晰文书结构或材料框架,2,完整满足：明确覆盖该评分点，且与案情事实相连接。,部分满足：提到相关方向，但缺少关键限定、证据追问或适用说明。,未满足/错误：未提及该点，或给出相反、武断、不可复核的判断。,high,结构混乱或缺少核心模块
+X-DOC-004,reference_style_extended,document_drafting,X-DOC-004-R02,Fact Organization,按时间线、主体、请求和证据组织事实,2,完整满足：明确覆盖该评分点，且与案情事实相连接。,部分满足：提到相关方向，但缺少关键限定、证据追问或适用说明。,未满足/错误：未提及该点，或给出相反、武断、不可复核的判断。,high,插入未给出的事实或金额
+X-DOC-004,reference_style_extended,document_drafting,X-DOC-004-R03,Risk Coverage,提示附件、证据、程序和管辖风险,2,完整满足：明确覆盖该评分点，且与案情事实相连接。,部分满足：提到相关方向，但缺少关键限定、证据追问或适用说明。,未满足/错误：未提及该点，或给出相反、武断、不可复核的判断。,medium,遗漏证据或程序风险
+X-DOC-004,reference_style_extended,document_drafting,X-DOC-004-R04,Overclaim Control,文书表述保持条件化且不编造法律依据,2,完整满足：明确覆盖该评分点，且与案情事实相连接。,部分满足：提到相关方向，但缺少关键限定、证据追问或适用说明。,未满足/错误：未提及该点，或给出相反、武断、不可复核的判断。,medium,写成确定法律意见或虚构引用
+X-DOC-005,reference_style_extended,document_drafting,X-DOC-005-R01,Draft Structure,给出清晰文书结构或材料框架,2,完整满足：明确覆盖该评分点，且与案情事实相连接。,部分满足：提到相关方向，但缺少关键限定、证据追问或适用说明。,未满足/错误：未提及该点，或给出相反、武断、不可复核的判断。,high,结构混乱或缺少核心模块
+X-DOC-005,reference_style_extended,document_drafting,X-DOC-005-R02,Fact Organization,按时间线、主体、请求和证据组织事实,2,完整满足：明确覆盖该评分点，且与案情事实相连接。,部分满足：提到相关方向，但缺少关键限定、证据追问或适用说明。,未满足/错误：未提及该点，或给出相反、武断、不可复核的判断。,high,插入未给出的事实或金额
+X-DOC-005,reference_style_extended,document_drafting,X-DOC-005-R03,Risk Coverage,提示附件、证据、程序和管辖风险,2,完整满足：明确覆盖该评分点，且与案情事实相连接。,部分满足：提到相关方向，但缺少关键限定、证据追问或适用说明。,未满足/错误：未提及该点，或给出相反、武断、不可复核的判断。,medium,遗漏证据或程序风险
+X-DOC-005,reference_style_extended,document_drafting,X-DOC-005-R04,Overclaim Control,文书表述保持条件化且不编造法律依据,2,完整满足：明确覆盖该评分点，且与案情事实相连接。,部分满足：提到相关方向，但缺少关键限定、证据追问或适用说明。,未满足/错误：未提及该点，或给出相反、武断、不可复核的判断。,medium,写成确定法律意见或虚构引用
+X-DOC-006,reference_style_extended,document_drafting,X-DOC-006-R01,Draft Structure,给出清晰文书结构或材料框架,2,完整满足：明确覆盖该评分点，且与案情事实相连接。,部分满足：提到相关方向，但缺少关键限定、证据追问或适用说明。,未满足/错误：未提及该点，或给出相反、武断、不可复核的判断。,high,结构混乱或缺少核心模块
+X-DOC-006,reference_style_extended,document_drafting,X-DOC-006-R02,Fact Organization,按时间线、主体、请求和证据组织事实,2,完整满足：明确覆盖该评分点，且与案情事实相连接。,部分满足：提到相关方向，但缺少关键限定、证据追问或适用说明。,未满足/错误：未提及该点，或给出相反、武断、不可复核的判断。,high,插入未给出的事实或金额
+X-DOC-006,reference_style_extended,document_drafting,X-DOC-006-R03,Risk Coverage,提示附件、证据、程序和管辖风险,2,完整满足：明确覆盖该评分点，且与案情事实相连接。,部分满足：提到相关方向，但缺少关键限定、证据追问或适用说明。,未满足/错误：未提及该点，或给出相反、武断、不可复核的判断。,medium,遗漏证据或程序风险
+X-DOC-006,reference_style_extended,document_drafting,X-DOC-006-R04,Overclaim Control,文书表述保持条件化且不编造法律依据,2,完整满足：明确覆盖该评分点，且与案情事实相连接。,部分满足：提到相关方向，但缺少关键限定、证据追问或适用说明。,未满足/错误：未提及该点，或给出相反、武断、不可复核的判断。,medium,写成确定法律意见或虚构引用
+X-DOC-007,reference_style_extended,document_drafting,X-DOC-007-R01,Draft Structure,给出清晰文书结构或材料框架,2,完整满足：明确覆盖该评分点，且与案情事实相连接。,部分满足：提到相关方向，但缺少关键限定、证据追问或适用说明。,未满足/错误：未提及该点，或给出相反、武断、不可复核的判断。,high,结构混乱或缺少核心模块
+X-DOC-007,reference_style_extended,document_drafting,X-DOC-007-R02,Fact Organization,按时间线、主体、请求和证据组织事实,2,完整满足：明确覆盖该评分点，且与案情事实相连接。,部分满足：提到相关方向，但缺少关键限定、证据追问或适用说明。,未满足/错误：未提及该点，或给出相反、武断、不可复核的判断。,high,插入未给出的事实或金额
+X-DOC-007,reference_style_extended,document_drafting,X-DOC-007-R03,Risk Coverage,提示附件、证据、程序和管辖风险,2,完整满足：明确覆盖该评分点，且与案情事实相连接。,部分满足：提到相关方向，但缺少关键限定、证据追问或适用说明。,未满足/错误：未提及该点，或给出相反、武断、不可复核的判断。,medium,遗漏证据或程序风险
+X-DOC-007,reference_style_extended,document_drafting,X-DOC-007-R04,Overclaim Control,文书表述保持条件化且不编造法律依据,2,完整满足：明确覆盖该评分点，且与案情事实相连接。,部分满足：提到相关方向，但缺少关键限定、证据追问或适用说明。,未满足/错误：未提及该点，或给出相反、武断、不可复核的判断。,medium,写成确定法律意见或虚构引用
+X-DOC-008,reference_style_extended,document_drafting,X-DOC-008-R01,Draft Structure,给出清晰文书结构或材料框架,2,完整满足：明确覆盖该评分点，且与案情事实相连接。,部分满足：提到相关方向，但缺少关键限定、证据追问或适用说明。,未满足/错误：未提及该点，或给出相反、武断、不可复核的判断。,high,结构混乱或缺少核心模块
+X-DOC-008,reference_style_extended,document_drafting,X-DOC-008-R02,Fact Organization,按时间线、主体、请求和证据组织事实,2,完整满足：明确覆盖该评分点，且与案情事实相连接。,部分满足：提到相关方向，但缺少关键限定、证据追问或适用说明。,未满足/错误：未提及该点，或给出相反、武断、不可复核的判断。,high,插入未给出的事实或金额
+X-DOC-008,reference_style_extended,document_drafting,X-DOC-008-R03,Risk Coverage,提示附件、证据、程序和管辖风险,2,完整满足：明确覆盖该评分点，且与案情事实相连接。,部分满足：提到相关方向，但缺少关键限定、证据追问或适用说明。,未满足/错误：未提及该点，或给出相反、武断、不可复核的判断。,medium,遗漏证据或程序风险
+X-DOC-008,reference_style_extended,document_drafting,X-DOC-008-R04,Overclaim Control,文书表述保持条件化且不编造法律依据,2,完整满足：明确覆盖该评分点，且与案情事实相连接。,部分满足：提到相关方向，但缺少关键限定、证据追问或适用说明。,未满足/错误：未提及该点，或给出相反、武断、不可复核的判断。,medium,写成确定法律意见或虚构引用
+X-DOC-009,reference_style_extended,document_drafting,X-DOC-009-R01,Draft Structure,给出清晰文书结构或材料框架,2,完整满足：明确覆盖该评分点，且与案情事实相连接。,部分满足：提到相关方向，但缺少关键限定、证据追问或适用说明。,未满足/错误：未提及该点，或给出相反、武断、不可复核的判断。,high,结构混乱或缺少核心模块
+X-DOC-009,reference_style_extended,document_drafting,X-DOC-009-R02,Fact Organization,按时间线、主体、请求和证据组织事实,2,完整满足：明确覆盖该评分点，且与案情事实相连接。,部分满足：提到相关方向，但缺少关键限定、证据追问或适用说明。,未满足/错误：未提及该点，或给出相反、武断、不可复核的判断。,high,插入未给出的事实或金额
+X-DOC-009,reference_style_extended,document_drafting,X-DOC-009-R03,Risk Coverage,提示附件、证据、程序和管辖风险,2,完整满足：明确覆盖该评分点，且与案情事实相连接。,部分满足：提到相关方向，但缺少关键限定、证据追问或适用说明。,未满足/错误：未提及该点，或给出相反、武断、不可复核的判断。,medium,遗漏证据或程序风险
+X-DOC-009,reference_style_extended,document_drafting,X-DOC-009-R04,Overclaim Control,文书表述保持条件化且不编造法律依据,2,完整满足：明确覆盖该评分点，且与案情事实相连接。,部分满足：提到相关方向，但缺少关键限定、证据追问或适用说明。,未满足/错误：未提及该点，或给出相反、武断、不可复核的判断。,medium,写成确定法律意见或虚构引用
+X-DOC-010,reference_style_extended,document_drafting,X-DOC-010-R01,Draft Structure,给出清晰文书结构或材料框架,2,完整满足：明确覆盖该评分点，且与案情事实相连接。,部分满足：提到相关方向，但缺少关键限定、证据追问或适用说明。,未满足/错误：未提及该点，或给出相反、武断、不可复核的判断。,high,结构混乱或缺少核心模块
+X-DOC-010,reference_style_extended,document_drafting,X-DOC-010-R02,Fact Organization,按时间线、主体、请求和证据组织事实,2,完整满足：明确覆盖该评分点，且与案情事实相连接。,部分满足：提到相关方向，但缺少关键限定、证据追问或适用说明。,未满足/错误：未提及该点，或给出相反、武断、不可复核的判断。,high,插入未给出的事实或金额
+X-DOC-010,reference_style_extended,document_drafting,X-DOC-010-R03,Risk Coverage,提示附件、证据、程序和管辖风险,2,完整满足：明确覆盖该评分点，且与案情事实相连接。,部分满足：提到相关方向，但缺少关键限定、证据追问或适用说明。,未满足/错误：未提及该点，或给出相反、武断、不可复核的判断。,medium,遗漏证据或程序风险
+X-DOC-010,reference_style_extended,document_drafting,X-DOC-010-R04,Overclaim Control,文书表述保持条件化且不编造法律依据,2,完整满足：明确覆盖该评分点，且与案情事实相连接。,部分满足：提到相关方向，但缺少关键限定、证据追问或适用说明。,未满足/错误：未提及该点，或给出相反、武断、不可复核的判断。,medium,写成确定法律意见或虚构引用
+X-DOC-011,reference_style_extended,document_drafting,X-DOC-011-R01,Draft Structure,给出清晰文书结构或材料框架,2,完整满足：明确覆盖该评分点，且与案情事实相连接。,部分满足：提到相关方向，但缺少关键限定、证据追问或适用说明。,未满足/错误：未提及该点，或给出相反、武断、不可复核的判断。,high,结构混乱或缺少核心模块
+X-DOC-011,reference_style_extended,document_drafting,X-DOC-011-R02,Fact Organization,按时间线、主体、请求和证据组织事实,2,完整满足：明确覆盖该评分点，且与案情事实相连接。,部分满足：提到相关方向，但缺少关键限定、证据追问或适用说明。,未满足/错误：未提及该点，或给出相反、武断、不可复核的判断。,high,插入未给出的事实或金额
+X-DOC-011,reference_style_extended,document_drafting,X-DOC-011-R03,Risk Coverage,提示附件、证据、程序和管辖风险,2,完整满足：明确覆盖该评分点，且与案情事实相连接。,部分满足：提到相关方向，但缺少关键限定、证据追问或适用说明。,未满足/错误：未提及该点，或给出相反、武断、不可复核的判断。,medium,遗漏证据或程序风险
+X-DOC-011,reference_style_extended,document_drafting,X-DOC-011-R04,Overclaim Control,文书表述保持条件化且不编造法律依据,2,完整满足：明确覆盖该评分点，且与案情事实相连接。,部分满足：提到相关方向，但缺少关键限定、证据追问或适用说明。,未满足/错误：未提及该点，或给出相反、武断、不可复核的判断。,medium,写成确定法律意见或虚构引用
+X-DOC-012,reference_style_extended,document_drafting,X-DOC-012-R01,Draft Structure,给出清晰文书结构或材料框架,2,完整满足：明确覆盖该评分点，且与案情事实相连接。,部分满足：提到相关方向，但缺少关键限定、证据追问或适用说明。,未满足/错误：未提及该点，或给出相反、武断、不可复核的判断。,high,结构混乱或缺少核心模块
+X-DOC-012,reference_style_extended,document_drafting,X-DOC-012-R02,Fact Organization,按时间线、主体、请求和证据组织事实,2,完整满足：明确覆盖该评分点，且与案情事实相连接。,部分满足：提到相关方向，但缺少关键限定、证据追问或适用说明。,未满足/错误：未提及该点，或给出相反、武断、不可复核的判断。,high,插入未给出的事实或金额
+X-DOC-012,reference_style_extended,document_drafting,X-DOC-012-R03,Risk Coverage,提示附件、证据、程序和管辖风险,2,完整满足：明确覆盖该评分点，且与案情事实相连接。,部分满足：提到相关方向，但缺少关键限定、证据追问或适用说明。,未满足/错误：未提及该点，或给出相反、武断、不可复核的判断。,medium,遗漏证据或程序风险
+X-DOC-012,reference_style_extended,document_drafting,X-DOC-012-R04,Overclaim Control,文书表述保持条件化且不编造法律依据,2,完整满足：明确覆盖该评分点，且与案情事实相连接。,部分满足：提到相关方向，但缺少关键限定、证据追问或适用说明。,未满足/错误：未提及该点，或给出相反、武断、不可复核的判断。,medium,写成确定法律意见或虚构引用
+X-DOC-013,reference_style_extended,document_drafting,X-DOC-013-R01,Draft Structure,给出清晰文书结构或材料框架,2,完整满足：明确覆盖该评分点，且与案情事实相连接。,部分满足：提到相关方向，但缺少关键限定、证据追问或适用说明。,未满足/错误：未提及该点，或给出相反、武断、不可复核的判断。,high,结构混乱或缺少核心模块
+X-DOC-013,reference_style_extended,document_drafting,X-DOC-013-R02,Fact Organization,按时间线、主体、请求和证据组织事实,2,完整满足：明确覆盖该评分点，且与案情事实相连接。,部分满足：提到相关方向，但缺少关键限定、证据追问或适用说明。,未满足/错误：未提及该点，或给出相反、武断、不可复核的判断。,high,插入未给出的事实或金额
+X-DOC-013,reference_style_extended,document_drafting,X-DOC-013-R03,Risk Coverage,提示附件、证据、程序和管辖风险,2,完整满足：明确覆盖该评分点，且与案情事实相连接。,部分满足：提到相关方向，但缺少关键限定、证据追问或适用说明。,未满足/错误：未提及该点，或给出相反、武断、不可复核的判断。,medium,遗漏证据或程序风险
+X-DOC-013,reference_style_extended,document_drafting,X-DOC-013-R04,Overclaim Control,文书表述保持条件化且不编造法律依据,2,完整满足：明确覆盖该评分点，且与案情事实相连接。,部分满足：提到相关方向，但缺少关键限定、证据追问或适用说明。,未满足/错误：未提及该点，或给出相反、武断、不可复核的判断。,medium,写成确定法律意见或虚构引用
+X-DOC-014,reference_style_extended,document_drafting,X-DOC-014-R01,Draft Structure,给出清晰文书结构或材料框架,2,完整满足：明确覆盖该评分点，且与案情事实相连接。,部分满足：提到相关方向，但缺少关键限定、证据追问或适用说明。,未满足/错误：未提及该点，或给出相反、武断、不可复核的判断。,high,结构混乱或缺少核心模块
+X-DOC-014,reference_style_extended,document_drafting,X-DOC-014-R02,Fact Organization,按时间线、主体、请求和证据组织事实,2,完整满足：明确覆盖该评分点，且与案情事实相连接。,部分满足：提到相关方向，但缺少关键限定、证据追问或适用说明。,未满足/错误：未提及该点，或给出相反、武断、不可复核的判断。,high,插入未给出的事实或金额
+X-DOC-014,reference_style_extended,document_drafting,X-DOC-014-R03,Risk Coverage,提示附件、证据、程序和管辖风险,2,完整满足：明确覆盖该评分点，且与案情事实相连接。,部分满足：提到相关方向，但缺少关键限定、证据追问或适用说明。,未满足/错误：未提及该点，或给出相反、武断、不可复核的判断。,medium,遗漏证据或程序风险
+X-DOC-014,reference_style_extended,document_drafting,X-DOC-014-R04,Overclaim Control,文书表述保持条件化且不编造法律依据,2,完整满足：明确覆盖该评分点，且与案情事实相连接。,部分满足：提到相关方向，但缺少关键限定、证据追问或适用说明。,未满足/错误：未提及该点，或给出相反、武断、不可复核的判断。,medium,写成确定法律意见或虚构引用
+X-DOC-015,reference_style_extended,document_drafting,X-DOC-015-R01,Draft Structure,给出清晰文书结构或材料框架,2,完整满足：明确覆盖该评分点，且与案情事实相连接。,部分满足：提到相关方向，但缺少关键限定、证据追问或适用说明。,未满足/错误：未提及该点，或给出相反、武断、不可复核的判断。,high,结构混乱或缺少核心模块
+X-DOC-015,reference_style_extended,document_drafting,X-DOC-015-R02,Fact Organization,按时间线、主体、请求和证据组织事实,2,完整满足：明确覆盖该评分点，且与案情事实相连接。,部分满足：提到相关方向，但缺少关键限定、证据追问或适用说明。,未满足/错误：未提及该点，或给出相反、武断、不可复核的判断。,high,插入未给出的事实或金额
+X-DOC-015,reference_style_extended,document_drafting,X-DOC-015-R03,Risk Coverage,提示附件、证据、程序和管辖风险,2,完整满足：明确覆盖该评分点，且与案情事实相连接。,部分满足：提到相关方向，但缺少关键限定、证据追问或适用说明。,未满足/错误：未提及该点，或给出相反、武断、不可复核的判断。,medium,遗漏证据或程序风险
+X-DOC-015,reference_style_extended,document_drafting,X-DOC-015-R04,Overclaim Control,文书表述保持条件化且不编造法律依据,2,完整满足：明确覆盖该评分点，且与案情事实相连接。,部分满足：提到相关方向，但缺少关键限定、证据追问或适用说明。,未满足/错误：未提及该点，或给出相反、武断、不可复核的判断。,medium,写成确定法律意见或虚构引用

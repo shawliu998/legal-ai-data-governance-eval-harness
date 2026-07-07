@@ -1,0 +1,14 @@
+.venv/
+__pycache__/
+.pytest_cache/
+*.pyc
+*.egg-info/
+build/
+dist/
+
+data/Legal_Agent_Eval_Harness_20_Samples.xlsx
+
+outputs/*.csv
+outputs/*.xlsx
+!outputs/.gitkeep
+!outputs/executive_dashboard.xlsx

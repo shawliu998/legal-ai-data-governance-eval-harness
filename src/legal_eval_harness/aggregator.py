@@ -1,0 +1,333 @@
+from __future__ import annotations
+
+from collections import Counter
+from pathlib import Path
+from typing import Any
+
+import pandas as pd
+from openpyxl.styles import Alignment, Font, PatternFill
+from openpyxl.utils import get_column_letter
+
+from .schemas import COARSE_ERROR_TAGS, DATA_ROUTES
+from .utils import json_loads_or_none
+
+
+def _iter_coarse_tags(values: pd.Series) -> list[str]:
+    tags: list[str] = []
+    for value in values:
+        parsed = json_loads_or_none(value) or []
+        for item in parsed:
+            if isinstance(item, dict):
+                tag = item.get("coarse_error_tag")
+                if tag:
+                    tags.append(str(tag))
+            elif isinstance(item, str):
+                tags.append(item)
+    return tags
+
+
+def _recommended_actions(top_tags: list[str]) -> str:
+    actions = []
+    if "missing_facts" in top_tags:
+        actions.append("expand intake/SFT samples for missing-facts awareness")
+    if "overclaim" in top_tags:
+        actions.append("build preference pairs for overclaim control")
+    if "missing_evidence_warning" in top_tags:
+        actions.append("add evidence-risk warning exemplars")
+    if "needs_human_review" in top_tags:
+        actions.append("calibrate high-risk review queue")
+    return "; ".join(actions) or "continue diagnostic eval expansion"
+
+
+BADCASE_CARD_COLUMNS = [
+    "sample_id",
+    "source_dataset",
+    "task_category",
+    "run_id",
+    "model_alias",
+    "version",
+    "main_error_type",
+    "risk_level",
+    "judge_confidence",
+    "data_route",
+    "priority",
+    "route_reason",
+    "route_subtype",
+    "score_rate",
+    "judge_reason",
+    "output_preview",
+]
+
+
+def _build_badcase_cards(badcase_base: pd.DataFrame, *, limit: int = 80) -> pd.DataFrame:
+    """Create interview-friendly cards with route and task diversity."""
+    cards = badcase_base.copy()
+    cards["output_preview"] = cards["output_text"].astype(str).str.slice(0, 220)
+    cards["_priority_rank"] = cards["priority"].map({"P0": 0, "P1": 1, "P2": 2}).fillna(9)
+    cards["_route_rank"] = cards["data_route"].map(
+        {
+            "human_review": 0,
+            "badcase": 1,
+            "preference": 2,
+            "sft": 3,
+            "eval": 4,
+        }
+    ).fillna(9)
+    cards["_score_rate"] = pd.to_numeric(cards["score_rate"], errors="coerce").fillna(1.0)
+    sort_cols = [
+        "_route_rank",
+        "task_category",
+        "_priority_rank",
+        "_score_rate",
+        "sample_id",
+        "version",
+        "model_alias",
+    ]
+    cards = cards.sort_values(sort_cols)
+
+    selected: list[int] = []
+    selected_run_ids: set[str] = set()
+    selected_card_keys: set[tuple[str, str, str]] = set()
+
+    def card_key(row: pd.Series) -> tuple[str, str, str]:
+        return (str(row["sample_id"]), str(row["version"]), str(row["data_route"]))
+
+    def add_first(group: pd.DataFrame, *, allow_duplicate_key: bool = False) -> None:
+        for idx, row in group.iterrows():
+            run_id = str(row["run_id"])
+            key = card_key(row)
+            if run_id not in selected_run_ids:
+                if key in selected_card_keys and not allow_duplicate_key:
+                    continue
+                selected.append(idx)
+                selected_run_ids.add(run_id)
+                selected_card_keys.add(key)
+                break
+
+    task_order = ["consultation", "case_analysis", "document_drafting"]
+    for route in ["human_review", "badcase", "preference", "sft", "eval"]:
+        route_group = cards[cards["data_route"] == route]
+        for task_category in task_order:
+            add_first(route_group[route_group["task_category"] == task_category])
+
+    for _, group in cards.groupby(["data_route", "main_error_type"], sort=False):
+        add_first(group)
+
+    for idx, row in cards.iterrows():
+        if len(selected) >= limit:
+            break
+        run_id = str(row["run_id"])
+        key = card_key(row)
+        if run_id not in selected_run_ids and key not in selected_card_keys:
+            selected.append(idx)
+            selected_run_ids.add(run_id)
+            selected_card_keys.add(key)
+
+    for idx, row in cards.iterrows():
+        if len(selected) >= limit:
+            break
+        run_id = str(row["run_id"])
+        if run_id not in selected_run_ids:
+            selected.append(idx)
+            selected_run_ids.add(run_id)
+            selected_card_keys.add(card_key(row))
+
+    return cards.loc[selected, BADCASE_CARD_COLUMNS].reset_index(drop=True)
+
+
+def build_executive_dashboard(
+    *,
+    runs: pd.DataFrame,
+    scores: pd.DataFrame,
+    routing: pd.DataFrame,
+    output_path: str | Path,
+) -> dict[str, Any]:
+    scores = scores.copy()
+    scores["score_rate"] = scores["score_rate"].astype(float)
+    runs = runs.copy()
+    routing = routing.copy()
+    for frame in [scores, runs, routing]:
+        if "source_dataset" not in frame.columns:
+            frame["source_dataset"] = "unknown"
+        if "task_category" not in frame.columns:
+            frame["task_category"] = "unknown"
+
+    pivot = scores.pivot_table(
+        index=["sample_id", "model_alias"],
+        columns="version",
+        values="score_rate",
+        aggfunc="mean",
+    )
+    if {"V0", "V3"}.issubset(set(pivot.columns)):
+        deltas = pivot["V3"] - pivot["V0"]
+        avg_delta = round(float(deltas.mean()), 3)
+    else:
+        avg_delta = 0.0
+
+    all_tags = _iter_coarse_tags(scores["error_tags"])
+    tag_counts = Counter(all_tags)
+    top_3 = [tag for tag, _ in tag_counts.most_common(3)]
+    dashboard = {
+        "total_samples": int(scores["sample_id"].nunique()),
+        "total_runs": int(len(runs)),
+        "total_task_categories": int(scores["task_category"].nunique()) if "task_category" in scores.columns else 0,
+        "total_source_datasets": int(scores["source_dataset"].nunique()) if "source_dataset" in scores.columns else 0,
+        "avg_v0_score": round(float(scores.loc[scores["version"] == "V0", "score_rate"].mean()), 3),
+        "avg_v3_score": round(float(scores.loc[scores["version"] == "V3", "score_rate"].mean()), 3),
+        "avg_score_delta": avg_delta,
+        "high_risk_rate": round(float((scores["risk_level"] == "high").mean()), 3),
+        "human_review_queue_size": int((routing["data_route"] == "human_review").sum()),
+        "top_3_error_tags": ", ".join(top_3),
+        "recommended_data_actions": _recommended_actions(top_3),
+        "dashboard_boundary": "Data production decision panel; diagnostic comparison only; not a model leaderboard.",
+    }
+
+    sample_cols = ["sample_id"]
+    for col in ["source_dataset", "task_category"]:
+        if col in runs.columns:
+            sample_cols.append(col)
+    sample_catalog = runs[sample_cols].drop_duplicates()
+    dataset_coverage = (
+        sample_catalog.groupby(["source_dataset", "task_category"], as_index=False)
+        .agg(samples=("sample_id", "nunique"))
+        .merge(
+            runs.groupby(["source_dataset", "task_category"], as_index=False).agg(runs=("run_id", "count")),
+            on=["source_dataset", "task_category"],
+            how="left",
+        )
+    )
+    dataset_coverage["coverage_note"] = "Core samples emphasize quality; extended samples exercise scale and task taxonomy."
+
+    task_tag_rows = []
+    for task_category, grp in scores.groupby("task_category"):
+        tags = Counter(_iter_coarse_tags(grp["error_tags"]))
+        routes = routing[routing["task_category"] == task_category]["data_route"].value_counts().to_dict()
+        task_tag_rows.append(
+            {
+                "task_category": task_category,
+                "samples": int(grp["sample_id"].nunique()),
+                "runs": int(len(grp)),
+                "avg_score_rate": round(float(grp["score_rate"].mean()), 3),
+                "high_risk_rate": round(float((grp["risk_level"] == "high").mean()), 3),
+                "human_review_rate": round(float(grp["needs_human_review"].mean()), 3),
+                "top_error_tags": ", ".join([tag for tag, _ in tags.most_common(3)]),
+                "route_mix": "; ".join(f"{route}:{count}" for route, count in sorted(routes.items())),
+                "data_action": _recommended_actions([tag for tag, _ in tags.most_common(3)]),
+            }
+        )
+    task_category_summary = pd.DataFrame(task_tag_rows)
+
+    version_summary = (
+        scores.groupby("version", as_index=False)
+        .agg(
+            avg_score_rate=("score_rate", "mean"),
+            high_risk_rate=("risk_level", lambda x: (x == "high").mean()),
+            human_review_rate=("needs_human_review", "mean"),
+        )
+        .round(3)
+    )
+
+    route_summary = (
+        routing.groupby(["data_route", "task_category"], as_index=False)
+        .agg(count=("run_id", "count"), example_sample_ids=("sample_id", lambda x: ", ".join(sorted(set(x))[:5])))
+        .sort_values("count", ascending=False)
+    )
+
+    model_patterns = []
+    for model_alias, grp in scores.groupby("model_alias"):
+        tags = Counter(_iter_coarse_tags(grp["error_tags"]))
+        model_patterns.append(
+            {
+                "model_alias": model_alias,
+                "dominant_error_patterns": ", ".join([tag for tag, _ in tags.most_common(3)]),
+                "workflow_delta_note": "Diagnostic comparison only; use this for workflow effects and data needs, not model ranking.",
+                "human_review_rate": round(float(grp["needs_human_review"].mean()), 3),
+            }
+        )
+    model_patterns_df = pd.DataFrame(model_patterns)
+
+    badcase_base = routing.merge(
+        scores.assign(
+            total_score=scores["total_score"] if "total_score" in scores.columns else "",
+            max_score=scores["max_score"] if "max_score" in scores.columns else "",
+            judge_reason=scores["judge_reason"] if "judge_reason" in scores.columns else "",
+            judge_confidence=scores["judge_confidence"] if "judge_confidence" in scores.columns else "",
+        )[
+            [
+                "run_id",
+                "total_score",
+                "max_score",
+                "score_rate",
+                "judge_reason",
+                "judge_confidence",
+                "needs_human_review",
+            ]
+        ],
+        on="run_id",
+        how="left",
+    ).merge(
+        runs[["run_id", "output_text", "output_length"]],
+        on="run_id",
+        how="left",
+    )
+    badcase_cards = _build_badcase_cards(badcase_base, limit=80)
+
+    taxonomy_df = pd.DataFrame(
+        {
+            "coarse_error_tag": COARSE_ERROR_TAGS,
+            "definition": [
+                "Answer misses necessary facts before analysis.",
+                "Answer states a stronger conclusion than facts support.",
+                "Answer fails to warn that evidence is required.",
+                "Answer relies on a legal basis that is not verified.",
+                "Answer fabricates laws, cases, institutions, or citations.",
+                "Answer weakly connects facts to legal rules.",
+                "Answer misses timing, procedure, limitation, or channel warnings.",
+                "Answer ignores jurisdiction or local-practice uncertainty.",
+                "Answer suggests potentially unsafe action.",
+                "Sample should be calibrated by human review.",
+            ],
+        }
+    )
+    route_taxonomy_df = pd.DataFrame(
+        {
+            "data_route": DATA_ROUTES,
+            "meaning": [
+                "held-out diagnostic evaluation",
+                "supervised fine-tuning candidate",
+                "preference pair candidate",
+                "regression badcase set",
+                "human calibration queue",
+            ],
+        }
+    )
+
+    output = Path(output_path)
+    output.parent.mkdir(parents=True, exist_ok=True)
+    with pd.ExcelWriter(output, engine="openpyxl") as writer:
+        pd.DataFrame([dashboard]).to_excel(writer, sheet_name="Executive_Dashboard", index=False)
+        dataset_coverage.to_excel(writer, sheet_name="Dataset_Coverage", index=False)
+        task_category_summary.to_excel(writer, sheet_name="Task_Category_Summary", index=False)
+        badcase_cards.to_excel(writer, sheet_name="Badcase_Cards", index=False)
+        version_summary.to_excel(writer, sheet_name="Version_Summary", index=False)
+        route_summary.to_excel(writer, sheet_name="Data_Routing_Summary", index=False)
+        model_patterns_df.to_excel(writer, sheet_name="Model_Error_Patterns", index=False)
+        taxonomy_df.to_excel(writer, sheet_name="Error_Taxonomy", index=False)
+        route_taxonomy_df.to_excel(writer, sheet_name="Data_Route_Taxonomy", index=False)
+        workbook = writer.book
+        header_fill = PatternFill("solid", fgColor="1F4E79")
+        header_font = Font(color="FFFFFF", bold=True)
+        for ws in workbook.worksheets:
+            ws.freeze_panes = "A2"
+            for cell in ws[1]:
+                cell.fill = header_fill
+                cell.font = header_font
+                cell.alignment = Alignment(horizontal="center", vertical="center", wrap_text=True)
+            for column_cells in ws.columns:
+                max_len = max(len(str(cell.value or "")) for cell in column_cells[:80])
+                width = min(max(max_len + 2, 12), 42)
+                ws.column_dimensions[get_column_letter(column_cells[0].column)].width = width
+            for row in ws.iter_rows(min_row=2):
+                for cell in row:
+                    cell.alignment = Alignment(vertical="top", wrap_text=True)
+    return dashboard

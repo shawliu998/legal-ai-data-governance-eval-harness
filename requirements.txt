@@ -1,0 +1,10 @@
+pandas
+openpyxl
+pydantic
+python-dotenv
+pyyaml
+tqdm
+tenacity
+openai
+pytest
+

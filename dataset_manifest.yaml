@@ -1,0 +1,38 @@
+project:
+  name: Legal AI Data-Loop Governance Prototype
+  version: "0.3.0"
+  boundary: diagnostic evaluation and data production decision support; not legal advice; not model ranking
+
+files:
+  eval_input: data/eval_input.csv
+  gold_labels: data/gold_labels.csv
+  rubric_items: data/rubric_items.csv
+  sample_metadata: data/sample_metadata.csv
+
+sources:
+  - source_dataset: self_authored_core_40
+    expected_samples: 40
+    role: high-quality portfolio core samples
+    note: Upgraded self-authored core workbook with Eval_Input, Gold_Labels, Rubric_Items, metadata, taxonomy, and dashboard templates.
+  - source_dataset: reference_style_extended
+    expected_samples: 45
+    role: taxonomy and scale extension
+    note: Synthetic reference-style samples inspired by common rubric-based legal evaluation task taxonomy; not a benchmark replica.
+
+task_categories:
+  - consultation
+  - case_analysis
+  - document_drafting
+
+visibility_policy:
+  agent_visible: Eval_Input only
+  metadata_visible: sample_metadata.csv is for experiment control and dashboard context; it is not prompt-visible.
+  judge_visible: Eval_Input + Gold_Labels + Rubric_Items
+  protected_from_agents:
+    - key_missing_facts
+    - expected_clarification_questions
+    - expected_answer_points
+    - risk_points
+    - expected_behavior
+    - rubric_items
+    - human_review_note
