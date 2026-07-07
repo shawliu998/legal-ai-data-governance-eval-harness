@@ -6,9 +6,12 @@ The project is intentionally scoped: no RAG, no Web UI, no database, and no auto
 
 It is not a legal advice system and not a model leaderboard.
 
+![Dashboard preview](assets/dashboard_preview.png)
+
 ## Open First
 
 - Portfolio narrative: [docs/portfolio_case_study.md](docs/portfolio_case_study.md)
+- Resume and pitch notes: [docs/resume_pitch.md](docs/resume_pitch.md)
 - Reproducible dashboard: [outputs/executive_dashboard.xlsx](outputs/executive_dashboard.xlsx)
 - Dataset design: [data/eval_input.csv](data/eval_input.csv), [data/gold_labels.csv](data/gold_labels.csv), [data/rubric_items.csv](data/rubric_items.csv)
 - Reproduction steps: [docs/runbook.md](docs/runbook.md)
