@@ -46,10 +46,10 @@ flowchart LR
 The normalized dataset has 85 samples:
 
 - 40 self-authored core samples from the upgraded workbook.
-- 45 reference-style extended samples for scale and task taxonomy coverage.
+- 45 internally extended diagnostic samples for scale and task coverage.
 - Task categories: consultation, case analysis, document drafting.
 
-The extended samples are synthetic reference-style scenarios inspired by common rubric-based legal evaluation task design. They do not attempt to replicate any external benchmark.
+The extended samples are synthetic diagnostic scenarios designed for coverage, routing calibration, and pipeline stress testing.
 
 Primary files:
 

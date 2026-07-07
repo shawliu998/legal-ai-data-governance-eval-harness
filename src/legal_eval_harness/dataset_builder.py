@@ -139,7 +139,7 @@ def _extended_specs() -> list[dict[str, Any]]:
             records.append(
                 {
                     "sample_id": sample_id,
-                    "source_dataset": "reference_style_extended",
+                    "source_dataset": "extended_diagnostic_45",
                     "task_category": task_category,
                     "scenario_title": title,
                     "user_question": question,
@@ -153,7 +153,7 @@ def _extended_specs() -> list[dict[str, Any]]:
                     "risk_points": f"主要风险包括证据链不足、程序路径不明、过度承诺结论，以及 {subtype}。",
                     "legal_concepts": concepts,
                     "expected_behavior": "任务类型化分析 + 风险控制 + 数据可用标签",
-                    "human_review_note": "reference-style sample; use for scale testing and data-routing calibration.",
+                    "human_review_note": "internal extended diagnostic sample; use for scale testing and data-routing calibration.",
                     "task_type": task_category,
                     "jurisdiction": JURISDICTION,
                     "law_snapshot_date": LAW_SNAPSHOT_DATE,

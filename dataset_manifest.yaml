@@ -14,10 +14,10 @@ sources:
     expected_samples: 40
     role: high-quality portfolio core samples
     note: Upgraded self-authored core workbook with Eval_Input, Gold_Labels, Rubric_Items, metadata, taxonomy, and dashboard templates.
-  - source_dataset: reference_style_extended
+  - source_dataset: extended_diagnostic_45
     expected_samples: 45
     role: taxonomy and scale extension
-    note: Synthetic reference-style samples inspired by common rubric-based legal evaluation task taxonomy; not a benchmark replica.
+    note: Internal extended diagnostic samples for task coverage and data-routing calibration.
 
 task_categories:
   - consultation

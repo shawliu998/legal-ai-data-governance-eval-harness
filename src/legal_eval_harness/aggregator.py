@@ -196,7 +196,7 @@ def build_executive_dashboard(
             how="left",
         )
     )
-    dataset_coverage["coverage_note"] = "Core samples emphasize quality; extended samples exercise scale and task taxonomy."
+    dataset_coverage["coverage_note"] = "Core samples emphasize quality; extended samples exercise scale and task coverage."
 
     task_tag_rows = []
     for task_category, grp in scores.groupby("task_category"):

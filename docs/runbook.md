@@ -45,7 +45,7 @@ Expected dataset shape:
 
 - 85 samples
 - 40 `self_authored_core_40` samples
-- 45 `reference_style_extended` samples
+- 45 `extended_diagnostic_45` samples
 - 3 task categories: `consultation`, `case_analysis`, `document_drafting`
 - 380 rubric rows
 - `sample_metadata.csv` for difficulty, risk level, deep-badcase flag, and human-review flag. This metadata is not prompt-visible.

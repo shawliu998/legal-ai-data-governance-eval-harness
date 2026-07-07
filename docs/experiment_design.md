@@ -3,9 +3,9 @@
 ## Positioning
 
 This is a two-day portfolio prototype for legal AI data-loop governance.
-It is designed to show data product thinking, not to reproduce a public benchmark.
+It is designed to show data product thinking through a compact, self-contained diagnostic dataset.
 
-The prototype references common legal evaluation task taxonomy and rubric-based judging ideas, then implements a lightweight data loop:
+The prototype uses a compact legal task set and rubric-based judging structure, then implements a lightweight data loop:
 
 1. Normalize legal samples.
 2. Prevent gold label leakage.
@@ -49,7 +49,7 @@ This separation is the primary leakage-control design.
 The current portfolio dataset contains 85 samples:
 
 - `self_authored_core_40`: 40 high-quality core samples.
-- `reference_style_extended`: 45 synthetic reference-style samples.
+- `extended_diagnostic_45`: 45 internal extended diagnostic samples.
 
 Task categories:
 
@@ -57,7 +57,7 @@ Task categories:
 - `case_analysis`
 - `document_drafting`
 
-The extended samples are for taxonomy coverage and scale testing, not external benchmark replication.
+The extended samples are for task coverage, scale testing, and data-routing calibration.
 
 ## Agent Versions
 
