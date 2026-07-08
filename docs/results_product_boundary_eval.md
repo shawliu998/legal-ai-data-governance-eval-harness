@@ -18,7 +18,9 @@ Core question:
 | Judge ensemble design | Complete |
 | Human calibration file | Complete for mock diagnostic outputs |
 | 12-case Qianfan API pilot dataset | Prepared |
-| Real Qianfan API outputs | Pending API credentials/run |
+| Real Qianfan API outputs | Complete |
+| Qwen single-judge full scoring | Complete |
+| Multi-judge ensemble smoke | Complete; not used as full-run scoring baseline |
 
 ## Mock Diagnostic Artifacts
 
@@ -60,17 +62,82 @@ The real API pilot is intentionally smaller than the mock diagnostic run:
 | Models | ERNIE 5.0, DeepSeek V4 Pro, Qwen3.5-27B, GLM-5.2, Kimi K2.6 |
 | Workflows | W0, W1, W2, W3, W4 |
 | Expected model outputs | 300 |
-| Judge ensemble | DeepSeek V4 Pro + GLM-5.2 primary judges, Kimi K2.6 arbiter, self-eval excluded |
+| Full scoring judge | Qwen3.5-27B single judge, selected after smoke testing for JSON stability |
+| Judge ensemble smoke | ERNIE 5.0 + Qwen3.5-27B primary judges, Kimi K2.6 arbiter, self-eval excluded |
 
-Run command:
+The API pilot was run as split jobs rather than one monolithic `all` command, because Qianfan model latency varied significantly by model and workflow.
 
-```bash
-.venv/bin/python -m legal_eval_harness.cli all \
-  --input data/product_boundary_api_pilot_v1/dataset_manifest.yaml \
-  --config config.qianfan_product_boundary_api_pilot.yaml \
-  --mode api \
-  --output-dir outputs/product_boundary_api_pilot_v1
-```
+## Real API Pilot Results
+
+### Completed Artifacts
+
+| Artifact | Path |
+| --- | --- |
+| Model outputs | `outputs/product_boundary_api_pilot_v1/model_run_log.csv` |
+| Retrieval log | `outputs/product_boundary_api_pilot_v1/retrieval_log.csv` |
+| RAG contexts | `outputs/product_boundary_api_pilot_v1/rag_contexts.csv` |
+| Citation verification | `outputs/product_boundary_api_pilot_v1/citation_verification.csv` |
+| Qwen judge scores | `outputs/product_boundary_api_pilot_v1/judge_scores.csv` |
+| Data routing | `outputs/product_boundary_api_pilot_v1/data_routing.csv` |
+| Release gate | `outputs/product_boundary_api_pilot_v1/release_gate.csv` |
+| Executive dashboard | `outputs/product_boundary_api_pilot_v1/executive_dashboard.xlsx` |
+| Human review queue | `outputs/product_boundary_api_pilot_v1/human_review_calibration.csv` |
+| Priority human review sample | `outputs/product_boundary_api_pilot_v1/human_review_priority_80.csv` |
+
+### Run Integrity
+
+| Check | Result |
+| --- | ---: |
+| Model outputs | 300 / 300 OK |
+| Unique run IDs | 300 |
+| Qwen judge parsed outputs | 300 / 300 OK |
+| RAG retrieval rows | 120 |
+| RAG context rows | 480 |
+| Citation verification rows | 120 |
+
+### Model-Level Signals
+
+These are deployment signals from a Qwen3.5-27B judge baseline, not a public leaderboard.
+
+| Model | Avg score | High-risk rate | Human-review rate | Avg latency |
+| --- | ---: | ---: | ---: | ---: |
+| Qwen3.5-27B | 0.878 | 0.200 | 0.800 | 13.3s |
+| ERNIE 5.0 | 0.765 | 0.383 | 0.817 | 32.9s |
+| DeepSeek V4 Pro | 0.756 | 0.400 | 0.800 | 27.6s |
+| Kimi K2.6 | 0.730 | 0.350 | 0.783 | 87.8s |
+| GLM-5.2 | 0.462 | 0.650 | 0.833 | 28.2s |
+
+### Workflow-Level Signals
+
+| Workflow | Version | Avg score | High-risk rate | Human-review rate | Product interpretation |
+| --- | --- | ---: | ---: | ---: | --- |
+| W1 structured prompt | V1 | 0.883 | 0.150 | 0.717 | Best baseline for routine structured answers. |
+| W4 clarification-first | V5 | 0.851 | 0.300 | 0.683 | Strong for intake and risk calibration. |
+| W2 RAG-grounded | V4 | 0.706 | 0.350 | 0.950 | Useful for grounding, but citation discipline still needs review. |
+| W0 closed-book baseline | V0 | 0.616 | 0.500 | 0.700 | Not suitable for high-risk autonomous release. |
+| W3 RAG verifier/router | V3 | 0.533 | 0.683 | 0.983 | Conservative but over-routes to human review under Qwen judge. |
+
+### Routing And Release Gate
+
+| Output | Count |
+| --- | ---: |
+| Human review route | 243 |
+| Eval route | 45 |
+| SFT route | 9 |
+| Badcase route | 3 |
+| Limited release / human review | 44 |
+| Blocked release gates | 31 |
+
+Citation verification produced 92 `unsupported_claim`, 24 `missing_citation`, 3 `citation_supported`, and 1 `fabricated_citation` labels. This is a triage signal, not a final legal entailment judgment.
+
+### Judge Reliability Finding
+
+The initial plan used DeepSeek V4 Pro and GLM-5.2 as primary judges with Kimi K2.6 as arbiter. Real smoke tests showed this was not stable enough on the Qianfan OpenAI-compatible endpoint:
+
+- DeepSeek V4 Pro often spent completion budget in `reasoning_content` and returned empty final `content`.
+- GLM-5.2 and ERNIE 5.0 sometimes returned truncated JSON on longer judge prompts.
+- Qwen3.5-27B returned stable JSON in the full 300-output single-judge run.
+- Multi-judge ensemble remains useful for targeted calibration, but full-run release decisions currently use the Qwen judge baseline plus human review.
 
 ## Product Policy Conclusions
 
