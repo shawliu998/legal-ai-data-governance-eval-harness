@@ -1,0 +1,2 @@
+﻿sample_id,source_dataset,task_category,user_question,known_facts,legal_concepts,jurisdiction,law_snapshot_date,task_type,legal_advice_boundary
+LPB-NORMAL-001,legal_product_boundary_pilot_v1,consultation,我在网店买的电脑到货后频繁死机，商家说已经拆封不能退。我有订单、聊天记录和检测视频，想知道怎么维权。,未提供额外背景材料；用户问题中包含模型可见事实。,slice=normal_practice；task_type=legal_consultation；expected_human_review=False,中国大陆,2026-07-07,legal_consultation,仅用于法律 AI 诊断评测和数据治理工作流，不构成法律咨询或最终法律意见。

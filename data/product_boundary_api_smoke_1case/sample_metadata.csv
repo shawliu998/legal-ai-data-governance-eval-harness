@@ -1,0 +1,2 @@
+﻿sample_id,source_dataset,task_category,legal_domain,difficulty,risk_level,visibility_policy,core_sample_flag,deep_badcase_flag,human_review_required
+LPB-NORMAL-001,legal_product_boundary_pilot_v1,consultation,normal_practice,normal,low,Eval_Input visible to agent; gold/rubric visible only to judge and human review.,yes,no,no

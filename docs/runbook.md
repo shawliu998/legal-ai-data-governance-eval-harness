@@ -509,7 +509,59 @@ Mock release-gate decisions are only pipeline diagnostics. Do not interpret them
 
 ## 12. Qianfan API Pilot
 
-Do not start with the full 1250-output run. Use the 12-case API pilot first:
+Do not start with the full 1250-output run. First run the 1-case API smoke test, then run the 12-case API pilot.
+
+### 12.1 One-Case API Smoke Test
+
+Use this to verify Qianfan API key, base URL, model ID, response parsing, and CSV writing before spending money on the pilot.
+
+Validate the smoke dataset and run plan:
+
+```bash
+.venv/bin/python -m legal_eval_harness.cli validate \
+  --input data/product_boundary_api_smoke_1case/dataset_manifest.yaml \
+  --config config.qianfan_product_boundary_api_smoke.yaml
+```
+
+Expected planned run count:
+
+```text
+1 case × 1 model × 1 workflow = 1 normalized run
+```
+
+Run only the target model call first:
+
+```bash
+.venv/bin/python -m legal_eval_harness.cli run-models \
+  --input data/product_boundary_api_smoke_1case/dataset_manifest.yaml \
+  --config config.qianfan_product_boundary_api_smoke.yaml \
+  --mode api \
+  --output outputs/product_boundary_api_smoke_1case/model_run_log.csv
+```
+
+Check that `run_status` is `ok` and `output_text` is non-empty:
+
+```bash
+.venv/bin/python - <<'PY'
+import pandas as pd
+df = pd.read_csv("outputs/product_boundary_api_smoke_1case/model_run_log.csv")
+print(df[["run_id", "model_alias", "version", "run_status", "error_message", "output_length"]].to_string(index=False))
+PY
+```
+
+Optionally run the full one-case smoke chain, including judge and routing:
+
+```bash
+.venv/bin/python -m legal_eval_harness.cli all \
+  --input data/product_boundary_api_smoke_1case/dataset_manifest.yaml \
+  --config config.qianfan_product_boundary_api_smoke.yaml \
+  --mode api \
+  --output-dir outputs/product_boundary_api_smoke_1case
+```
+
+### 12.2 Twelve-Case API Pilot
+
+Use the 12-case API pilot after the smoke test passes:
 
 - 2 `normal_practice`
 - 2 `hard_legal_reasoning`
