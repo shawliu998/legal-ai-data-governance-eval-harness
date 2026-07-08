@@ -1,0 +1,127 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="980" viewBox="0 0 1600 980">
+  <rect width="1600" height="980" fill="#f6f8fb"/>
+  <rect width="1600" height="140" fill="#121f34"/>
+  <text x="54" y="66" fill="#ffffff" font-family="Arial, Helvetica, sans-serif" font-size="42" font-weight="700">Legal AI Product Boundary Eval &amp; Data Governance System</text>
+  <text x="56" y="102" fill="#cbd5e1" font-family="Arial, Helvetica, sans-serif" font-size="23">Model routing | RAG reliability | A5 trace eval | Human review | Release gates | Data asset routing</text>
+
+  <g font-family="Arial, Helvetica, sans-serif">
+    <g transform="translate(54 175)">
+      <rect width="282" height="128" rx="8" fill="#ffffff" stroke="#cbd5e1"/>
+      <rect width="7" height="128" fill="#2563eb"/>
+      <text x="25" y="38" fill="#64748b" font-size="18" font-weight="700">Real API outputs</text>
+      <text x="25" y="86" fill="#1f2937" font-size="40" font-weight="700">300</text>
+    </g>
+    <g transform="translate(358 175)">
+      <rect width="282" height="128" rx="8" fill="#ffffff" stroke="#cbd5e1"/>
+      <rect width="7" height="128" fill="#be123c"/>
+      <text x="25" y="38" fill="#64748b" font-size="18" font-weight="700">Priority human review</text>
+      <text x="25" y="86" fill="#1f2937" font-size="40" font-weight="700">80</text>
+    </g>
+    <g transform="translate(662 175)">
+      <rect width="282" height="128" rx="8" fill="#ffffff" stroke="#cbd5e1"/>
+      <rect width="7" height="128" fill="#16a34a"/>
+      <text x="25" y="38" fill="#64748b" font-size="18" font-weight="700">RAG V2 outputs</text>
+      <text x="25" y="86" fill="#1f2937" font-size="40" font-weight="700">72</text>
+    </g>
+    <g transform="translate(966 175)">
+      <rect width="282" height="128" rx="8" fill="#ffffff" stroke="#cbd5e1"/>
+      <rect width="7" height="128" fill="#7c3aed"/>
+      <text x="25" y="38" fill="#64748b" font-size="18" font-weight="700">A5 traces / turns</text>
+      <text x="25" y="86" fill="#1f2937" font-size="40" font-weight="700">24 / 72</text>
+    </g>
+    <g transform="translate(1270 175)">
+      <rect width="282" height="128" rx="8" fill="#ffffff" stroke="#cbd5e1"/>
+      <rect width="7" height="128" fill="#d97706"/>
+      <text x="25" y="38" fill="#64748b" font-size="18" font-weight="700">A5 pass rate</text>
+      <text x="25" y="86" fill="#1f2937" font-size="40" font-weight="700">75.0%</text>
+    </g>
+  </g>
+
+  <g transform="translate(54 335)" font-family="Arial, Helvetica, sans-serif">
+    <rect width="706" height="355" rx="8" fill="#ffffff" stroke="#cbd5e1"/>
+    <text x="26" y="43" fill="#1f2937" font-size="24" font-weight="700">Product Eval Loop</text>
+    <text x="26" y="73" fill="#64748b" font-size="17">Each output becomes a launch and data decision, not a leaderboard row.</text>
+    <g transform="translate(28 111)">
+      <circle cx="12" cy="12" r="12" fill="#2563eb"/><text x="8" y="18" fill="#ffffff" font-size="14" font-weight="700">1</text>
+      <text x="40" y="10" fill="#1f2937" font-size="18" font-weight="700">Legal task slice</text>
+      <text x="40" y="33" fill="#64748b" font-size="15">normal / hard / risk / citation / adversarial</text>
+      <line x1="12" y1="29" x2="12" y2="42" stroke="#cbd5e1" stroke-width="2"/>
+    </g>
+    <g transform="translate(28 154)">
+      <circle cx="12" cy="12" r="12" fill="#2563eb"/><text x="8" y="18" fill="#ffffff" font-size="14" font-weight="700">2</text>
+      <text x="40" y="10" fill="#1f2937" font-size="18" font-weight="700">Agent architecture</text>
+      <text x="40" y="33" fill="#64748b" font-size="15">A0 closed-book to A5 multi-turn intake</text>
+      <line x1="12" y1="29" x2="12" y2="42" stroke="#cbd5e1" stroke-width="2"/>
+    </g>
+    <g transform="translate(28 197)">
+      <circle cx="12" cy="12" r="12" fill="#2563eb"/><text x="8" y="18" fill="#ffffff" font-size="14" font-weight="700">3</text>
+      <text x="40" y="10" fill="#1f2937" font-size="18" font-weight="700">Verification</text>
+      <text x="40" y="33" fill="#64748b" font-size="15">retrieval + citation + claim + risk checks</text>
+      <line x1="12" y1="29" x2="12" y2="42" stroke="#cbd5e1" stroke-width="2"/>
+    </g>
+    <g transform="translate(28 240)">
+      <circle cx="12" cy="12" r="12" fill="#2563eb"/><text x="8" y="18" fill="#ffffff" font-size="14" font-weight="700">4</text>
+      <text x="40" y="10" fill="#1f2937" font-size="18" font-weight="700">Product policy</text>
+      <text x="40" y="33" fill="#64748b" font-size="15">auto-answer / RAG / clarify / human review / block</text>
+      <line x1="12" y1="29" x2="12" y2="42" stroke="#cbd5e1" stroke-width="2"/>
+    </g>
+    <g transform="translate(28 283)">
+      <circle cx="12" cy="12" r="12" fill="#2563eb"/><text x="8" y="18" fill="#ffffff" font-size="14" font-weight="700">5</text>
+      <text x="40" y="10" fill="#1f2937" font-size="18" font-weight="700">Data route</text>
+      <text x="40" y="33" fill="#64748b" font-size="15">eval / SFT / preference / badcase / regression</text>
+    </g>
+  </g>
+
+  <g transform="translate(792 335)" font-family="Arial, Helvetica, sans-serif">
+    <rect width="754" height="355" rx="8" fill="#ffffff" stroke="#cbd5e1"/>
+    <text x="26" y="43" fill="#1f2937" font-size="24" font-weight="700">Release &amp; Risk Signals</text>
+    <text x="26" y="73" fill="#64748b" font-size="17">Strict gates expose where legal AI should not auto-release.</text>
+    <g transform="translate(30 120)">
+      <text x="0" y="0" fill="#1f2937" font-size="17">Qwen judge parse success</text>
+      <rect x="300" y="-14" width="315" height="16" rx="8" fill="#e2e8f0"/><rect x="300" y="-14" width="315" height="16" rx="8" fill="#2563eb"/>
+      <text x="635" y="0" fill="#64748b" font-size="17">300 / 300</text>
+    </g>
+    <g transform="translate(30 174)">
+      <text x="0" y="0" fill="#1f2937" font-size="17">Priority judge-human agreement</text>
+      <rect x="300" y="-14" width="315" height="16" rx="8" fill="#e2e8f0"/><rect x="300" y="-14" width="291" height="16" rx="8" fill="#16a34a"/>
+      <text x="635" y="0" fill="#64748b" font-size="17">92.5%</text>
+    </g>
+    <g transform="translate(30 228)">
+      <text x="0" y="0" fill="#1f2937" font-size="17">RAG V2 citation-gate issue rate</text>
+      <rect x="300" y="-14" width="315" height="16" rx="8" fill="#e2e8f0"/><rect x="300" y="-14" width="277" height="16" rx="8" fill="#d97706"/>
+      <text x="635" y="0" fill="#64748b" font-size="17">88.1%</text>
+    </g>
+    <g transform="translate(30 282)">
+      <text x="0" y="0" fill="#1f2937" font-size="17">A5 overclaim-flagged traces</text>
+      <rect x="300" y="-14" width="315" height="16" rx="8" fill="#e2e8f0"/><rect x="300" y="-14" width="79" height="16" rx="8" fill="#be123c"/>
+      <text x="635" y="0" fill="#64748b" font-size="17">6 / 24</text>
+    </g>
+  </g>
+
+  <g transform="translate(54 725)" font-family="Arial, Helvetica, sans-serif">
+    <rect width="1492" height="190" rx="8" fill="#ffffff" stroke="#cbd5e1"/>
+    <text x="26" y="44" fill="#1f2937" font-size="24" font-weight="700">What the project decides</text>
+    <g transform="translate(28 80)">
+      <rect width="320" height="78" rx="8" fill="#f8fafc" stroke="#e2e8f0"/><rect width="6" height="78" fill="#16a34a"/>
+      <text x="20" y="29" fill="#1f2937" font-size="18" font-weight="700">Auto-answer eligible</text>
+      <text x="20" y="55" fill="#64748b" font-size="14">low-risk routine consultation</text>
+    </g>
+    <g transform="translate(388 80)">
+      <rect width="320" height="78" rx="8" fill="#f8fafc" stroke="#e2e8f0"/><rect width="6" height="78" fill="#2563eb"/>
+      <text x="20" y="29" fill="#1f2937" font-size="18" font-weight="700">Grounding required</text>
+      <text x="20" y="55" fill="#64748b" font-size="14">contract, statute, case, policy claims</text>
+    </g>
+    <g transform="translate(748 80)">
+      <rect width="320" height="78" rx="8" fill="#f8fafc" stroke="#e2e8f0"/><rect width="6" height="78" fill="#7c3aed"/>
+      <text x="20" y="29" fill="#1f2937" font-size="18" font-weight="700">Clarification required</text>
+      <text x="20" y="55" fill="#64748b" font-size="14">missing facts and high-risk strategy</text>
+    </g>
+    <g transform="translate(1108 80)">
+      <rect width="320" height="78" rx="8" fill="#f8fafc" stroke="#e2e8f0"/><rect width="6" height="78" fill="#be123c"/>
+      <text x="20" y="29" fill="#1f2937" font-size="18" font-weight="700">Human review / block</text>
+      <text x="20" y="55" fill="#64748b" font-size="14">unsafe drafting and unsupported claims</text>
+    </g>
+  </g>
+
+  <text x="56" y="946" fill="#64748b" font-family="Arial, Helvetica, sans-serif" font-size="15">Boundary: portfolio project for legal data product roles; not legal advice, not statistical model ranking.</text>
+</svg>

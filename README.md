@@ -21,7 +21,7 @@ The project is intentionally scoped: controlled local RAG, no Web UI, no databas
 
 It is not a legal advice system and not a model leaderboard.
 
-![Dashboard preview](assets/dashboard_preview.png)
+![Product evaluation system preview](assets/product_eval_system_preview.png)
 
 ## Main Track
 
@@ -111,6 +111,7 @@ A5 and trace-level eval additions:
 - Technical case study: [docs/case_study.md](docs/case_study.md)
 - API smoke run plan: [docs/api_smoke_run.md](docs/api_smoke_run.md)
 - Reproducible dashboard: [outputs/executive_dashboard.xlsx](outputs/executive_dashboard.xlsx)
+- Legacy mock dashboard preview: [assets/dashboard_preview.png](assets/dashboard_preview.png)
 - Dataset design: [data/eval_input.csv](data/eval_input.csv), [data/gold_labels.csv](data/gold_labels.csv), [data/rubric_items.csv](data/rubric_items.csv)
 - Reproduction steps: [docs/runbook.md](docs/runbook.md)
 - GitHub upload guide: [docs/git_upload_guide.md](docs/git_upload_guide.md)
