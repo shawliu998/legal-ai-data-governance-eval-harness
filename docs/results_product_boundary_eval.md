@@ -20,6 +20,7 @@ Core question:
 | 12-case Qianfan API pilot dataset | Prepared |
 | Real Qianfan API outputs | Complete |
 | Qwen single-judge full scoring | Complete |
+| API priority human review | Complete |
 | Multi-judge ensemble smoke | Complete; not used as full-run scoring baseline |
 
 ## Mock Diagnostic Artifacts
@@ -83,6 +84,9 @@ The API pilot was run as split jobs rather than one monolithic `all` command, be
 | Executive dashboard | `outputs/product_boundary_api_pilot_v1/executive_dashboard.xlsx` |
 | Human review queue | `outputs/product_boundary_api_pilot_v1/human_review_calibration.csv` |
 | Priority human review sample | `outputs/product_boundary_api_pilot_v1/human_review_priority_80.csv` |
+| Reviewed priority sample | `outputs/product_boundary_api_pilot_v1/human_review_priority_80_reviewed.csv` |
+| Chinese reviewed workbook | `outputs/product_boundary_api_pilot_v1/human_review_priority_80_reviewed_zh.xlsx` |
+| Human calibration summary | `outputs/product_boundary_api_pilot_v1/human_calibration_summary_priority_80.csv` |
 
 ### Run Integrity
 
@@ -129,6 +133,29 @@ These are deployment signals from a Qwen3.5-27B judge baseline, not a public lea
 | Blocked release gates | 31 |
 
 Citation verification produced 92 `unsupported_claim`, 24 `missing_citation`, 3 `citation_supported`, and 1 `fabricated_citation` labels. This is a triage signal, not a final legal entailment judgment.
+
+### Human Calibration Results
+
+The priority legal-review sample focuses on high-risk outputs, citation or claim issues, and likely release blockers. It is intentionally not a random sample of all 300 outputs.
+
+| Metric | Result |
+| --- | ---: |
+| Reviewed priority outputs | 80 |
+| Review completion rate | 100% |
+| Human pass | 4 |
+| Human partial pass | 27 |
+| Human fail | 49 |
+| Judge-human agreement | 92.5% |
+| Confirmed critical failures | 76 |
+| Confirmed citation or evidence-support issues | 45 |
+| Human route overrides | 47 |
+
+The reviewed sample shows that the Qwen judge baseline was directionally useful for triage, but the human review added important product-level distinctions:
+
+- Some high-risk answers were legally usable but still needed human-review routing.
+- Passing high-risk answers should not be treated as `badcase`; they are better used as calibration, preference, or positive regression examples.
+- RAG-enabled workflows exposed citation-boundary failures when the output used retrieved sources or external statutes beyond the source-limited task.
+- The most common product failure was not merely answer quality; it was insufficient escalation or unsupported source use under constrained legal-product conditions.
 
 ### Judge Reliability Finding
 
