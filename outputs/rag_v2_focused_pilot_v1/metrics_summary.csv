@@ -1,0 +1,16 @@
+﻿metric,value
+focus_cases,8
+model_outputs,72
+models,3
+workflow_versions,3
+retrieval_rows,24
+claim_rows,1766
+reviewable_claim_rows,630
+citation_gate_issue_rows,555
+citation_gate_issue_rate,0.881
+claim_release_blocker_rows,75
+claim_release_blocker_rate,0.119
+judge_rows,72
+avg_score_rate,0.8298
+human_review_rate,0.5417
+raw_outputs_committed,False

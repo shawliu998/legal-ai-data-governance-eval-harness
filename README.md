@@ -30,13 +30,23 @@ Current real API pilot takeaways:
 - RAG is still required for source-specific tasks, but the pilot showed citation-boundary and unsupported-claim failures that must be caught by verification and human review.
 - Real API pilot evidence package: [outputs/product_boundary_api_pilot_v1/](outputs/product_boundary_api_pilot_v1/)
 
+RAG V2 focused pilot takeaways:
+
+- 72 / 72 Qianfan outputs completed on 8 source-limited citation/document cases across ERNIE 5.0, DeepSeek V4 Pro, and Qwen3.5-27B.
+- Retrieval found all expected allowed sources for W4/RAG runs, but average source-boundary precision was only 0.50 because top-k also included extra sources.
+- Claim-level triage found 555 citation-gate issues among 630 reviewable legal claims; the largest failure mode was uncited material claims.
+- W4/RAG improved citation coverage versus W1 and W5, but also produced 74 out-of-scope source claims, so RAG must be paired with source-boundary and claim-level verification.
+- RAG V2 evidence package: [outputs/rag_v2_focused_pilot_v1/](outputs/rag_v2_focused_pilot_v1/)
+
 ## Open First
 
 - Product PRD: [docs/product_prd.md](docs/product_prd.md)
 - Project summary: [docs/project_summary.md](docs/project_summary.md)
 - Product-boundary results: [docs/results_product_boundary_eval.md](docs/results_product_boundary_eval.md)
+- RAG V2 focused results: [docs/rag_v2_focused_results.md](docs/rag_v2_focused_results.md)
 - Model boundary memo: [docs/model_boundary_memo.md](docs/model_boundary_memo.md)
 - Real API pilot evidence package: [outputs/product_boundary_api_pilot_v1/](outputs/product_boundary_api_pilot_v1/)
+- RAG V2 evidence package: [outputs/rag_v2_focused_pilot_v1/](outputs/rag_v2_focused_pilot_v1/)
 - RAG V2 improvement plan: [docs/rag_v2_improvement_plan.md](docs/rag_v2_improvement_plan.md)
 - Interview talk track: [docs/interview_talk_track.md](docs/interview_talk_track.md)
 - Labeling SOP: [docs/labeling_sop.md](docs/labeling_sop.md)

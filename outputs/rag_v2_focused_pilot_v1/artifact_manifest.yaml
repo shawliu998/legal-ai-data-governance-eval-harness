@@ -1,0 +1,39 @@
+package: rag_v2_focused_pilot_lightweight_evidence
+purpose: Focused RAG V2 evidence package for citation grounding, source-boundary precision,
+  and claim-level release gates.
+source_run:
+  focus_cases:
+  - LPB-CITE-001
+  - LPB-CITE-002
+  - LPB-CITE-003
+  - LPB-CITE-004
+  - LPB-CITE-005
+  - LPB-CITE-006
+  - LPB-CITE-007
+  - LPB-CITE-008
+  workflow_versions:
+  - V1
+  - V4
+  - V5
+  model_outputs: 72
+  retrieval_rows: 24
+  claim_rows: 1766
+methodology_caveats:
+- Focused citation/document slice, not a full legal knowledge-base benchmark.
+- Claim entailment labels are deterministic triage signals, not final legal conclusions.
+- Qwen judge scores are baseline signals and should not be treated as final model
+  rankings.
+- Raw full model outputs remain local/ignored; this package commits summaries and
+  redacted samples only.
+included_artifacts:
+- README.md
+- artifact_manifest.yaml
+- metrics_summary.csv
+- workflow_comparison.csv
+- model_workflow_summary.csv
+- failure_taxonomy.csv
+- source_boundary_summary.csv
+- redacted_sample_outputs_20.csv
+excluded_artifacts:
+- Full model_run_log.csv, judge_scores.csv, claim_entailment.csv, citation_verification.csv,
+  and raw output text.

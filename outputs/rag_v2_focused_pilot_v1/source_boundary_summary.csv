@@ -1,0 +1,25 @@
+﻿run_id,sample_id,model_alias,version,workflow_condition,retrieved_count,allowed_source_count,allowed_retrieved_count,source_boundary_precision,allowed_source_recall,expected_source_count,expected_source_hit_count,context_recall,context_precision,retrieval_status,slice,task_type,allowed_source_ids,expected_human_review
+RUN-LPB-CITE-001-qianfan_ernie_50-V4,LPB-CITE-001,qianfan_ernie_50,V4,W2,4,2,2,0.5,1.0,2,2,1.0,0.5,hit,citation_grounding,grounded_qa,"['CONTRACT-001', 'PLATFORM-001']",False
+RUN-LPB-CITE-001-qianfan_deepseek_v4_pro-V4,LPB-CITE-001,qianfan_deepseek_v4_pro,V4,W2,4,2,2,0.5,1.0,2,2,1.0,0.5,hit,citation_grounding,grounded_qa,"['CONTRACT-001', 'PLATFORM-001']",False
+RUN-LPB-CITE-001-qianfan_qwen35_27b-V4,LPB-CITE-001,qianfan_qwen35_27b,V4,W2,4,2,2,0.5,1.0,2,2,1.0,0.5,hit,citation_grounding,grounded_qa,"['CONTRACT-001', 'PLATFORM-001']",False
+RUN-LPB-CITE-002-qianfan_ernie_50-V4,LPB-CITE-002,qianfan_ernie_50,V4,W2,4,2,2,0.5,1.0,2,2,1.0,0.5,hit,citation_grounding,grounded_qa,"['POLICY-001', 'POLICY-002']",True
+RUN-LPB-CITE-002-qianfan_deepseek_v4_pro-V4,LPB-CITE-002,qianfan_deepseek_v4_pro,V4,W2,4,2,2,0.5,1.0,2,2,1.0,0.5,hit,citation_grounding,grounded_qa,"['POLICY-001', 'POLICY-002']",True
+RUN-LPB-CITE-002-qianfan_qwen35_27b-V4,LPB-CITE-002,qianfan_qwen35_27b,V4,W2,4,2,2,0.5,1.0,2,2,1.0,0.5,hit,citation_grounding,grounded_qa,"['POLICY-001', 'POLICY-002']",True
+RUN-LPB-CITE-003-qianfan_ernie_50-V4,LPB-CITE-003,qianfan_ernie_50,V4,W2,4,2,2,0.5,1.0,2,2,1.0,0.5,hit,citation_grounding,grounded_qa,"['CONTRACT-DELIVERY-001', 'CONTRACT-PAY-001']",False
+RUN-LPB-CITE-003-qianfan_deepseek_v4_pro-V4,LPB-CITE-003,qianfan_deepseek_v4_pro,V4,W2,4,2,2,0.5,1.0,2,2,1.0,0.5,hit,citation_grounding,grounded_qa,"['CONTRACT-DELIVERY-001', 'CONTRACT-PAY-001']",False
+RUN-LPB-CITE-003-qianfan_qwen35_27b-V4,LPB-CITE-003,qianfan_qwen35_27b,V4,W2,4,2,2,0.5,1.0,2,2,1.0,0.5,hit,citation_grounding,grounded_qa,"['CONTRACT-DELIVERY-001', 'CONTRACT-PAY-001']",False
+RUN-LPB-CITE-004-qianfan_ernie_50-V4,LPB-CITE-004,qianfan_ernie_50,V4,W2,4,3,3,0.75,1.0,3,3,1.0,0.75,hit,citation_grounding,grounded_qa,"['NOTICE-001', 'PLATFORM-RESP-001', 'LOSS-001']",False
+RUN-LPB-CITE-004-qianfan_deepseek_v4_pro-V4,LPB-CITE-004,qianfan_deepseek_v4_pro,V4,W2,4,3,3,0.75,1.0,3,3,1.0,0.75,hit,citation_grounding,grounded_qa,"['NOTICE-001', 'PLATFORM-RESP-001', 'LOSS-001']",False
+RUN-LPB-CITE-004-qianfan_qwen35_27b-V4,LPB-CITE-004,qianfan_qwen35_27b,V4,W2,4,3,3,0.75,1.0,3,3,1.0,0.75,hit,citation_grounding,grounded_qa,"['NOTICE-001', 'PLATFORM-RESP-001', 'LOSS-001']",False
+RUN-LPB-CITE-005-qianfan_ernie_50-V4,LPB-CITE-005,qianfan_ernie_50,V4,W2,4,3,3,0.75,1.0,3,3,1.0,0.75,hit,citation_grounding,grounded_qa,"['AGREEMENT-001', 'AGREEMENT-002', 'EVIDENCE-001']",True
+RUN-LPB-CITE-005-qianfan_deepseek_v4_pro-V4,LPB-CITE-005,qianfan_deepseek_v4_pro,V4,W2,4,3,3,0.75,1.0,3,3,1.0,0.75,hit,citation_grounding,grounded_qa,"['AGREEMENT-001', 'AGREEMENT-002', 'EVIDENCE-001']",True
+RUN-LPB-CITE-005-qianfan_qwen35_27b-V4,LPB-CITE-005,qianfan_qwen35_27b,V4,W2,4,3,3,0.75,1.0,3,3,1.0,0.75,hit,citation_grounding,grounded_qa,"['AGREEMENT-001', 'AGREEMENT-002', 'EVIDENCE-001']",True
+RUN-LPB-CITE-006-qianfan_ernie_50-V4,LPB-CITE-006,qianfan_ernie_50,V4,W2,4,2,2,0.5,1.0,2,2,1.0,0.5,hit,citation_grounding,grounded_qa,"['CONTRACT-TRAINING-001', 'CONTRACT-TRAINING-002']",False
+RUN-LPB-CITE-006-qianfan_deepseek_v4_pro-V4,LPB-CITE-006,qianfan_deepseek_v4_pro,V4,W2,4,2,2,0.5,1.0,2,2,1.0,0.5,hit,citation_grounding,grounded_qa,"['CONTRACT-TRAINING-001', 'CONTRACT-TRAINING-002']",False
+RUN-LPB-CITE-006-qianfan_qwen35_27b-V4,LPB-CITE-006,qianfan_qwen35_27b,V4,W2,4,2,2,0.5,1.0,2,2,1.0,0.5,hit,citation_grounding,grounded_qa,"['CONTRACT-TRAINING-001', 'CONTRACT-TRAINING-002']",False
+RUN-LPB-CITE-007-qianfan_ernie_50-V4,LPB-CITE-007,qianfan_ernie_50,V4,W2,4,1,1,0.25,1.0,1,1,1.0,0.25,hit,citation_grounding,grounded_qa,['POLICY-PRIVACY-001'],False
+RUN-LPB-CITE-007-qianfan_deepseek_v4_pro-V4,LPB-CITE-007,qianfan_deepseek_v4_pro,V4,W2,4,1,1,0.25,1.0,1,1,1.0,0.25,hit,citation_grounding,grounded_qa,['POLICY-PRIVACY-001'],False
+RUN-LPB-CITE-007-qianfan_qwen35_27b-V4,LPB-CITE-007,qianfan_qwen35_27b,V4,W2,4,1,1,0.25,1.0,1,1,1.0,0.25,hit,citation_grounding,grounded_qa,['POLICY-PRIVACY-001'],False
+RUN-LPB-CITE-008-qianfan_ernie_50-V4,LPB-CITE-008,qianfan_ernie_50,V4,W2,4,1,1,0.25,1.0,1,1,1.0,0.25,hit,citation_grounding,grounded_qa,['CONTRACT-GUARANTEE-001'],True
+RUN-LPB-CITE-008-qianfan_deepseek_v4_pro-V4,LPB-CITE-008,qianfan_deepseek_v4_pro,V4,W2,4,1,1,0.25,1.0,1,1,1.0,0.25,hit,citation_grounding,grounded_qa,['CONTRACT-GUARANTEE-001'],True
+RUN-LPB-CITE-008-qianfan_qwen35_27b-V4,LPB-CITE-008,qianfan_qwen35_27b,V4,W2,4,1,1,0.25,1.0,1,1,1.0,0.25,hit,citation_grounding,grounded_qa,['CONTRACT-GUARANTEE-001'],True

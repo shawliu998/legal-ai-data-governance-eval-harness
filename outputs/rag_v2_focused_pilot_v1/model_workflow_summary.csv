@@ -1,0 +1,10 @@
+﻿model_alias,version,workflow_condition,runs,avg_score_rate,human_review_rate,citation_coverage_rate,citation_gate_issue_rate,claim_release_blocker_count,recommended_policy
+qianfan_deepseek_v4_pro,V1,W1,8,0.893,0.375,0.1026,0.8974,0,human_review_required_for_grounded_answers
+qianfan_deepseek_v4_pro,V4,W2,8,0.7986,0.75,0.2584,0.8876,11,blocked_until_citation_failures_reviewed
+qianfan_deepseek_v4_pro,V5,W4,8,0.7679,0.5,0.0769,0.9487,0,human_review_required_for_grounded_answers
+qianfan_ernie_50,V1,W1,8,0.937,0.375,0.0781,0.9219,0,human_review_required_for_grounded_answers
+qianfan_ernie_50,V4,W2,8,0.6761,1.0,0.3707,0.8448,42,blocked_until_citation_failures_reviewed
+qianfan_ernie_50,V5,W4,8,0.8884,0.375,0.0682,0.9318,0,human_review_required_for_grounded_answers
+qianfan_qwen35_27b,V1,W1,8,0.937,0.375,0.1605,0.9259,1,blocked_until_citation_failures_reviewed
+qianfan_qwen35_27b,V4,W2,8,0.7838,0.625,0.4625,0.7875,21,blocked_until_citation_failures_reviewed
+qianfan_qwen35_27b,V5,W4,8,0.7864,0.5,0.1538,0.8462,0,human_review_required_for_grounded_answers

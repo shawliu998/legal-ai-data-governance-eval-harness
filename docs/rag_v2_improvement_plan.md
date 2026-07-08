@@ -77,6 +77,11 @@ Current implementation status:
 - The controlled corpus has been expanded from 45 to 52 sources and a conflicting `POLICY-001` source was corrected to match the source-limited employment-policy case.
 - False positives were reduced by filtering intake/question fragments and scoring combined cited sources for multi-source claims.
 - It should be treated as triage before human review, not as final legal entailment.
+- A focused RAG V2 pilot has now been run on 8 source-limited citation/document cases, 3 Qianfan-hosted models, and 3 workflows, producing 72 / 72 successful model outputs.
+- The focused pilot evidence package is committed at `outputs/rag_v2_focused_pilot_v1/`.
+- The focused pilot found 100% expected-source recall for W4/RAG retrieval, but only 0.50 average source-boundary precision because top-k retrieval also included extra sources.
+- Claim-level triage found 555 citation-gate issues among 630 reviewable legal claims, mostly uncited material claims.
+- W4/RAG improved citation coverage but introduced 74 out-of-scope source claims, so source-specific legal tasks still need source-boundary filtering and claim-level verification before release.
 
 ## Retrieval Metrics
 

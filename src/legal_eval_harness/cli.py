@@ -18,6 +18,7 @@ from .product_boundary_dataset import load_product_boundary_cases, validate_prod
 from .product_boundary_importer import prepare_product_boundary_dataset
 from .prompt_builder import PromptBuilder
 from .rag import build_claim_entailment_rows, summarize_claim_entailment
+from .rag_v2 import DEFAULT_RAG_V2_FOCUS_CASES, build_rag_v2_report
 from .release_gate import build_release_gate
 from .runner import build_run_plan, run_models
 from .router import route_scores
@@ -318,6 +319,24 @@ def cmd_merge_model_outputs(args: argparse.Namespace) -> None:
         print(f"Wrote {len(merged)} rows to {output_dir / file_name}")
 
 
+def cmd_rag_v2_report(args: argparse.Namespace) -> None:
+    result = build_rag_v2_report(
+        runs_path=args.runs,
+        retrieval_path=args.retrieval,
+        citation_path=args.citation_verification,
+        claim_entailment_path=args.claim_entailment,
+        cases_jsonl=args.cases_jsonl,
+        output_dir=args.output_dir,
+        judge_scores_path=args.scores,
+        routing_path=args.routing,
+        release_gate_path=args.release_gate,
+        focus_cases=_alias_filter(args.focus_case) or DEFAULT_RAG_V2_FOCUS_CASES,
+        focus_versions=_alias_filter(args.version) or ["V1", "V4", "V5"],
+    )
+    print(f"Wrote RAG V2 focused report to {args.output_dir}")
+    print(result["metrics_summary"].to_string(index=False))
+
+
 def cmd_validate_product_boundary(args: argparse.Namespace) -> None:
     cases = load_product_boundary_cases(args.input)
     errors = validate_product_boundary_cases(cases)
@@ -473,6 +492,20 @@ def build_parser() -> argparse.ArgumentParser:
     merge_outputs.add_argument("--output-dir", required=True)
     merge_outputs.add_argument("--file-name", action="append", default=[])
     merge_outputs.set_defaults(func=cmd_merge_model_outputs)
+
+    rag_v2_report = sub.add_parser("rag-v2-report")
+    rag_v2_report.add_argument("--runs", required=True)
+    rag_v2_report.add_argument("--retrieval", required=True)
+    rag_v2_report.add_argument("--citation-verification", required=True)
+    rag_v2_report.add_argument("--claim-entailment", required=True)
+    rag_v2_report.add_argument("--cases-jsonl", default="data/eval_sets/legal_product_boundary_pilot_v1.jsonl")
+    rag_v2_report.add_argument("--scores", default="")
+    rag_v2_report.add_argument("--routing", default="")
+    rag_v2_report.add_argument("--release-gate", default="")
+    rag_v2_report.add_argument("--output-dir", default="outputs/rag_v2_focused_pilot_v1")
+    rag_v2_report.add_argument("--focus-case", action="append", default=[])
+    rag_v2_report.add_argument("--version", action="append", default=[])
+    rag_v2_report.set_defaults(func=cmd_rag_v2_report)
 
     boundary = sub.add_parser("validate-product-boundary")
     boundary.add_argument("--input", default="data/eval_sets/legal_product_boundary_pilot_v1.jsonl")

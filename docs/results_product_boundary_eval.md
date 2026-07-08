@@ -22,6 +22,7 @@ Core question:
 | Qwen single-judge full scoring | Complete |
 | API priority human review | Complete |
 | Multi-judge ensemble smoke | Complete; not used as full-run scoring baseline |
+| RAG V2 focused pilot | Complete |
 
 ## Mock Diagnostic Artifacts
 
@@ -200,6 +201,33 @@ The initial plan used DeepSeek V4 Pro and GLM-5.2 as primary judges with Kimi K2
 - GLM-5.2 and ERNIE 5.0 sometimes returned truncated JSON on longer judge prompts.
 - Qwen3.5-27B returned stable JSON in the full 300-output single-judge run.
 - Multi-judge ensemble remains useful for targeted calibration, but full-run release decisions currently use the Qwen judge baseline plus human review.
+
+## RAG V2 Focused Pilot
+
+After the main API pilot, a smaller RAG V2 focused pilot was run on 8 source-limited citation/document cases across ERNIE 5.0, DeepSeek V4 Pro, and Qwen3.5-27B.
+
+Evidence package:
+
+`outputs/rag_v2_focused_pilot_v1/`
+
+| Metric | Result |
+| --- | ---: |
+| Model outputs | 72 / 72 OK |
+| RAG retrieval rows | 24 |
+| Expected-source recall on W4/RAG retrieval | 100% |
+| Average source-boundary precision | 0.50 |
+| Reviewable legal claims | 630 |
+| Citation-gate issue rows | 555 |
+| Citation-gate issue rate | 88.1% |
+| Claim-level release blocker rows | 75 |
+
+Main finding:
+
+Retrieval found the expected sources, but generation still produced too many uncited material claims and out-of-scope source uses. W4/RAG improved citation coverage versus W1 and W5, but it also introduced source-boundary release blockers. The product policy should be: RAG is required for source-specific tasks, but RAG output is not releasable unless it passes claim-level citation and source-boundary gates.
+
+Detailed results:
+
+`docs/rag_v2_focused_results.md`
 
 ## Product Policy Conclusions
 
