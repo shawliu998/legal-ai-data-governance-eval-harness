@@ -22,6 +22,29 @@ from .router import route_scores
 from .schemas import PROTECTED_GOLD_FIELDS, VISIBLE_INPUT_FIELDS
 
 
+def _alias_filter(values: list[str] | None) -> list[str]:
+    aliases: list[str] = []
+    for value in values or []:
+        aliases.extend(part.strip() for part in str(value).split(",") if part.strip())
+    return aliases
+
+
+def _filter_config_models(config: dict, aliases: list[str]) -> dict:
+    if not aliases:
+        return config
+    requested = set(aliases)
+    models = config.get("models") or []
+    filtered = [model for model in models if str(model.get("alias", "")) in requested]
+    found = {str(model.get("alias", "")) for model in filtered}
+    missing = sorted(requested - found)
+    if missing:
+        available = sorted(str(model.get("alias", "")) for model in models)
+        raise SystemExit(f"Unknown model alias {missing}; available aliases: {available}")
+    filtered_config = dict(config)
+    filtered_config["models"] = filtered
+    return filtered_config
+
+
 def _load_bundle(input_path: str, config: dict) -> object:
     return load_dataset(
         input_path,
@@ -101,6 +124,7 @@ def cmd_render_prompts(args: argparse.Namespace) -> None:
 
 def cmd_run_models(args: argparse.Namespace) -> None:
     config = load_config(args.config)
+    config = _filter_config_models(config, _alias_filter(args.model_alias))
     bundle = _load_bundle(args.input, config)
     df = run_models(bundle=bundle, config=config, mode=args.mode, output_path=args.output)
     print(f"Wrote {len(df)} normalized model runs to {args.output}")
@@ -192,6 +216,32 @@ def cmd_release_gate(args: argparse.Namespace) -> None:
     print(df[["task_category", "model_alias", "workflow_condition", "release_decision"]].to_string(index=False))
 
 
+def cmd_merge_model_outputs(args: argparse.Namespace) -> None:
+    output_dir = Path(args.output_dir)
+    output_dir.mkdir(parents=True, exist_ok=True)
+    file_names = [
+        "model_run_log.csv",
+        "retrieval_log.csv",
+        "rag_contexts.csv",
+        "citation_verification.csv",
+    ]
+    for file_name in file_names:
+        frames = []
+        for input_dir in args.input_dirs:
+            path = Path(input_dir) / file_name
+            if path.exists():
+                frames.append(pd.read_csv(path))
+        if not frames:
+            continue
+        merged = pd.concat(frames, ignore_index=True)
+        if file_name != "rag_contexts.csv" and "run_id" in merged.columns:
+            merged = merged.drop_duplicates("run_id").sort_values("run_id")
+        elif "run_id" in merged.columns:
+            merged = merged.sort_values("run_id")
+        merged.to_csv(output_dir / file_name, index=False, encoding="utf-8-sig")
+        print(f"Wrote {len(merged)} rows to {output_dir / file_name}")
+
+
 def cmd_validate_product_boundary(args: argparse.Namespace) -> None:
     cases = load_product_boundary_cases(args.input)
     errors = validate_product_boundary_cases(cases)
@@ -274,6 +324,7 @@ def build_parser() -> argparse.ArgumentParser:
     run_models_cmd.add_argument("--config", default="config.yaml")
     run_models_cmd.add_argument("--mode", choices=["mock", "api"], default="mock")
     run_models_cmd.add_argument("--output", default="outputs/model_run_log.csv")
+    run_models_cmd.add_argument("--model-alias", action="append", default=[])
     run_models_cmd.set_defaults(func=cmd_run_models)
 
     judge_cmd = sub.add_parser("run-judge")
@@ -328,6 +379,11 @@ def build_parser() -> argparse.ArgumentParser:
     release_gate.add_argument("--routing", required=True)
     release_gate.add_argument("--output", default="outputs/release_gate.csv")
     release_gate.set_defaults(func=cmd_release_gate)
+
+    merge_outputs = sub.add_parser("merge-model-outputs")
+    merge_outputs.add_argument("--input-dirs", nargs="+", required=True)
+    merge_outputs.add_argument("--output-dir", required=True)
+    merge_outputs.set_defaults(func=cmd_merge_model_outputs)
 
     boundary = sub.add_parser("validate-product-boundary")
     boundary.add_argument("--input", default="data/eval_sets/legal_product_boundary_pilot_v1.jsonl")
