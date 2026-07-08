@@ -148,13 +148,13 @@ This is a conservative review-queue signal, not a final legal conclusion.
 | Metric | Result |
 | --- | ---: |
 | Total extracted claim rows | 3597 |
-| Reviewable legal claim rows | 741 |
-| Citation-gate issue rows | 698 |
+| Reviewable legal claim rows | 716 |
+| Citation-gate issue rows | 648 |
 | Release-blocker rows | 60 |
-| Supported rows | 53 |
-| Partially supported rows | 23 |
-| Unsupported rows | 72 |
-| No-citation rows | 566 |
+| Supported rows | 56 |
+| Partially supported rows | 41 |
+| Unsupported rows | 46 |
+| No-citation rows | 542 |
 | Out-of-scope source rows | 56 |
 | Fabricated citation rows | 3 |
 | Contradicted rows | 1 |
@@ -163,7 +163,7 @@ Product interpretation:
 
 - The high `no_citation` count confirms that RAG prompts need stricter material-claim citation coverage.
 - `out_of_scope_source` rows identify source-boundary failures where answers used sources outside a source-limited task.
-- `unsupported` rows are good candidates for citation-grounding regression evals.
+- `unsupported` rows fell after filtering intake fragments and scoring combined cited sources, but remain good candidates for citation-grounding regression evals.
 - `out_of_scope_source`, `fabricated_citation`, and `contradicted` rows should stay release blockers pending human review.
 
 ### Human Calibration Results

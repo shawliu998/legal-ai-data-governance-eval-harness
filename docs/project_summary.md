@@ -32,6 +32,7 @@ The project does not ask only which model scores highest. It asks:
 
 - Designed leakage-safe data separation: `Eval_Input` is visible to the agent, while `Gold_Labels` and `Rubric_Items` are visible only to judge and human review.
 - Built controlled local RAG with a small legal corpus, retrieval logs, context injection, source-id citation verification, and claim-level support triage.
+- Improved the controlled RAG corpus by correcting a conflicting employment-policy source and adding precise consumer, labor, debt-collection, false-litigation, lease-deposit, and evidence snippets.
 - Added judge ensemble calibration and then revised the production scoring plan after API smoke tests showed judge JSON instability on some Qianfan model endpoints.
 - Used Qwen3.5-27B as the full-run structured judge after it produced 300 / 300 parseable judge outputs.
 - Implemented data routing into `eval`, `sft`, `preference`, `badcase`, and `human_review`.

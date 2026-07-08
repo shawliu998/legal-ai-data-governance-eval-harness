@@ -74,6 +74,8 @@ Current implementation status:
 - It emits `claim_entailment.csv` and `claim_entailment_summary.csv`.
 - It supports allowed-source boundary checks through `--cases-jsonl`.
 - It can be passed into `release-gate` through `--claim-entailment`.
+- The controlled corpus has been expanded from 45 to 52 sources and a conflicting `POLICY-001` source was corrected to match the source-limited employment-policy case.
+- False positives were reduced by filtering intake/question fragments and scoring combined cited sources for multi-source claims.
 - It should be treated as triage before human review, not as final legal entailment.
 
 ## Retrieval Metrics

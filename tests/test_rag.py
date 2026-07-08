@@ -27,6 +27,20 @@ def test_rag_corpus_retrieves_expected_contract_sources():
     assert {"CONTRACT-DELIVERY-001", "CONTRACT-PAY-001"}.issubset(source_ids)
 
 
+def test_rag_corpus_policy_source_matches_source_limited_case():
+    bundle = load_dataset(ROOT / "data/product_boundary_api_pilot_v1/dataset_manifest.yaml")
+    eval_row = find_eval_row(bundle, "LPB-CITE-002")
+    corpus = load_rag_corpus(ROOT / "data/rag_corpus/legal_sources.csv")
+
+    contexts = retrieve_contexts(eval_row=eval_row, corpus=corpus, top_k=4)
+    by_id = {context["source_id"]: context["text"] for context in contexts}
+
+    assert "POLICY-001" in by_id
+    assert "可给予书面警告" in by_id["POLICY-001"]
+    assert "直接解除劳动合同" in by_id["POLICY-001"]
+    assert "严重违纪" not in by_id["POLICY-001"]
+
+
 def test_citation_verifier_flags_fabricated_source_id():
     contexts = [{"source_id": "CONTRACT-PAY-001"}]
     row = {

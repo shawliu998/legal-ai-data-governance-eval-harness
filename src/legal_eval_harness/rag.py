@@ -270,12 +270,69 @@ def _is_risk_control_statement(claim: str) -> bool:
         "检索命中",
         "若检索材料",
         "避免承诺",
+        "仅用于法律",
+        "不构成法律咨询",
+        "不构成最终法律意见",
+        "无法评估",
+        "无法确定",
     ]
     return any(marker in text for marker in markers)
 
 
+def _is_intake_or_structural_fragment(claim: str) -> bool:
+    text = safe_text(claim).strip()
+    if not text:
+        return True
+    lower_text = text.lower()
+    if any(
+        marker in lower_text
+        for marker in [
+            "known_facts",
+            "missing_facts",
+            "clarification_questions",
+            "evidence_risk",
+            "limitation_or_timing_risk",
+            "conditional_conclusion",
+        ]
+    ):
+        return True
+    question_markers = [
+        "是否有",
+        "是否存在",
+        "是否已经",
+        "是否已",
+        "是否需要",
+        "有无",
+        "哪些",
+        "什么",
+        "何时",
+        "多少",
+    ]
+    if any(marker in text for marker in question_markers):
+        return True
+    structural_markers = [
+        "债务人身份",
+        "送达信息",
+        "证据清单",
+        "附件",
+        "争议类型",
+        "金额",
+        "期限",
+        "对方主体",
+        "担保人",
+        "担保措施",
+        "抵押物",
+        "违约责任或法律依据",
+        "明确要求",
+        "用户要求",
+    ]
+    return any(marker in text for marker in structural_markers)
+
+
 def _is_reviewable_legal_claim(claim: str) -> bool:
     text = safe_text(claim)
+    if _is_intake_or_structural_fragment(text):
+        return False
     if _is_risk_control_statement(text):
         return False
     markers = [
@@ -303,6 +360,12 @@ def _is_reviewable_legal_claim(claim: str) -> bool:
         "不能主张",
         "不能排除",
         "不当然",
+        "欺诈",
+        "惩罚性赔偿",
+        "加班费",
+        "虚假诉讼",
+        "名誉权",
+        "敲诈",
     ]
     return any(marker in text for marker in markers)
 
@@ -451,8 +514,20 @@ def build_claim_entailment_rows(
             if source_id in source_rows
         }
         best_source_id = max(scores, key=scores.get) if scores else ""
-        best_score = scores.get(best_source_id, _claim_support_score(claim, all_source_text))
+        single_source_score = scores.get(best_source_id, _claim_support_score(claim, all_source_text))
+        cited_context_text = "\n".join(
+            safe_text(source_rows.get(source_id, {}).get("text")) for source_id in cited_ids if source_id in source_rows
+        )
+        combined_cited_score = _claim_support_score(claim, cited_context_text) if cited_context_text else 0.0
+        all_context_score = _claim_support_score(claim, all_source_text) if not cited_ids else 0.0
+        best_score = max(single_source_score, combined_cited_score, all_context_score)
+        if combined_cited_score > single_source_score and len([source_id for source_id in cited_ids if source_id in source_rows]) > 1:
+            best_source_id = "COMBINED_CITED_SOURCES"
         best_source_text = safe_text(source_rows.get(best_source_id, {}).get("text"))
+        conditional_claim = any(
+            marker in safe_text(claim)
+            for marker in ["若", "如果", "前提", "取决于", "可能", "需结合", "仍需", "不应做确定性承诺"]
+        )
         if fabricated:
             label = "fabricated_citation"
         elif out_of_scope:
@@ -466,6 +541,8 @@ def build_claim_entailment_rows(
         elif best_score >= 0.45:
             label = "supported"
         elif best_score >= 0.25:
+            label = "partially_supported"
+        elif cited_ids and conditional_claim and best_score >= 0.12:
             label = "partially_supported"
         else:
             label = "unsupported"
@@ -488,6 +565,8 @@ def build_claim_entailment_rows(
                 "best_source_type": safe_text(source_rows.get(best_source_id, {}).get("source_type")),
                 "best_source_origin": safe_text(source_rows.get(best_source_id, {}).get("source_origin")),
                 "support_score": best_score,
+                "single_source_support_score": single_source_score,
+                "combined_cited_support_score": combined_cited_score,
                 "entailment_label": label,
                 "product_action": _entailment_product_action(label),
                 "entailment_reason": _entailment_reason(
