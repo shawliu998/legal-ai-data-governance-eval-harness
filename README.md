@@ -106,6 +106,7 @@ A5 and trace-level eval additions:
 - A5 full pilot evidence package: [outputs/a5_multiturn_intake_pilot_v1/](outputs/a5_multiturn_intake_pilot_v1/)
 - RAG V2 improvement plan: [docs/rag_v2_improvement_plan.md](docs/rag_v2_improvement_plan.md)
 - Interview talk track: [docs/interview_talk_track.md](docs/interview_talk_track.md)
+- Chinese interview pitch: [docs/interview_pitch_zh.md](docs/interview_pitch_zh.md)
 - Labeling SOP: [docs/labeling_sop.md](docs/labeling_sop.md)
 - Technical case study: [docs/case_study.md](docs/case_study.md)
 - API smoke run plan: [docs/api_smoke_run.md](docs/api_smoke_run.md)
