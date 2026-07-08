@@ -12,7 +12,7 @@ import yaml
 
 from .config import get_models
 from .llm_client import LLMClient
-from .utils import json_dumps, safe_text, utc_now_iso
+from .utils import json_dumps, parse_bool, safe_text, utc_now_iso
 
 
 DEFAULT_A5_SMOKE_CASES = ["A5-INTAKE-001", "A5-INTAKE-002", "A5-INTAKE-004"]
@@ -181,6 +181,12 @@ def _evaluate_trace(case: dict[str, Any], turns: list[dict[str, Any]]) -> dict[s
     }
 
 
+def _default_raw_output_dir(output_dir: Path) -> Path:
+    if output_dir.parent.name == "outputs":
+        return output_dir.parent.parent / "outputs_raw" / output_dir.name
+    return output_dir.parent / f"{output_dir.name}_raw"
+
+
 def run_a5_multiturn_smoke(
     *,
     cases_path: str | Path,
@@ -189,9 +195,12 @@ def run_a5_multiturn_smoke(
     mode: str,
     case_ids: list[str] | None = None,
     model_aliases: list[str] | None = None,
+    raw_output_dir: str | Path | None = None,
 ) -> dict[str, pd.DataFrame]:
     output = Path(output_dir)
     output.mkdir(parents=True, exist_ok=True)
+    raw_output = Path(raw_output_dir) if raw_output_dir else _default_raw_output_dir(output)
+    raw_output.mkdir(parents=True, exist_ok=True)
     cases = load_a5_cases(cases_path)
     errors = validate_a5_cases(cases)
     if errors:
@@ -282,13 +291,13 @@ def run_a5_multiturn_smoke(
                 }
             )
 
-    trace_path = output / "trace_log.jsonl"
+    trace_path = raw_output / "trace_log.jsonl"
     trace_path.write_text(
         "\n".join(json_dumps(row) for row in trace_rows) + "\n",
         encoding="utf-8",
     )
     turn_df = pd.DataFrame(turn_rows)
-    turn_df.to_csv(output / "turn_log.csv", index=False, encoding="utf-8-sig")
+    turn_df.to_csv(raw_output / "turn_log.csv", index=False, encoding="utf-8-sig")
     summary = build_a5_evidence_package(trace_rows=trace_rows, turn_rows=turn_rows, output_dir=output)
     return summary
 
@@ -441,7 +450,7 @@ def build_a5_evidence_package(
 def _bool_rate(series: pd.Series) -> float:
     if series.empty:
         return 0.0
-    return round(float(series.astype(bool).mean()), 4)
+    return round(float(series.map(parse_bool).mean()), 4)
 
 
 def _write_redacted_trace_example(output_dir: Path, redacted: pd.DataFrame, turns: pd.DataFrame) -> None:
@@ -559,7 +568,7 @@ def _write_readme(output_dir: Path, metrics: dict[str, Any]) -> None:
         "- This is a limited API smoke/pilot run, not a full benchmark.",
         "- The pass rate is a deterministic triage signal, not human-validated product readiness.",
         "- Deterministic trace checks are triage signals and need human calibration before production release.",
-        "- Full raw model outputs remain local/ignored.",
+        "- Full raw model outputs are written outside this evidence package and remain local/ignored.",
     ]
     (output_dir / "README.md").write_text("\n".join(lines) + "\n", encoding="utf-8")
 

@@ -11,7 +11,7 @@ from .io_excel import DatasetBundle, find_eval_row, find_gold_row
 from .llm_client import LLMClient
 from .prompt_builder import PromptBuilder
 from .schemas import COARSE_ERROR_TAGS, SCORE_DIMENSIONS
-from .utils import extract_first_json_object, json_dumps, json_loads_or_none, safe_text
+from .utils import extract_first_json_object, json_dumps, json_loads_or_none, parse_bool, safe_text
 
 
 def _risk_level_for_score(score_rate: float, has_high_risk_gold: bool) -> str:
@@ -211,10 +211,6 @@ def normalize_judge_payload(payload: dict[str, Any]) -> dict[str, Any]:
     judge_confidence = safe_text(payload.get("judge_confidence")).lower()
     if judge_confidence not in {"low", "medium", "high"}:
         judge_confidence = "medium"
-    needs_human_review = payload.get("needs_human_review")
-    if isinstance(needs_human_review, str):
-        needs_human_review = needs_human_review.strip().lower() in {"true", "yes", "1", "是"}
-
     return {
         "dimension_scores": dimension_scores,
         "atomic_scores": atomic_scores,
@@ -225,7 +221,7 @@ def normalize_judge_payload(payload: dict[str, Any]) -> dict[str, Any]:
         "risk_level": risk_level,
         "judge_reason": safe_text(payload.get("judge_reason")),
         "judge_confidence": judge_confidence,
-        "needs_human_review": bool(needs_human_review),
+        "needs_human_review": parse_bool(payload.get("needs_human_review")),
     }
 
 

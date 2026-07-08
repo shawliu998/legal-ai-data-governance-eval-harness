@@ -5,7 +5,7 @@ from typing import Any
 
 import pandas as pd
 
-from .utils import json_loads_or_none, safe_text
+from .utils import json_loads_or_none, parse_bool, safe_text
 
 
 def _tags(value: Any) -> list[str]:
@@ -30,7 +30,7 @@ def _rate(series: pd.Series, value: str) -> float:
 def _bool_rate(series: pd.Series) -> float:
     if len(series) == 0:
         return 0.0
-    return float(series.astype(bool).mean())
+    return float(series.map(parse_bool).mean())
 
 
 CLAIM_ENTAILMENT_ISSUE_LABELS = {
@@ -67,11 +67,7 @@ def _claim_entailment_by_run(claim_entailment: pd.DataFrame | None) -> pd.DataFr
         df["entailment_label"] = ""
     if "reviewable_legal_claim" not in df.columns:
         df["reviewable_legal_claim"] = False
-    df["reviewable_legal_claim"] = df["reviewable_legal_claim"].map(
-        lambda value: safe_text(value).lower() in {"true", "1", "yes", "是"}
-        if not isinstance(value, bool)
-        else value
-    )
+    df["reviewable_legal_claim"] = df["reviewable_legal_claim"].map(parse_bool)
     grouped = []
     for run_id, group in df.groupby("run_id", sort=False):
         labels = group["entailment_label"].fillna("")
@@ -221,8 +217,8 @@ def build_release_gate(
             "overclaim_rate": round(_bool_rate(group["has_overclaim"]), 4),
             "missing_evidence_warning_rate": round(_bool_rate(group["has_missing_evidence_warning"]), 4),
             "weak_fact_rule_application_rate": round(_bool_rate(group["has_weak_fact_rule_application"]), 4),
-            "judge_parse_failure_rate": round(float((~group["parsed_ok"].astype(bool)).mean()), 4),
-            "parsed_ok_rate": round(float(group["parsed_ok"].astype(bool).mean()), 4),
+            "judge_parse_failure_rate": round(float((~group["parsed_ok"].map(parse_bool)).mean()), 4),
+            "parsed_ok_rate": round(float(group["parsed_ok"].map(parse_bool).mean()), 4),
             "high_risk_consultation_not_reviewed_count": int(group["high_risk_consultation_not_reviewed"].sum()),
             "claim_entailment_rows": int(group["claim_entailment_rows"].sum()),
             "reviewable_claim_count": int(group["reviewable_claim_count"].sum()),

@@ -8,7 +8,7 @@ import yaml
 
 from .dataset_builder import AGENT_VISIBLE_COLUMNS, BOUNDARY, GOLD_COLUMNS, JURISDICTION, METADATA_COLUMNS
 from .product_boundary_dataset import load_product_boundary_cases, validate_product_boundary_cases
-from .utils import safe_text
+from .utils import parse_bool, safe_text
 
 
 SOURCE_DATASET = "legal_product_boundary_pilot_v1"
@@ -55,7 +55,7 @@ def _difficulty(slice_name: str) -> str:
 
 
 def _risk_level(case: dict[str, Any]) -> str:
-    if bool(case.get("expected_human_review")):
+    if parse_bool(case.get("expected_human_review")):
         return "high"
     if case.get("slice") in {"hard_legal_reasoning", "citation_grounding", "counterfactual_pair"}:
         return "medium"
@@ -153,7 +153,7 @@ def prepare_product_boundary_dataset(
                     for part in [
                         "禁止主张：" + _format_list(case.get("forbidden_claims")),
                         "关键失败：" + _format_list(case.get("critical_failure_triggers")),
-                        f"expected_human_review={bool(case.get('expected_human_review'))}",
+                        f"expected_human_review={parse_bool(case.get('expected_human_review'))}",
                     ]
                     if part
                 ),
@@ -183,7 +183,7 @@ def prepare_product_boundary_dataset(
                 "visibility_policy": "Eval_Input visible to agent; gold/rubric visible only to judge and human review.",
                 "core_sample_flag": "yes" if slice_name == "normal_practice" else "no",
                 "deep_badcase_flag": "yes" if slice_name in {"risk_calibration", "adversarial_trap"} else "no",
-                "human_review_required": "yes" if bool(case.get("expected_human_review")) else "no",
+                "human_review_required": "yes" if parse_bool(case.get("expected_human_review")) else "no",
             }
         )
 

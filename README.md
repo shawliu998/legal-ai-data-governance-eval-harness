@@ -180,8 +180,7 @@ The normalized CSV files are committed because they show the data design directl
 
 ```bash
 python3 -m venv .venv
-.venv/bin/python -m pip install -r requirements.txt
-.venv/bin/python -m pip install .
+.venv/bin/python -m pip install ".[test]"
 cp .env.example .env
 ```
 

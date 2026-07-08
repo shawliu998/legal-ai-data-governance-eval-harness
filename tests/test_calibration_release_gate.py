@@ -274,3 +274,35 @@ def test_release_gate_blocks_claim_entailment_source_boundary(tmp_path):
     assert blocked["release_decision"] == "blocked"
     assert blocked["out_of_scope_source_count"] == 1
     assert "source-boundary citation failure" in blocked["blockers"]
+
+
+def test_release_gate_parses_string_false_flags(tmp_path):
+    runs, scores, routing = _frames()
+    scores = scores.loc[scores["run_id"] == "r2"].copy()
+    runs = runs.loc[runs["run_id"] == "r2"].copy()
+    routing = routing.loc[routing["run_id"] == "r2"].copy()
+    scores["parsed_ok"] = "False"
+    claim_entailment = pd.DataFrame(
+        [
+            {
+                "run_id": "r2",
+                "claim_index": 1,
+                "claim": "结构性说明，不是可审查法律主张。",
+                "reviewable_legal_claim": "False",
+                "entailment_label": "not_reviewable",
+            }
+        ]
+    )
+
+    gate = build_release_gate(
+        runs=runs,
+        scores=scores,
+        routing=routing,
+        claim_entailment=claim_entailment,
+        output_path=tmp_path / "release_gate.csv",
+    )
+
+    row = gate.iloc[0]
+    assert row["parsed_ok_rate"] == 0.0
+    assert row["judge_parse_failure_rate"] == 1.0
+    assert row["reviewable_claim_count"] == 0

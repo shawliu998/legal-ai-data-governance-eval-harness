@@ -9,7 +9,7 @@ from typing import Any
 import pandas as pd
 
 from .io_excel import DatasetBundle, find_gold_row
-from .utils import json_dumps, json_loads_or_none, safe_text
+from .utils import json_dumps, json_loads_or_none, parse_bool, safe_text
 
 
 BRACKETED_SOURCE_ID_RE = re.compile(r"\[([A-Z][A-Z0-9_-]{2,})\]")
@@ -602,7 +602,7 @@ def summarize_claim_entailment(rows: pd.DataFrame, output_path: str | Path) -> p
             [
                 {
                     "total_claim_rows": len(rows),
-                    "reviewable_claim_rows": int(rows["reviewable_legal_claim"].fillna(False).astype(bool).sum()),
+                    "reviewable_claim_rows": int(rows["reviewable_legal_claim"].map(parse_bool).sum()),
                     "citation_gate_issue_rows": int(rows["entailment_label"].isin(issue_labels).sum()),
                     "release_blocker_rows": int(rows["entailment_label"].isin(release_blockers).sum()),
                     "supported_rows": int((rows["entailment_label"] == "supported").sum()),

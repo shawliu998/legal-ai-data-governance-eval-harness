@@ -6,7 +6,7 @@ from typing import Any
 import pandas as pd
 
 from .schemas import COARSE_ERROR_TAGS, DATA_ROUTES
-from .utils import json_dumps, json_loads_or_none, safe_text
+from .utils import json_dumps, json_loads_or_none, parse_bool, safe_text
 
 
 def _parse_tags(value: Any) -> list[dict[str, str]]:
@@ -31,7 +31,7 @@ def route_one(score_row: dict[str, Any]) -> dict[str, Any]:
     coarse_tags = [tag["coarse_error_tag"] for tag in tags]
     risk_level = safe_text(score_row.get("risk_level")) or "medium"
     judge_confidence = safe_text(score_row.get("judge_confidence")) or "medium"
-    needs_review = bool(score_row.get("needs_human_review"))
+    needs_review = parse_bool(score_row.get("needs_human_review"))
     score_rate = float(score_row.get("score_rate") or 0)
 
     if "fabricated_citation" in coarse_tags or risk_level == "high" or judge_confidence == "low" or needs_review:
@@ -64,7 +64,7 @@ def route_one(score_row: dict[str, Any]) -> dict[str, Any]:
 
     priority = "P0" if route == "human_review" or risk_level == "high" else "P1" if risk_level == "medium" else "P2"
     subtype = next((tag["error_subtype"] for tag in tags if tag["coarse_error_tag"] == main_error), "")
-    reusable = bool(score_row.get("parsed_ok")) and route in {"eval", "sft", "preference", "badcase"}
+    reusable = parse_bool(score_row.get("parsed_ok")) and route in {"eval", "sft", "preference", "badcase"}
     return {
         "sample_id": score_row["sample_id"],
         "run_id": score_row["run_id"],

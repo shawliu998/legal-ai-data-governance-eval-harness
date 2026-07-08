@@ -67,4 +67,6 @@ outputs/a5_multiturn_intake_pilot_v1/*
 !outputs/a5_multiturn_intake_pilot_v1/redacted_trace_example.md
 !outputs/a5_multiturn_intake_pilot_v1/human_trace_calibration_template.csv
 
+outputs_raw/
+
 data/practice_benchmark_pilot/source/

@@ -367,6 +367,7 @@ def cmd_run_a5_multiturn(args: argparse.Namespace) -> None:
         mode=args.mode,
         case_ids=case_ids,
         model_aliases=model_aliases,
+        raw_output_dir=args.raw_output_dir or None,
     )
     print(f"Wrote A5 multi-turn outputs to {args.output_dir}")
     print(result["trace_metrics_summary"].to_string(index=False))
@@ -557,6 +558,7 @@ def build_parser() -> argparse.ArgumentParser:
     run_a5.add_argument("--config", default="config.qianfan_a5_multiturn_smoke.yaml")
     run_a5.add_argument("--mode", choices=["mock", "api"], default="mock")
     run_a5.add_argument("--output-dir", default="outputs/a5_multiturn_intake_smoke")
+    run_a5.add_argument("--raw-output-dir", default="")
     run_a5.add_argument("--case-id", action="append", default=[])
     run_a5.add_argument("--model-alias", action="append", default=[])
     run_a5.set_defaults(func=cmd_run_a5_multiturn)

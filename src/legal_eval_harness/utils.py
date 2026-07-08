@@ -5,6 +5,9 @@ import re
 from datetime import datetime, timezone
 from typing import Any
 
+TRUE_VALUES = {"true", "1", "yes", "y", "是", "有", "需要", "required"}
+FALSE_VALUES = {"false", "0", "no", "n", "否", "无", "不需要", "none", "null", "nan", ""}
+
 
 def utc_now_iso() -> str:
     return datetime.now(timezone.utc).replace(microsecond=0).isoformat()
@@ -77,6 +80,23 @@ def safe_text(value: Any) -> str:
     return str(value).strip()
 
 
+def parse_bool(value: Any, *, default: bool = False) -> bool:
+    """Parse booleans from Python values and CSV/Excel string round-trips."""
+    if isinstance(value, bool):
+        return value
+    if value is None:
+        return default
+    if isinstance(value, float) and value != value:
+        return default
+    if isinstance(value, int | float):
+        return bool(value)
+    text = safe_text(value).lower()
+    if text in TRUE_VALUES:
+        return True
+    if text in FALSE_VALUES:
+        return False
+    return default
+
+
 def slug_tokens(text: str) -> list[str]:
     return [t for t in re.split(r"[^A-Za-z0-9_\-\u4e00-\u9fff]+", text or "") if t]
-

@@ -8,6 +8,7 @@ from legal_eval_harness.rag import (
     build_claim_entailment_rows,
     load_rag_corpus,
     retrieve_contexts,
+    summarize_claim_entailment,
     verify_output_citations,
 )
 from legal_eval_harness.runner import run_models
@@ -135,3 +136,24 @@ def test_run_models_writes_rag_component_logs(tmp_path):
     assert citations["citation_fidelity_label"].item() in {"citation_supported", "unsupported_claim"}
     assert citations["claim_count"].item() > 0
     assert citations["claim_checks"].item()
+
+
+def test_claim_entailment_summary_parses_string_false_reviewable_flag(tmp_path):
+    rows = pd.DataFrame(
+        [
+            {
+                "run_id": "RUN-1",
+                "reviewable_legal_claim": "False",
+                "entailment_label": "not_reviewable",
+            },
+            {
+                "run_id": "RUN-1",
+                "reviewable_legal_claim": "True",
+                "entailment_label": "supported",
+            },
+        ]
+    )
+
+    summary = summarize_claim_entailment(rows, tmp_path / "claim_summary.csv")
+
+    assert summary["reviewable_claim_rows"].item() == 1

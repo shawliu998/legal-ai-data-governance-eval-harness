@@ -9,7 +9,7 @@ import yaml
 
 from .product_boundary_dataset import load_product_boundary_cases
 from .release_gate import CLAIM_ENTAILMENT_BLOCKER_LABELS, CLAIM_ENTAILMENT_ISSUE_LABELS
-from .utils import json_loads_or_none, safe_text
+from .utils import json_loads_or_none, parse_bool, safe_text
 
 
 DEFAULT_RAG_V2_FOCUS_CASES = [
@@ -34,9 +34,7 @@ def _json_list(value: Any) -> list[str]:
 
 
 def _as_bool(value: Any) -> bool:
-    if isinstance(value, bool):
-        return value
-    return safe_text(value).lower() in {"true", "1", "yes", "y", "是"}
+    return parse_bool(value)
 
 
 def _rate(numerator: int | float, denominator: int | float) -> float:

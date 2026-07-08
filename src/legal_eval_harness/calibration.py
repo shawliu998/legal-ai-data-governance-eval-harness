@@ -6,7 +6,7 @@ from typing import Any
 
 import pandas as pd
 
-from .utils import json_loads_or_none, safe_text
+from .utils import json_loads_or_none, parse_bool, safe_text
 
 
 CRITICAL_TAGS = {"fabricated_citation", "unsafe_action_suggestion", "needs_human_review"}
@@ -30,7 +30,7 @@ def _is_critical(row: pd.Series) -> bool:
     return (
         safe_text(row.get("risk_level")) == "high"
         or safe_text(row.get("judge_confidence")) == "low"
-        or bool(row.get("needs_human_review"))
+        or parse_bool(row.get("needs_human_review"))
         or bool(tags.intersection(CRITICAL_TAGS))
     )
 
@@ -148,9 +148,9 @@ def build_human_review_sample(
     merged["citation_or_claim_review"] = citation_label.isin(
         ["fabricated_citation", "missing_citation", "unsupported_claim"]
     )
-    merged["ensemble_review"] = (
-        merged.get("requires_human_calibration", pd.Series(False, index=merged.index)).fillna(False).astype(bool)
-    )
+    merged["ensemble_review"] = merged.get(
+        "requires_human_calibration", pd.Series(False, index=merged.index)
+    ).map(parse_bool)
     merged["legal_review_required"] = (
         merged["critical_for_review"] | merged["citation_or_claim_review"] | merged["ensemble_review"]
     )

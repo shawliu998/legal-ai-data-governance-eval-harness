@@ -687,7 +687,7 @@ The output package contains redacted summaries and a human calibration template:
 outputs/a5_multiturn_intake_pilot_v1/human_trace_calibration_template.csv
 ```
 
-Full raw traces remain local and ignored by Git.
+Full raw traces remain local and ignored by Git. By default, runs under `outputs/` write raw A5 logs to `outputs_raw/<run_name>/`.
 
 ## 14. Common Checks
 

@@ -40,7 +40,9 @@ def test_a5_multiturn_smoke_writes_redacted_artifacts(tmp_path):
     metrics = result["trace_metrics_summary"].set_index("metric")
     assert metrics.loc["traces", "value"] == 1
     assert metrics.loc["turns", "value"] == 3
-    assert (tmp_path / "trace_log.jsonl").exists()
+    assert not (tmp_path / "trace_log.jsonl").exists()
+    assert (tmp_path.parent / f"{tmp_path.name}_raw" / "trace_log.jsonl").exists()
+    assert (tmp_path.parent / f"{tmp_path.name}_raw" / "turn_log.csv").exists()
     assert (tmp_path / "redacted_trace_example.md").exists()
     assert (tmp_path / "human_trace_calibration_template.csv").exists()
     redacted = pd.read_csv(tmp_path / "redacted_trace_samples.csv")

@@ -9,7 +9,7 @@ from openpyxl.styles import Alignment, Font, PatternFill
 from openpyxl.utils import get_column_letter
 
 from .schemas import COARSE_ERROR_TAGS, DATA_ROUTES
-from .utils import json_loads_or_none
+from .utils import json_loads_or_none, parse_bool
 
 
 def _iter_coarse_tags(values: pd.Series) -> list[str]:
@@ -150,6 +150,8 @@ def build_executive_dashboard(
 ) -> dict[str, Any]:
     scores = scores.copy()
     scores["score_rate"] = scores["score_rate"].astype(float)
+    if "needs_human_review" in scores.columns:
+        scores["needs_human_review"] = scores["needs_human_review"].map(parse_bool)
     runs = runs.copy()
     routing = routing.copy()
     for frame in [scores, runs, routing]:
