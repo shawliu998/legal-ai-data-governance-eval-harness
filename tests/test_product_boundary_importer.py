@@ -17,6 +17,9 @@ def test_prepare_product_boundary_dataset_outputs_loadable_manifest(tmp_path):
     assert len(bundle.gold_labels) == 50
     assert len(bundle.rubric_items) == 200
     assert set(bundle.eval_input["task_category"]) == {"consultation", "case_analysis", "document_drafting"}
+    visible_concepts = "\n".join(bundle.eval_input["legal_concepts"].fillna("").astype(str).tolist())
+    assert "expected_human_review" not in visible_concepts
+    assert "slice=" not in visible_concepts
 
     config = {
         "models": [

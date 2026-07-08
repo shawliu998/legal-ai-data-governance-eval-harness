@@ -20,5 +20,7 @@ outputs/qianfan_vendors_smoke/
 outputs/qianfan_vendors_smoke_mock/
 outputs/product_boundary_pilot/
 outputs/product_boundary_pilot_mock/
+outputs/product_boundary_api_smoke_1case/
+outputs/product_boundary_api_pilot_v1/
 
 data/practice_benchmark_pilot/source/

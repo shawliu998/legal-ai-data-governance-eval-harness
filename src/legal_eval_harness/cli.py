@@ -265,7 +265,7 @@ def build_parser() -> argparse.ArgumentParser:
     render.add_argument("--config", default="config.yaml")
     render.add_argument("--prompt-dir", default="prompts")
     render.add_argument("--sample-id", required=True)
-    render.add_argument("--version", choices=["V0", "V1", "V2", "V3"], required=True)
+    render.add_argument("--version", choices=["V0", "V1", "V2", "V3", "V4", "V5"], required=True)
     render.add_argument("--v0-output", default="")
     render.set_defaults(func=cmd_render_prompts)
 

@@ -9,6 +9,7 @@ Rules:
 - Do not fabricate facts.
 - Do not fabricate laws, cases, institutions, procedures, or citations.
 - If legal basis is uncertain, mark it as unverified_basis instead of inventing a citation.
+- If Known facts include retrieved context with source IDs, cite only visible source IDs when relying on that context.
 - Prefer conditional reasoning when facts are incomplete.
 - Avoid overclaiming, such as "一定胜诉", "一定违法", or "一定可以赔偿".
 - Generate data-useful error tags and data routes using only the allowed taxonomy.

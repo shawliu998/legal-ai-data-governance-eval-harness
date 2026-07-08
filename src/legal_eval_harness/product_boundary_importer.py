@@ -6,12 +6,13 @@ from typing import Any
 import pandas as pd
 import yaml
 
-from .dataset_builder import AGENT_VISIBLE_COLUMNS, BOUNDARY, GOLD_COLUMNS, JURISDICTION, LAW_SNAPSHOT_DATE, METADATA_COLUMNS
+from .dataset_builder import AGENT_VISIBLE_COLUMNS, BOUNDARY, GOLD_COLUMNS, JURISDICTION, METADATA_COLUMNS
 from .product_boundary_dataset import load_product_boundary_cases, validate_product_boundary_cases
 from .utils import safe_text
 
 
 SOURCE_DATASET = "legal_product_boundary_pilot_v1"
+PRODUCT_BOUNDARY_LAW_SNAPSHOT_DATE = "2026-07-08"
 
 
 def _task_category(task_type: str) -> str:
@@ -108,9 +109,8 @@ def prepare_product_boundary_dataset(
         legal_concepts = "；".join(
             value
             for value in [
-                f"slice={slice_name}",
                 f"task_type={safe_text(case.get('task_type'))}",
-                f"expected_human_review={bool(case.get('expected_human_review'))}",
+                "product_boundary_eval_visible_context_only",
             ]
             if value
         )
@@ -123,7 +123,7 @@ def prepare_product_boundary_dataset(
                 "known_facts": known_facts,
                 "legal_concepts": legal_concepts,
                 "jurisdiction": "中国大陆",
-                "law_snapshot_date": LAW_SNAPSHOT_DATE,
+                "law_snapshot_date": PRODUCT_BOUNDARY_LAW_SNAPSHOT_DATE,
                 "task_type": safe_text(case.get("task_type")),
                 "legal_advice_boundary": BOUNDARY,
             }
