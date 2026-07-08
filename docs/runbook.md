@@ -663,7 +663,33 @@ Use the API outputs to update:
 - `docs/results_product_boundary_eval.md`
 - `docs/model_boundary_memo.md`
 
-## 13. Common Checks
+## 13. A5 Multi-Turn Intake Pilot
+
+Validate the 8-case A5 pilot set:
+
+```bash
+.venv/bin/python -m legal_eval_harness.cli validate-a5-multiturn \
+  --input data/eval_sets/legal_agent_multiturn_intake_pilot_v1.jsonl
+```
+
+Run the full 8-case A5 pilot:
+
+```bash
+PYTHONPATH=src .venv/bin/python -m legal_eval_harness.cli run-a5-multiturn \
+  --config config.qianfan_a5_multiturn_pilot.yaml \
+  --mode api \
+  --output-dir outputs/a5_multiturn_intake_pilot_v1
+```
+
+The output package contains redacted summaries and a human calibration template:
+
+```text
+outputs/a5_multiturn_intake_pilot_v1/human_trace_calibration_template.csv
+```
+
+Full raw traces remain local and ignored by Git.
+
+## 14. Common Checks
 
 Confirm output row counts:
 
@@ -698,7 +724,7 @@ Allowed values:
 eval, sft, preference, badcase, human_review
 ```
 
-## 14. Walkthrough Script
+## 15. Walkthrough Script
 
 For review discussion:
 

@@ -1,10 +1,10 @@
 package: a5_multiturn_intake_lightweight_evidence
 purpose: Trace-level A5 multi-turn legal intake evidence package.
 source_run:
-  traces: 6
-  turns: 18
-  cases: 3
-  models: 2
+  traces: 24
+  turns: 72
+  cases: 8
+  models: 3
 methodology_caveats:
 - This is a limited A5 smoke/pilot run, not a statistically powered benchmark.
 - The trace pass rate is a deterministic triage signal, not human-validated product

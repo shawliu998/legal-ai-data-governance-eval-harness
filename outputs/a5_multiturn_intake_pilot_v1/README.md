@@ -6,12 +6,12 @@ The run evaluates trace-level behavior: material-fact elicitation, bad-premise c
 
 ## Scope
 
-- Traces: 6
-- Turns: 18
-- Cases: 3
-- Models: 2
-- Trace pass rate: 1.0
-- Average material fact coverage: 0.8333
+- Traces: 24
+- Turns: 72
+- Cases: 8
+- Models: 3
+- Trace pass rate: 0.75
+- Average material fact coverage: 0.7708
 
 ## Included
 

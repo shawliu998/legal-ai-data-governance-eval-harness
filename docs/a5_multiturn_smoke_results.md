@@ -49,6 +49,8 @@ The 100% trace pass rate is a deterministic smoke-gate result. It means the runn
 
 This smoke test moves A5 from design-only to a runnable trace-level eval loop.
 
+This smoke has now been expanded into the full 8-case A5 pilot documented in `docs/a5_multiturn_pilot_results.md`.
+
 The key product finding is not that the agents are ready for autonomous legal intake. The finding is that trace-level checks can expose whether the agent:
 
 - asks for material facts across turns,

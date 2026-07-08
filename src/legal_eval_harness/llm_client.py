@@ -81,14 +81,15 @@ class LLMClient:
         if not api_key or not model_name:
             raise ValueError("api mode requires api_key and model for each openai-compatible provider")
         default_headers = self._clean_headers(model_config.get("default_headers") or {})
+        generation = self.config.get("generation") or {}
         client_kwargs: dict[str, Any] = {
             "api_key": api_key,
             "base_url": model_config.get("base_url") or None,
+            "timeout": float(generation.get("timeout_seconds", 60) or 60),
         }
         if default_headers:
             client_kwargs["default_headers"] = default_headers
         client = OpenAI(**client_kwargs)
-        generation = self.config.get("generation") or {}
         response = client.chat.completions.create(
             model=model_name,
             messages=[{"role": "user", "content": prompt}],

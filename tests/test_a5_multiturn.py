@@ -42,6 +42,9 @@ def test_a5_multiturn_smoke_writes_redacted_artifacts(tmp_path):
     assert metrics.loc["turns", "value"] == 3
     assert (tmp_path / "trace_log.jsonl").exists()
     assert (tmp_path / "redacted_trace_example.md").exists()
+    assert (tmp_path / "human_trace_calibration_template.csv").exists()
     redacted = pd.read_csv(tmp_path / "redacted_trace_samples.csv")
     assert "agent_message" not in redacted.columns
     assert redacted["turn_output_hashes"].item()
+    calibration = pd.read_csv(tmp_path / "human_trace_calibration_template.csv")
+    assert "human_escalation_timing_0_2" in calibration.columns

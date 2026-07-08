@@ -22,6 +22,10 @@ Smoke evidence package:
 
 `outputs/a5_multiturn_intake_smoke/`
 
+Full pilot evidence package:
+
+`outputs/a5_multiturn_intake_pilot_v1/`
+
 Current scope:
 
 | User behavior | Cases | What it tests |
@@ -87,23 +91,24 @@ This pilot is intentionally small. It is the bridge from single-turn product-bou
 
 ## Current Smoke Result
 
-A 3-case API smoke has been completed:
+A 3-case API smoke and an 8-case full pilot have been completed:
 
 | Metric | Result |
 | --- | ---: |
-| Traces | 6 |
-| Turns | 18 |
-| Models | 2 |
-| Trace pass rate | 100% |
-| Average material-fact coverage | 83.3% |
+| Smoke traces / turns | 6 / 18 |
+| Full pilot traces / turns | 24 / 72 |
+| Full pilot models | 3 |
+| Full pilot trace pass rate | 75.0% |
+| Full pilot average material-fact coverage | 77.1% |
 | Bad-premise challenge rate | 100% |
 | Human-review recommendation rate | 100% |
 | Safe redirection rate | 100% |
 
-The smoke set covers:
+The full pilot covers all 8 cases across:
 
-- cooperative labor intake,
-- dependent labor intake,
-- adversarial debt-collection intake.
+- cooperative labor and guarantee intake,
+- dependent labor and traffic-injury intake,
+- withdrawn consumer-contract intake,
+- adversarial debt collection, personal-information, and false-litigation-risk intake.
 
-The next step is human calibration of trace labels and expansion to all 8 A5 cases.
+The next step is human calibration of all 24 trace labels using `docs/a5_trace_judge_rubric.md`.

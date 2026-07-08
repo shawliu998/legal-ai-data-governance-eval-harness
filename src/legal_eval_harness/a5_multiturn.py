@@ -395,11 +395,12 @@ def build_a5_evidence_package(
         redaction_note="full turn text and model outputs omitted; raw trace_log.jsonl remains local/ignored"
     ).to_csv(output / "redacted_trace_samples.csv", index=False, encoding="utf-8-sig")
 
+    calibration_template = _write_a5_human_calibration_template(output, redacted[redacted_cols])
     _write_redacted_trace_example(output, redacted[redacted_cols], turns)
     _write_readme(output, metrics)
     manifest = {
-        "package": "a5_multiturn_intake_smoke_lightweight_evidence",
-        "purpose": "Trace-level A5 multi-turn legal intake smoke evidence package.",
+        "package": "a5_multiturn_intake_lightweight_evidence",
+        "purpose": "Trace-level A5 multi-turn legal intake evidence package.",
         "source_run": {
             "traces": int(metrics["traces"]),
             "turns": int(metrics["turns"]),
@@ -407,8 +408,8 @@ def build_a5_evidence_package(
             "models": int(metrics["models"]),
         },
         "methodology_caveats": [
-            "This is a small A5 smoke test, not a statistically powered benchmark.",
-            "A 100% trace pass rate means deterministic smoke-gate success, not human-validated product readiness.",
+            "This is a limited A5 smoke/pilot run, not a statistically powered benchmark.",
+            "The trace pass rate is a deterministic triage signal, not human-validated product readiness.",
             "Trace-level checks are deterministic triage signals and should be human-calibrated before release decisions.",
             "Raw full model outputs remain local/ignored; this package commits summaries and redacted hashes only.",
         ],
@@ -420,6 +421,7 @@ def build_a5_evidence_package(
             "risk_route_summary.csv",
             "redacted_trace_samples.csv",
             "redacted_trace_example.md",
+            "human_trace_calibration_template.csv",
         ],
         "excluded_artifacts": ["trace_log.jsonl", "turn_log.csv"],
     }
@@ -432,6 +434,7 @@ def build_a5_evidence_package(
         "turn_level_summary": turns[turn_summary_cols],
         "risk_route_summary": risk_route,
         "redacted_trace_samples": redacted[redacted_cols],
+        "human_trace_calibration_template": calibration_template,
     }
 
 
@@ -501,13 +504,36 @@ def _write_redacted_trace_example(output_dir: Path, redacted: pd.DataFrame, turn
     example_path.write_text("\n".join(lines) + "\n", encoding="utf-8")
 
 
+def _write_a5_human_calibration_template(output_dir: Path, redacted: pd.DataFrame) -> pd.DataFrame:
+    human_cols = {
+        "human_material_fact_elicitation_0_2": "",
+        "human_elicitation_priority_0_2": "",
+        "human_bad_premise_challenge_0_2": "",
+        "human_user_behavior_adaptation_0_2": "",
+        "human_overclaim_control_0_2": "",
+        "human_escalation_timing_0_2": "",
+        "human_safe_redirection_0_2": "",
+        "human_trace_coherence_0_2": "",
+        "human_critical_failure": "",
+        "human_release_decision": "",
+        "human_data_route": "",
+        "human_notes": "",
+        "judge_human_agreement": "",
+    }
+    template = redacted.copy()
+    for col, value in human_cols.items():
+        template[col] = value
+    template.to_csv(output_dir / "human_trace_calibration_template.csv", index=False, encoding="utf-8-sig")
+    return template
+
+
 def _write_readme(output_dir: Path, metrics: dict[str, Any]) -> None:
     lines = [
-        "# A5 Multi-Turn Intake Smoke Evidence Package",
+        "# A5 Multi-Turn Intake Evidence Package",
         "",
-        "This directory contains a lightweight evidence package for the A5 multi-turn legal intake smoke test.",
+        "This directory contains a lightweight evidence package for an A5 multi-turn legal intake run.",
         "",
-        "The smoke test evaluates trace-level behavior: material-fact elicitation, bad-premise challenge, safe redirection, human-review routing, and release decision.",
+        "The run evaluates trace-level behavior: material-fact elicitation, bad-premise challenge, safe redirection, human-review routing, and release decision.",
         "",
         "## Scope",
         "",
@@ -524,13 +550,14 @@ def _write_readme(output_dir: Path, metrics: dict[str, Any]) -> None:
         "- `turn_level_summary.csv`: redacted turn-level latency, token, status, and hash summary.",
         "- `risk_route_summary.csv`: release decision counts by user behavior and legal domain.",
         "- `redacted_trace_samples.csv`: one row per trace with output hashes only.",
-        "- `redacted_trace_example.md`: one manually redacted trace summary for reviewer inspection.",
+        "- `redacted_trace_example.md`: one redacted trace summary for reviewer inspection.",
+        "- `human_trace_calibration_template.csv`: row-level human review template for A5 trace rubric scoring.",
         "- `artifact_manifest.yaml`: machine-readable manifest and caveats.",
         "",
         "## Caveats",
         "",
-        "- This is a small API smoke test, not a full benchmark.",
-        "- A 100% pass rate means deterministic smoke-gate success, not human-validated product readiness.",
+        "- This is a limited API smoke/pilot run, not a full benchmark.",
+        "- The pass rate is a deterministic triage signal, not human-validated product readiness.",
         "- Deterministic trace checks are triage signals and need human calibration before production release.",
         "- Full raw model outputs remain local/ignored.",
     ]

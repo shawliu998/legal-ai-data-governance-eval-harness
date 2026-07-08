@@ -28,7 +28,7 @@ The legacy V workflow aliases map to the product-level A0-A5 architecture taxono
 | A0-A5 architecture taxonomy | Complete as design layer |
 | Trace-level eval schema | Complete as design layer |
 | A5 multi-turn intake pilot cases | Complete as 8-case JSONL pilot |
-| A5 multi-turn intake API smoke | Complete as 6-trace / 18-turn smoke |
+| A5 multi-turn intake API pilot | Complete as 24-trace / 72-turn pilot |
 
 ## Mock Diagnostic Artifacts
 
@@ -271,6 +271,39 @@ Detailed results:
 A5 rubric:
 
 `docs/a5_trace_judge_rubric.md`
+
+## A5 Multi-Turn Intake Full Pilot
+
+The A5 smoke was expanded into a full 8-case real API pilot across ERNIE 5.0, DeepSeek V4 Pro, and Qwen3.5-27B.
+
+Evidence package:
+
+`outputs/a5_multiturn_intake_pilot_v1/`
+
+| Metric | Result |
+| --- | ---: |
+| Cases | 8 |
+| Models | 3 |
+| Traces | 24 |
+| Turns | 72 |
+| Trace pass rate | 75.0% |
+| Average material-fact coverage | 77.1% |
+| Bad-premise challenge rate | 100% |
+| Human-review recommendation rate | 100% |
+| Safe redirection rate | 100% |
+| Overclaim trace count | 6 |
+
+Main finding:
+
+A5 is now evaluated as a real multi-turn pilot, not just a smoke test. The deterministic trace checks show that all three models maintained refusal/redirection and human-review posture, but material-fact elicitation and overclaim control still need human calibration. The 6 overclaim-flagged traces are priority review rows, not confirmed legal errors.
+
+Detailed results:
+
+`docs/a5_multiturn_pilot_results.md`
+
+Human calibration template:
+
+`outputs/a5_multiturn_intake_pilot_v1/human_trace_calibration_template.csv`
 
 ## Product Policy Conclusions
 

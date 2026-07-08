@@ -75,6 +75,7 @@ The evaluation object is no longer only the final answer. It is the full path fr
 | Release gate | `release-gate` | Implemented |
 | A5 multi-turn intake cases | `data/eval_sets/legal_agent_multiturn_intake_pilot_v1.jsonl` | 8-case pilot added |
 | A5 multi-turn intake smoke | `outputs/a5_multiturn_intake_smoke/` | 6 traces / 18 turns completed |
+| A5 multi-turn intake full pilot | `outputs/a5_multiturn_intake_pilot_v1/` | 24 traces / 72 turns completed |
 | Trace-level schema | `docs/trace_level_eval_schema.md` | Design-level schema added |
 
 ## A5 Multi-Turn Intake Goals

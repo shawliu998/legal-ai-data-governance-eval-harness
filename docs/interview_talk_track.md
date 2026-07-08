@@ -2,7 +2,7 @@
 
 ## 30-Second Version
 
-I built a legal agent product-boundary eval and data governance harness. Instead of ranking models by average score, it evaluates whether a legal AI product should answer, ask clarifying questions, use grounded sources, route to human review, or block release. I ran a real Qianfan API pilot across ERNIE 5.0, DeepSeek V4 Pro, Qwen3.5-27B, GLM-5.2, and Kimi K2.6, then human-reviewed 80 priority outputs and added RAG V2 plus A5 multi-turn intake smoke tests. The output is not just scores; it is model-agent routing policy, trace-level risk signals, release gates, and next-round data production actions.
+I built a legal agent product-boundary eval and data governance harness. Instead of ranking models by average score, it evaluates whether a legal AI product should answer, ask clarifying questions, use grounded sources, route to human review, or block release. I ran a real Qianfan API pilot across ERNIE 5.0, DeepSeek V4 Pro, Qwen3.5-27B, GLM-5.2, and Kimi K2.6, then human-reviewed 80 priority outputs and added RAG V2 plus a 24-trace A5 multi-turn intake pilot. The output is not just scores; it is model-agent routing policy, trace-level risk signals, release gates, and next-round data production actions.
 
 ## 2-Minute Version
 
@@ -53,8 +53,9 @@ The main finding was not simply "which model won." A1 structured legal counsel a
 | RAG V2 focused outputs | 72 / 72 |
 | RAG V2 citation-gate issue rate | 88.1% strict release-risk gate |
 | A5 multi-turn intake cases | 8 |
-| A5 API smoke traces / turns | 6 / 18 |
-| A5 smoke bad-premise challenge rate | 100% deterministic smoke check |
+| A5 API pilot traces / turns | 24 / 72 |
+| A5 deterministic trace pass rate | 75.0% |
+| A5 overclaim-flagged traces | 6 |
 
 ## What I Would Emphasize
 
@@ -79,7 +80,8 @@ I would state these directly:
 - Citation verification is stronger than source-id matching, but not yet full legal entailment.
 - Full-run scoring currently uses one stable judge plus human review, not a fully reliable multi-judge ensemble.
 - The RAG V2 88.1% citation-gate issue rate is a strict material-claim release gate, not an overall legal-answer accuracy rate.
-- The A5 100% smoke pass rate means the deterministic trace checks passed on 6 traces; it still needs human calibration with the A5 rubric.
+- The A5 75.0% pilot pass rate is still deterministic triage, not human-validated legal correctness.
+- A5 still needs human calibration with the A5 rubric, especially for the 6 overclaim-flagged traces.
 - The real API pilot is intentionally small, designed to prove method and product decision value rather than claim statistical superiority.
 
 These are not fatal weaknesses. They define the next data loop.
@@ -92,10 +94,9 @@ RAG V2 is now complete as a focused pilot. Its product lesson is:
 - source-boundary filtering is a product requirement, not a retrieval nice-to-have;
 - claim-level citation coverage must be enforced before source-specific answers are released.
 
-The agentic next iteration is A5:
+The agentic next iteration is A5 calibration:
 
-- human-calibrate the 6 completed smoke traces;
-- expand the 3-case smoke to all 8 multi-turn intake cases;
+- human-calibrate the 24 completed pilot traces;
 - measure material-fact elicitation, bad-premise challenge, user-behavior adaptation, and escalation timing with the A5-specific judge rubric;
 - route trace failures into SFT, preference, badcase, and regression eval assets.
 

@@ -357,15 +357,18 @@ def cmd_validate_a5_multiturn(args: argparse.Namespace) -> None:
 
 def cmd_run_a5_multiturn(args: argparse.Namespace) -> None:
     config = load_config(args.config)
+    a5_cfg = config.get("a5_multiturn_pilot") or config.get("a5_multiturn_smoke") or {}
+    case_ids = _alias_filter(args.case_id) or a5_cfg.get("case_ids") or None
+    model_aliases = _alias_filter(args.model_alias) or a5_cfg.get("model_aliases") or None
     result = run_a5_multiturn_smoke(
         cases_path=args.cases,
         config=config,
         output_dir=args.output_dir,
         mode=args.mode,
-        case_ids=_alias_filter(args.case_id) or None,
-        model_aliases=_alias_filter(args.model_alias) or None,
+        case_ids=case_ids,
+        model_aliases=model_aliases,
     )
-    print(f"Wrote A5 multi-turn smoke outputs to {args.output_dir}")
+    print(f"Wrote A5 multi-turn outputs to {args.output_dir}")
     print(result["trace_metrics_summary"].to_string(index=False))
 
 
