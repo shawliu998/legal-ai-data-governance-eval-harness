@@ -1,0 +1,20 @@
+project:
+  name: Legal AI Practice Benchmark Pilot
+  version: 0.1.0
+  boundary: pilot evaluation dataset; not legal advice; not model ranking
+files:
+  eval_input: eval_input.csv
+  gold_labels: gold_labels.csv
+  rubric_items: rubric_items.csv
+  sample_metadata: sample_metadata.csv
+sources:
+- source_dataset: licensed_practice_benchmark_adapted
+  expected_samples: 30
+  role: licensed adapted legal-practice pilot cases
+task_categories:
+- consultation
+- case_analysis
+- document_drafting
+visibility_policy:
+  agent_visible: Eval_Input only
+  judge_visible: Eval_Input + Gold_Labels + Rubric_Items

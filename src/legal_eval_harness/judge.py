@@ -24,11 +24,15 @@ def _risk_level_for_score(score_rate: float, has_high_risk_gold: bool) -> str:
 
 def _dimension_scores(version: str, sample_id: str) -> dict[str, int]:
     digest = int(hashlib.sha256(f"{sample_id}-{version}-judge".encode("utf-8")).hexdigest(), 16)
-    base_by_version = {"V0": 0, "V1": 1, "V2": 1, "V3": 1}
+    base_by_version = {"V0": 0, "V1": 1, "V2": 1, "V3": 1, "V4": 1, "V5": 1}
     scores = {}
     for idx, dim in enumerate(SCORE_DIMENSIONS):
         base = base_by_version.get(version, 1)
         if version == "V3" and dim in {"missing_facts_awareness", "risk_coverage", "overclaim_control"}:
+            value = 2
+        elif version == "V4" and dim in {"legal_grounding", "hallucination_control", "risk_coverage"}:
+            value = 2
+        elif version == "V5" and dim in {"missing_facts_awareness", "clarification_quality", "overclaim_control"}:
             value = 2
         elif version == "V2" and dim in {"risk_coverage", "overclaim_control", "data_tag_usability"}:
             value = 2
@@ -89,6 +93,8 @@ def _mock_judge_payload(run_row: dict[str, Any], gold_row: dict[str, Any]) -> di
             score = 1
         elif version == "V2":
             score = 2 if item.get("criticality") == "high" and idx % 2 else 1
+        elif version in {"V4", "V5"}:
+            score = 2 if item.get("criticality") == "high" or idx % 2 else 1
         else:
             score = 2 if idx % 3 else 1
         atomic_scores.append(
@@ -124,6 +130,10 @@ def _mock_judge_payload(run_row: dict[str, Any], gold_row: dict[str, Any]) -> di
             tags.append({"coarse_error_tag": "overclaim", "error_subtype": "structure_without_sufficient_caution"})
     elif version == "V2":
         tags.append({"coarse_error_tag": "weak_fact_rule_application", "error_subtype": subtype})
+    elif version == "V4":
+        tags.append({"coarse_error_tag": "unverified_basis", "error_subtype": "grounding_boundary_check"})
+    elif version == "V5":
+        tags.append({"coarse_error_tag": "missing_facts", "error_subtype": "clarification_first"})
     else:
         tags.append({"coarse_error_tag": "missing_evidence_warning", "error_subtype": subtype})
     if risk_level == "high":

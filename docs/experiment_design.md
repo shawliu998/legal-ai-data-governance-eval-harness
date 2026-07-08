@@ -59,6 +59,16 @@ Task categories:
 
 The extended samples are for task coverage, scale testing, and data-routing calibration.
 
+An optional practice benchmark pilot can be generated separately under `data/practice_benchmark_pilot/`.
+It contains 30 licensed adapted practice samples by default:
+
+- 20 `case_analysis` samples
+- 6 `consultation` samples
+- 4 `document_drafting` samples
+- 155 rubric rows
+
+This pilot is intentionally not merged into the default 85-sample manifest. It is used for higher-difficulty real-practice evaluation and API runs while keeping the portfolio MVP deterministic and stable.
+
 ## Agent Versions
 
 V0 Direct Answer:
@@ -92,6 +102,28 @@ Deep supplement:
 Total mock/full run count:
 
 - 546 normalized runs
+
+Practice benchmark pilot run:
+
+- 30 adapted practice samples
+- 3 model aliases
+- V0, V1, and V3
+- 270 normalized runs
+
+Practice API smoke run:
+
+- 12 adapted practice samples
+- 3 model aliases
+- W0/V0 closed-book answer, W1/V1 structured legal prompt, W3/V3 risk-control workflow
+- 108 normalized API outputs
+- output-level latency, token count, estimated cost, judge score, critical failure label, human-review decision, and data route
+
+The API smoke run should be interpreted as a deployment-eval experiment:
+
+- Which task slices can be auto-answered?
+- Which slices require stronger workflow or human review?
+- Which model-workflow pair is cost-effective for each task type?
+- Which failures should become badcases, SFT examples, preference pairs, or holdout eval samples?
 
 ## Task-Specific Judge
 

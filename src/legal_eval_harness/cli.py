@@ -6,11 +6,16 @@ from pathlib import Path
 import pandas as pd
 
 from .aggregator import build_executive_dashboard
+from .calibration import build_human_review_sample
 from .config import get_project_default, load_config
 from .dataset_builder import build_normalized_dataset
 from .io_excel import find_eval_row, load_dataset
 from .judge import run_judge
+from .practice_benchmark_importer import prepare_practice_benchmark_dataset
+from .product_boundary_dataset import load_product_boundary_cases, validate_product_boundary_cases
+from .product_boundary_importer import prepare_product_boundary_dataset
 from .prompt_builder import PromptBuilder
+from .release_gate import build_release_gate
 from .runner import build_run_plan, run_models
 from .router import route_scores
 from .schemas import PROTECTED_GOLD_FIELDS, VISIBLE_INPUT_FIELDS
@@ -56,6 +61,31 @@ def cmd_prepare_data(args: argparse.Namespace) -> None:
     print(f"Wrote {len(rubric_items)} Rubric_Items rows to {Path(args.output_dir) / 'rubric_items.csv'}")
 
 
+def cmd_prepare_practice_benchmark(args: argparse.Namespace) -> None:
+    paths = prepare_practice_benchmark_dataset(
+        output_dir=args.output_dir,
+        source_dir=args.source_dir,
+        download=not args.no_download,
+        case_limit=args.case_limit,
+        consultation_limit=args.consultation_limit,
+        document_limit=args.document_limit,
+    )
+    eval_rows = pd.read_csv(paths["eval_input"])
+    rubric_rows = pd.read_csv(paths["rubric_items"])
+    print(f"Wrote practice benchmark pilot manifest to {paths['manifest']}")
+    print(f"Wrote {len(eval_rows)} Eval_Input rows to {paths['eval_input']}")
+    print(f"Wrote {len(rubric_rows)} Rubric_Items rows to {paths['rubric_items']}")
+
+
+def cmd_prepare_product_boundary(args: argparse.Namespace) -> None:
+    paths = prepare_product_boundary_dataset(input_jsonl=args.input_jsonl, output_dir=args.output_dir)
+    eval_rows = pd.read_csv(paths["eval_input"])
+    rubric_rows = pd.read_csv(paths["rubric_items"])
+    print(f"Wrote product-boundary manifest to {paths['manifest']}")
+    print(f"Wrote {len(eval_rows)} Eval_Input rows to {paths['eval_input']}")
+    print(f"Wrote {len(rubric_rows)} Rubric_Items rows to {paths['rubric_items']}")
+
+
 def cmd_render_prompts(args: argparse.Namespace) -> None:
     config = load_config(args.config)
     bundle = _load_bundle(args.input, config)
@@ -98,6 +128,44 @@ def cmd_summarize(args: argparse.Namespace) -> None:
     print(dashboard)
 
 
+def cmd_sample_human_review(args: argparse.Namespace) -> None:
+    runs = pd.read_csv(args.runs)
+    scores = pd.read_csv(args.scores)
+    routing = pd.read_csv(args.routing)
+    df = build_human_review_sample(
+        runs=runs,
+        scores=scores,
+        routing=routing,
+        output_path=args.output,
+        sample_rate=args.sample_rate,
+        min_samples=args.min_samples,
+        random_state=args.random_state,
+    )
+    print(f"Wrote {len(df)} human review calibration rows to {args.output}")
+
+
+def cmd_release_gate(args: argparse.Namespace) -> None:
+    runs = pd.read_csv(args.runs)
+    scores = pd.read_csv(args.scores)
+    routing = pd.read_csv(args.routing)
+    df = build_release_gate(runs=runs, scores=scores, routing=routing, output_path=args.output)
+    print(f"Wrote {len(df)} release gate rows to {args.output}")
+    print(df[["task_category", "model_alias", "workflow_condition", "release_decision"]].to_string(index=False))
+
+
+def cmd_validate_product_boundary(args: argparse.Namespace) -> None:
+    cases = load_product_boundary_cases(args.input)
+    errors = validate_product_boundary_cases(cases)
+    if errors:
+        for error in errors:
+            print(f"ERROR: {error}")
+        raise SystemExit(1)
+    slice_counts = pd.Series([case["slice"] for case in cases]).value_counts().sort_index().to_dict()
+    print("Product boundary dataset validation OK")
+    print(f"Cases: {len(cases)}")
+    print(f"Slices: {slice_counts}")
+
+
 def cmd_all(args: argparse.Namespace) -> None:
     output_dir = Path(args.output_dir)
     output_dir.mkdir(parents=True, exist_ok=True)
@@ -133,6 +201,20 @@ def build_parser() -> argparse.ArgumentParser:
     prepare.add_argument("--input-workbook", default="data/Legal_AI_Data_Governance_Eval_Harness_40_Core.xlsx")
     prepare.add_argument("--output-dir", default="data")
     prepare.set_defaults(func=cmd_prepare_data)
+
+    practice = sub.add_parser("prepare-practice-benchmark")
+    practice.add_argument("--output-dir", default="data/practice_benchmark_pilot")
+    practice.add_argument("--source-dir", default=None)
+    practice.add_argument("--no-download", action="store_true")
+    practice.add_argument("--case-limit", type=int, default=20)
+    practice.add_argument("--consultation-limit", type=int, default=6)
+    practice.add_argument("--document-limit", type=int, default=4)
+    practice.set_defaults(func=cmd_prepare_practice_benchmark)
+
+    product_boundary = sub.add_parser("prepare-product-boundary")
+    product_boundary.add_argument("--input-jsonl", default="data/eval_sets/legal_product_boundary_pilot_v1.jsonl")
+    product_boundary.add_argument("--output-dir", default="data/product_boundary_pilot")
+    product_boundary.set_defaults(func=cmd_prepare_product_boundary)
 
     validate = sub.add_parser("validate")
     validate.add_argument("--input", required=True)
@@ -174,6 +256,27 @@ def build_parser() -> argparse.ArgumentParser:
     summarize.add_argument("--routing", required=True)
     summarize.add_argument("--output", default="outputs/executive_dashboard.xlsx")
     summarize.set_defaults(func=cmd_summarize)
+
+    human_review = sub.add_parser("sample-human-review")
+    human_review.add_argument("--runs", required=True)
+    human_review.add_argument("--scores", required=True)
+    human_review.add_argument("--routing", required=True)
+    human_review.add_argument("--output", default="outputs/human_review_calibration.csv")
+    human_review.add_argument("--sample-rate", type=float, default=0.2)
+    human_review.add_argument("--min-samples", type=int, default=20)
+    human_review.add_argument("--random-state", type=int, default=7)
+    human_review.set_defaults(func=cmd_sample_human_review)
+
+    release_gate = sub.add_parser("release-gate")
+    release_gate.add_argument("--runs", required=True)
+    release_gate.add_argument("--scores", required=True)
+    release_gate.add_argument("--routing", required=True)
+    release_gate.add_argument("--output", default="outputs/release_gate.csv")
+    release_gate.set_defaults(func=cmd_release_gate)
+
+    boundary = sub.add_parser("validate-product-boundary")
+    boundary.add_argument("--input", default="data/eval_sets/legal_product_boundary_pilot_v1.jsonl")
+    boundary.set_defaults(func=cmd_validate_product_boundary)
 
     all_cmd = sub.add_parser("all")
     all_cmd.add_argument("--input", required=True)

@@ -157,6 +157,160 @@ models:
     model: ${MODEL_A_NAME}
 ```
 
+## Practice Benchmark Pilot
+
+For a higher-difficulty real-practice pilot, generate a separate licensed adapted dataset:
+
+```bash
+.venv/bin/python -m legal_eval_harness.cli prepare-practice-benchmark \
+  --output-dir data/practice_benchmark_pilot \
+  --case-limit 20 \
+  --consultation-limit 6 \
+  --document-limit 4
+```
+
+Then validate or run it without changing the default 85-sample portfolio dataset:
+
+```bash
+.venv/bin/python -m legal_eval_harness.cli validate \
+  --input data/practice_benchmark_pilot/dataset_manifest.yaml \
+  --config config.practice_pilot.yaml
+
+.venv/bin/python -m legal_eval_harness.cli all \
+  --input data/practice_benchmark_pilot/dataset_manifest.yaml \
+  --config config.practice_pilot.yaml \
+  --mode mock \
+  --output-dir outputs/practice_benchmark_pilot
+```
+
+Default pilot shape:
+
+- 30 adapted practice samples
+- 155 rubric rows
+- 3 task categories
+- 270 planned normalized runs across V0, V1, and V3
+
+For a real-API smoke run focused on deployment decisions:
+
+```bash
+.venv/bin/python -m legal_eval_harness.cli all \
+  --input data/practice_benchmark_pilot/dataset_manifest.yaml \
+  --config config.practice_api_smoke.yaml \
+  --mode api \
+  --output-dir outputs/practice_api_smoke
+```
+
+The API smoke config selects 12 practice samples, 3 model aliases, and 3 workflow conditions:
+
+- `W0`: closed-book answer
+- `W1`: structured legal prompt
+- `W3`: risk-control workflow agent
+
+`model_run_log.csv` includes `workflow_condition`, `latency_ms`, token counts, `estimated_cost`, and `usage_source`, so results can be interpreted as deployment tradeoffs rather than a leaderboard.
+
+Use [docs/results_practice_api_smoke.md](docs/results_practice_api_smoke.md) and [docs/release_gate.md](docs/release_gate.md) to turn the run into model routing, human-review, release-gate, and data-production decisions.
+
+After an API run, generate the human calibration queue and release gate table:
+
+```bash
+.venv/bin/python -m legal_eval_harness.cli sample-human-review \
+  --runs outputs/practice_api_smoke/model_run_log.csv \
+  --scores outputs/practice_api_smoke/judge_scores.csv \
+  --routing outputs/practice_api_smoke/data_routing.csv \
+  --output outputs/practice_api_smoke/human_review_calibration.csv
+
+.venv/bin/python -m legal_eval_harness.cli release-gate \
+  --runs outputs/practice_api_smoke/model_run_log.csv \
+  --scores outputs/practice_api_smoke/judge_scores.csv \
+  --routing outputs/practice_api_smoke/data_routing.csv \
+  --output outputs/practice_api_smoke/release_gate.csv
+```
+
+### Qianfan Multi-Vendor Run
+
+If using Baidu Qianfan ModelBuilder, use the OpenAI-compatible endpoint:
+
+```text
+QIANFAN_BASE_URL=https://qianfan.baidubce.com/v2
+```
+
+Fill model names from the Qianfan model center into `.env`, for example:
+
+```text
+QIANFAN_MODEL_ERNIE_51=
+QIANFAN_MODEL_DEEPSEEK_V4_PRO=
+QIANFAN_MODEL_QWEN35_27B=
+QIANFAN_MODEL_GLM_52=
+QIANFAN_JUDGE_MODEL=
+```
+
+Then run the Qianfan-hosted vendor comparison:
+
+```bash
+.venv/bin/python -m legal_eval_harness.cli all \
+  --input data/practice_benchmark_pilot/dataset_manifest.yaml \
+  --config config.qianfan_vendors_smoke.yaml \
+  --mode api \
+  --output-dir outputs/qianfan_vendors_smoke
+```
+
+Default shape:
+
+- 8 practice samples
+- 4 Qianfan-hosted model vendor slots: ERNIE 5.1, DeepSeek V4 Pro, Qwen3.5-27B, GLM 5.2
+- 3 workflow conditions: W0, W1, W3
+- 96 model outputs
+
+This compares deployment behavior by task slice, workflow, risk route, latency, and cost. It should still be reported as a product policy experiment, not a vendor leaderboard.
+
+## Stratified Legal Product Boundary Eval
+
+The product-boundary eval extends the project beyond hard-case smoke tests.
+It uses normal, hard, risk-calibration, citation-grounding, adversarial, and counterfactual slices to reflect realistic legal product traffic while still exposing differences among strong models.
+
+Primary artifacts:
+
+- Design: [docs/stratified_legal_eval_design.md](docs/stratified_legal_eval_design.md)
+- Results template: [docs/results_product_boundary_eval.md](docs/results_product_boundary_eval.md)
+- Dataset: [data/eval_sets/legal_product_boundary_pilot_v1.jsonl](data/eval_sets/legal_product_boundary_pilot_v1.jsonl)
+- Qianfan config: [config.qianfan_product_boundary_eval.yaml](config.qianfan_product_boundary_eval.yaml)
+- Runnable config: [config.qianfan_product_boundary_runnable.yaml](config.qianfan_product_boundary_runnable.yaml)
+
+Validate the dataset:
+
+```bash
+.venv/bin/python -m legal_eval_harness.cli validate-product-boundary \
+  --input data/eval_sets/legal_product_boundary_pilot_v1.jsonl
+```
+
+Prepare a runnable normalized manifest:
+
+```bash
+.venv/bin/python -m legal_eval_harness.cli prepare-product-boundary \
+  --input-jsonl data/eval_sets/legal_product_boundary_pilot_v1.jsonl \
+  --output-dir data/product_boundary_pilot
+```
+
+Run the current mock-compatible workflow mapping:
+
+```bash
+.venv/bin/python -m legal_eval_harness.cli all \
+  --input data/product_boundary_pilot/dataset_manifest.yaml \
+  --config config.qianfan_product_boundary_runnable.yaml \
+  --mode mock \
+  --output-dir outputs/product_boundary_pilot_mock
+```
+
+Current runnable workflow mapping:
+
+- `V0`: `w0_closed_book`
+- `V1`: `w1_structured_legal_prompt`
+- `V4`: `w2_rag_grounded` using provided context
+- `V3`: `w3_risk_control_workflow`
+- `V5`: `w4_clarification_first`
+
+This is not a simple leaderboard. It evaluates model-workflow configurations under realistic legal product conditions to decide product routing, release readiness, and next-round data production.
+
 ## Project Boundary
 
 This project evaluates model behavior and routes data. It does not provide legal advice, does not decide final legal correctness, does not retrieve statutes, and does not rank models.
