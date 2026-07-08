@@ -19,7 +19,7 @@ def test_agent_prompts_do_not_include_gold_label_values():
         gold_row["expected_answer_points"],
         gold_row["risk_points"],
     ]
-    for version in ["V0", "V1", "V2", "V3"]:
+    for version in ["V0", "V1", "V2", "V3", "V4", "V5"]:
         prompt, visible = builder.render_agent_prompt(version, eval_row, v0_output="baseline answer")
         assert "key_missing_facts" not in visible
         for value in gold_values:

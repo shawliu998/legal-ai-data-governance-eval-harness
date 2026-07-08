@@ -14,6 +14,16 @@ from .prompt_builder import PromptBuilder
 from .utils import json_dumps, utc_now_iso
 
 
+WORKFLOW_CONDITIONS = {
+    "V0": ("W0", "closed-book answer"),
+    "V1": ("W1", "structured legal prompt"),
+    "V2": ("W2", "blind verifier/reviewer"),
+    "V3": ("W3", "risk-control workflow agent"),
+    "V4": ("W2", "provided-context grounded answer"),
+    "V5": ("W4", "clarification-first intake agent"),
+}
+
+
 @dataclass(frozen=True)
 class RunSpec:
     sample_id: str
@@ -45,7 +55,10 @@ def build_run_plan(bundle: DatasetBundle, config: dict[str, Any]) -> list[RunSpe
         unknown = sorted(set(sample_ids) - set(all_sample_ids))
         if unknown:
             raise ValueError(f"full_samples contains unknown sample_id: {unknown}")
-    deep_samples = run_plan.get("deep_samples") or sample_ids[:5]
+    if "deep_samples" in run_plan:
+        deep_samples = run_plan.get("deep_samples") or []
+    else:
+        deep_samples = sample_ids[:5]
 
     specs: list[RunSpec] = []
     seen: set[str] = set()
@@ -86,9 +99,10 @@ def run_models(
     for spec in tqdm(build_run_plan(bundle, config), desc="model runs"):
         eval_row = find_eval_row(bundle, spec.sample_id)
         v0_output = output_by_key.get((spec.sample_id, spec.model_alias, "V0"), "")
+        workflow_condition, workflow_name = WORKFLOW_CONDITIONS.get(spec.version, (spec.version, spec.version))
         try:
             prompt, visible_fields = builder.render_agent_prompt(spec.version, eval_row, v0_output=v0_output)
-            output_text = client.generate(
+            output_text, call_metadata = client.generate_with_metadata(
                 prompt=prompt,
                 model_config=spec.model_config,
                 version=spec.version,
@@ -100,6 +114,15 @@ def run_models(
         except Exception as exc:  # preserve failed runs for auditability
             visible_fields = []
             output_text = ""
+            call_metadata = {
+                "latency_ms": 0,
+                "input_tokens": 0,
+                "output_tokens": 0,
+                "total_tokens": 0,
+                "estimated_cost": 0.0,
+                "cost_currency": spec.model_config.get("cost_currency", "USD"),
+                "usage_source": "failed",
+            }
             run_status = "failed"
             error_message = str(exc)
         output_by_key[(spec.sample_id, spec.model_alias, spec.version)] = output_text
@@ -110,9 +133,13 @@ def run_models(
                 "source_dataset": eval_row.get("source_dataset", ""),
                 "task_category": eval_row.get("task_category", ""),
                 "model_alias": spec.model_alias,
+                "model_vendor": spec.model_config.get("vendor", ""),
+                "model_family": spec.model_config.get("family", ""),
                 "provider": spec.model_config.get("provider", ""),
                 "model_name": spec.model_config.get("model", ""),
                 "version": spec.version,
+                "workflow_condition": workflow_condition,
+                "workflow_name": workflow_name,
                 "run_scope": spec.run_scope,
                 "prompt_id": spec.version,
                 "input_visible_fields": json_dumps(visible_fields),
@@ -120,6 +147,13 @@ def run_models(
                 "run_status": run_status,
                 "error_message": error_message,
                 "output_length": len(output_text),
+                "latency_ms": int(call_metadata.get("latency_ms", 0)),
+                "input_tokens": int(call_metadata.get("input_tokens", 0)),
+                "output_tokens": int(call_metadata.get("output_tokens", 0)),
+                "total_tokens": int(call_metadata.get("total_tokens", 0)),
+                "estimated_cost": float(call_metadata.get("estimated_cost", 0.0)),
+                "cost_currency": call_metadata.get("cost_currency", "USD"),
+                "usage_source": call_metadata.get("usage_source", ""),
                 "created_at": utc_now_iso(),
             }
         )

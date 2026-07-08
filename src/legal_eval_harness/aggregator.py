@@ -135,6 +135,12 @@ def _build_badcase_cards(badcase_base: pd.DataFrame, *, limit: int = 80) -> pd.D
     return cards.loc[selected, BADCASE_CARD_COLUMNS].reset_index(drop=True)
 
 
+def _numeric_column(frame: pd.DataFrame, column: str) -> pd.Series:
+    if column not in frame.columns:
+        return pd.Series([0] * len(frame), index=frame.index, dtype="float64")
+    return pd.to_numeric(frame[column], errors="coerce").fillna(0)
+
+
 def build_executive_dashboard(
     *,
     runs: pd.DataFrame,
@@ -177,6 +183,8 @@ def build_executive_dashboard(
         "avg_score_delta": avg_delta,
         "high_risk_rate": round(float((scores["risk_level"] == "high").mean()), 3),
         "human_review_queue_size": int((routing["data_route"] == "human_review").sum()),
+        "avg_latency_ms": round(float(_numeric_column(runs, "latency_ms").mean()), 1),
+        "total_estimated_cost": round(float(_numeric_column(runs, "estimated_cost").sum()), 6),
         "top_3_error_tags": ", ".join(top_3),
         "recommended_data_actions": _recommended_actions(top_3),
         "dashboard_boundary": "Data production decision panel; diagnostic comparison only; not a model leaderboard.",
@@ -225,6 +233,70 @@ def build_executive_dashboard(
             human_review_rate=("needs_human_review", "mean"),
         )
         .round(3)
+    )
+    if "workflow_condition" in runs.columns:
+        workflow_lookup = runs[["version", "workflow_condition", "workflow_name"]].drop_duplicates()
+        version_summary = version_summary.merge(workflow_lookup, on="version", how="left")
+
+    operational_summary = runs.copy()
+    for col in ["latency_ms", "input_tokens", "output_tokens", "total_tokens", "estimated_cost"]:
+        if col not in operational_summary.columns:
+            operational_summary[col] = 0
+        operational_summary[col] = pd.to_numeric(operational_summary[col], errors="coerce").fillna(0)
+    group_cols = [
+        col
+        for col in ["task_category", "model_alias", "version", "workflow_condition", "workflow_name"]
+        if col in operational_summary.columns
+    ]
+    cost_latency_summary = (
+        operational_summary.groupby(group_cols, as_index=False)
+        .agg(
+            runs=("run_id", "count"),
+            avg_latency_ms=("latency_ms", "mean"),
+            avg_input_tokens=("input_tokens", "mean"),
+            avg_output_tokens=("output_tokens", "mean"),
+            total_estimated_cost=("estimated_cost", "sum"),
+        )
+        .round(4)
+    )
+
+    policy_base = scores.merge(
+        routing[["run_id", "data_route", "priority"]],
+        on="run_id",
+        how="left",
+    )
+    if "workflow_condition" in runs.columns:
+        policy_base = policy_base.merge(
+            runs[["run_id", "workflow_condition", "workflow_name", "latency_ms", "estimated_cost"]],
+            on="run_id",
+            how="left",
+        )
+    else:
+        policy_base["workflow_condition"] = policy_base["version"]
+        policy_base["workflow_name"] = policy_base["version"]
+        policy_base["latency_ms"] = 0
+        policy_base["estimated_cost"] = 0
+    deployment_policy = (
+        policy_base.groupby(["task_category", "workflow_condition", "workflow_name"], as_index=False)
+        .agg(
+            runs=("run_id", "count"),
+            avg_score_rate=("score_rate", "mean"),
+            high_risk_rate=("risk_level", lambda x: (x == "high").mean()),
+            human_review_rate=("data_route", lambda x: (x == "human_review").mean()),
+            avg_latency_ms=("latency_ms", "mean"),
+            total_estimated_cost=("estimated_cost", "sum"),
+        )
+        .round(4)
+    )
+    deployment_policy["policy_hint"] = deployment_policy.apply(
+        lambda row: (
+            "candidate for auto-answer only if critical checks pass"
+            if row["high_risk_rate"] <= 0.05 and row["human_review_rate"] <= 0.15
+            else "route to human review or stronger workflow before release"
+            if row["high_risk_rate"] >= 0.2
+            else "limited release with monitoring and targeted data production"
+        ),
+        axis=1,
     )
 
     route_summary = (
@@ -310,6 +382,8 @@ def build_executive_dashboard(
         task_category_summary.to_excel(writer, sheet_name="Task_Category_Summary", index=False)
         badcase_cards.to_excel(writer, sheet_name="Badcase_Cards", index=False)
         version_summary.to_excel(writer, sheet_name="Version_Summary", index=False)
+        cost_latency_summary.to_excel(writer, sheet_name="Cost_Latency", index=False)
+        deployment_policy.to_excel(writer, sheet_name="Deployment_Policy", index=False)
         route_summary.to_excel(writer, sheet_name="Data_Routing_Summary", index=False)
         model_patterns_df.to_excel(writer, sheet_name="Model_Error_Patterns", index=False)
         taxonomy_df.to_excel(writer, sheet_name="Error_Taxonomy", index=False)

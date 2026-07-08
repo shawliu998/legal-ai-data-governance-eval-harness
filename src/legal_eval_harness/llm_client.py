@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import hashlib
+import time
 from typing import Any
 
 from tenacity import retry, stop_after_attempt, wait_exponential
@@ -24,12 +25,47 @@ class LLMClient:
         sample_id: str,
         v0_output: str = "",
     ) -> str:
+        text, _ = self.generate_with_metadata(
+            prompt=prompt,
+            model_config=model_config,
+            version=version,
+            sample_id=sample_id,
+            v0_output=v0_output,
+        )
+        return text
+
+    def generate_with_metadata(
+        self,
+        *,
+        prompt: str,
+        model_config: dict[str, Any],
+        version: str,
+        sample_id: str,
+        v0_output: str = "",
+    ) -> tuple[str, dict[str, Any]]:
+        started = time.perf_counter()
         if self.mode == "mock":
-            return self._mock_generate(version=version, sample_id=sample_id, v0_output=v0_output)
-        return self._api_generate(prompt=prompt, model_config=model_config)
+            text = self._mock_generate(version=version, sample_id=sample_id, v0_output=v0_output)
+            latency_ms = int((time.perf_counter() - started) * 1000)
+            return text, self._metadata(
+                prompt=prompt,
+                output_text=text,
+                model_config=model_config,
+                latency_ms=latency_ms,
+                usage=None,
+            )
+        text, usage = self._api_generate(prompt=prompt, model_config=model_config)
+        latency_ms = int((time.perf_counter() - started) * 1000)
+        return text, self._metadata(
+            prompt=prompt,
+            output_text=text,
+            model_config=model_config,
+            latency_ms=latency_ms,
+            usage=usage,
+        )
 
     @retry(wait=wait_exponential(min=1, max=8), stop=stop_after_attempt(3))
-    def _api_generate(self, *, prompt: str, model_config: dict[str, Any]) -> str:
+    def _api_generate(self, *, prompt: str, model_config: dict[str, Any]) -> tuple[str, dict[str, int]]:
         try:
             from openai import OpenAI
         except ImportError as exc:
@@ -39,7 +75,14 @@ class LLMClient:
         model_name = model_config.get("model")
         if not api_key or not model_name:
             raise ValueError("api mode requires api_key and model for each openai-compatible provider")
-        client = OpenAI(api_key=api_key, base_url=model_config.get("base_url") or None)
+        default_headers = self._clean_headers(model_config.get("default_headers") or {})
+        client_kwargs: dict[str, Any] = {
+            "api_key": api_key,
+            "base_url": model_config.get("base_url") or None,
+        }
+        if default_headers:
+            client_kwargs["default_headers"] = default_headers
+        client = OpenAI(**client_kwargs)
         generation = self.config.get("generation") or {}
         response = client.chat.completions.create(
             model=model_name,
@@ -47,7 +90,59 @@ class LLMClient:
             temperature=float(generation.get("temperature", 0.2)),
             max_tokens=int(generation.get("max_output_tokens", 1800)),
         )
-        return response.choices[0].message.content or ""
+        usage = getattr(response, "usage", None)
+        usage_dict = {
+            "input_tokens": int(getattr(usage, "prompt_tokens", 0) or 0),
+            "output_tokens": int(getattr(usage, "completion_tokens", 0) or 0),
+            "total_tokens": int(getattr(usage, "total_tokens", 0) or 0),
+        }
+        return response.choices[0].message.content or "", usage_dict
+
+    def _metadata(
+        self,
+        *,
+        prompt: str,
+        output_text: str,
+        model_config: dict[str, Any],
+        latency_ms: int,
+        usage: dict[str, int] | None,
+    ) -> dict[str, Any]:
+        usage = usage or {}
+        input_tokens = int(usage.get("input_tokens") or self._estimate_tokens(prompt))
+        output_tokens = int(usage.get("output_tokens") or self._estimate_tokens(output_text))
+        total_tokens = int(usage.get("total_tokens") or input_tokens + output_tokens)
+        return {
+            "latency_ms": latency_ms,
+            "input_tokens": input_tokens,
+            "output_tokens": output_tokens,
+            "total_tokens": total_tokens,
+            "estimated_cost": self._estimate_cost(model_config, input_tokens, output_tokens),
+            "cost_currency": str(model_config.get("cost_currency") or "USD"),
+            "usage_source": "api_usage" if usage else "estimated",
+        }
+
+    @staticmethod
+    def _estimate_tokens(text: str) -> int:
+        if not text:
+            return 0
+        return max(1, len(text) // 3)
+
+    @staticmethod
+    def _estimate_cost(model_config: dict[str, Any], input_tokens: int, output_tokens: int) -> float:
+        input_per_1k = LLMClient._safe_float(model_config.get("input_cost_per_1k"))
+        output_per_1k = LLMClient._safe_float(model_config.get("output_cost_per_1k"))
+        return round((input_tokens / 1000 * input_per_1k) + (output_tokens / 1000 * output_per_1k), 6)
+
+    @staticmethod
+    def _safe_float(value: Any) -> float:
+        try:
+            return float(value or 0)
+        except (TypeError, ValueError):
+            return 0.0
+
+    @staticmethod
+    def _clean_headers(headers: dict[str, Any]) -> dict[str, str]:
+        return {str(key): str(value) for key, value in headers.items() if value not in {None, ""}}
 
     @staticmethod
     def _mock_generate(*, version: str, sample_id: str, v0_output: str = "") -> str:
@@ -136,5 +231,50 @@ class LLMClient:
                     },
                 }
             )
+        if version == "V4":
+            return (
+                "1. 可使用的依据：仅能依据用户问题和已提供的可见材料；如材料中出现来源编号，应只引用这些编号。\n"
+                "2. 不能从依据中推出的结论：不能编造未提供的法条、案例或合同条款，也不能把证据不足的问题说成确定结论。\n"
+                "3. 条件化分析：若提供材料支持核心事实，可作初步判断；若材料不足，应说明依据不足。\n"
+                "4. 需要补充的事实或证据：完整合同、通知、付款、沟通记录、证据来源和程序状态。\n"
+                "5. 风险与人审建议：引用或高风险事实不明确时，应转人工复核。"
+            )
+        if version == "V5":
+            level = "high" if seed % 4 == 0 else "medium"
+            return json_dumps(
+                {
+                    "answer_now": level != "high",
+                    "reason": "material facts must be clarified before a reliable legal conclusion",
+                    "clarification_questions": [
+                        "请补充合同、付款、通知或聊天记录等基础材料。",
+                        "请说明对方主体、时间线、金额和目前程序状态。",
+                        "是否存在人身、劳动解除、诉讼文书、威胁催收或虚构证据等高风险情形？",
+                    ],
+                    "initial_risk_assessment": {
+                        "risk_level": level,
+                        "human_review_recommended": level == "high",
+                        "unsafe_or_deceptive_request_detected": False,
+                    },
+                    "safe_response": "当前只能先做事实 intake 和风险识别；补齐关键事实后再给条件化分析。",
+                    "do_not_answer_or_refuse": {
+                        "refused_parts": [],
+                        "reason": "no explicit unsafe request detected in mock output",
+                    },
+                    "data_tags": {
+                        "error_tags": [
+                            {"coarse_error_tag": "missing_facts", "error_subtype": "clarification_first_gap"},
+                            {
+                                "coarse_error_tag": "needs_human_review",
+                                "error_subtype": "high_risk_intake",
+                            }
+                            if level == "high"
+                            else {
+                                "coarse_error_tag": "missing_evidence_warning",
+                                "error_subtype": "needs_evidence_before_answer",
+                            },
+                        ],
+                        "data_route": ["human_review"] if level == "high" else ["eval", "sft"],
+                    },
+                }
+            )
         raise ValueError(f"Unsupported mock version: {version}")
-

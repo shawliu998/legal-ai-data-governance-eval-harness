@@ -12,6 +12,8 @@ PROMPT_FILES = {
     "V1": "v1_answer_protocol.txt",
     "V2": "v2_blind_review_agent.txt",
     "V3": "v3_workflow_agent.txt",
+    "V4": "v4_grounded_answer.txt",
+    "V5": "v5_clarification_first.txt",
     "JUDGE": "judge_consultation.txt",
     "JUDGE_CONSULTATION": "judge_consultation.txt",
     "JUDGE_CASE_ANALYSIS": "judge_case_analysis.txt",
@@ -44,7 +46,7 @@ class PromptBuilder:
         *,
         v0_output: str = "",
     ) -> tuple[str, list[str]]:
-        if version not in {"V0", "V1", "V2", "V3"}:
+        if version not in {"V0", "V1", "V2", "V3", "V4", "V5"}:
             raise ValueError(f"Unsupported agent version: {version}")
         protected_present = PROTECTED_GOLD_FIELDS.intersection(eval_row.keys())
         if protected_present:

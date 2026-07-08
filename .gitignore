@@ -12,3 +12,12 @@ outputs/*.csv
 outputs/*.xlsx
 !outputs/.gitkeep
 !outputs/executive_dashboard.xlsx
+outputs/practice_benchmark_pilot/
+outputs/practice_api_smoke/
+outputs/practice_api_smoke_mock/
+outputs/qianfan_vendors_smoke/
+outputs/qianfan_vendors_smoke_mock/
+outputs/product_boundary_pilot/
+outputs/product_boundary_pilot_mock/
+
+data/practice_benchmark_pilot/source/
