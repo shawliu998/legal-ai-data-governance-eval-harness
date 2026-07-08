@@ -21,11 +21,13 @@ It is not a legal advice system and not a model leaderboard.
 
 ![Dashboard preview](assets/dashboard_preview.png)
 
-Three dashboard takeaways:
+Current real API pilot takeaways:
 
-- V3 workflow responses improve structured risk-control behavior over V0 in the deterministic diagnostic run.
-- The largest operational queue is human review, which is expected for high-risk or low-confidence legal outputs.
-- Top data actions are preference pairs for overclaim control, evidence-risk SFT samples, and high-risk review calibration.
+- 300 / 300 Qianfan model-workflow outputs completed across ERNIE 5.0, DeepSeek V4 Pro, Qwen3.5-27B, GLM-5.2, and Kimi K2.6.
+- Qwen3.5-27B was selected as the full-run structured judge after smoke tests; it produced 300 / 300 parseable judge outputs.
+- 80 priority real outputs were human-reviewed: 4 pass, 27 partial pass, 49 fail, with 92.5% judge-human agreement.
+- W1 structured prompting and W5 clarification-first were stronger release candidates than closed-book or current RAG/verifier variants.
+- RAG is still required for source-specific tasks, but the pilot showed citation-boundary and unsupported-claim failures that must be caught by verification and human review.
 
 ## Open First
 
@@ -66,7 +68,7 @@ flowchart LR
 - Rubric-based LLM Judge: task-specific judge prompts for consultation, case analysis, and document drafting.
 - Human review queue: high-risk or low-confidence outputs are routed for calibration.
 - Standardized error taxonomy and fixed data routes: `eval`, `sft`, `preference`, `badcase`, `human_review`.
-- Dashboard as a data decision panel, not a ranking report.
+- Dashboard and model-boundary memo as data decision artifacts, not ranking reports.
 
 ## Dataset
 
