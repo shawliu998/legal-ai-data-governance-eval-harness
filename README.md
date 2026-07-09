@@ -34,10 +34,6 @@
 - [docs/rag_v2_focused_results.md](docs/rag_v2_focused_results.md)：RAG source-boundary 结果
 - [docs/a5_multiturn_pilot_results.md](docs/a5_multiturn_pilot_results.md)：多轮 intake trace 结果
 
-## 项目边界
-
-本项目为 pilot-scale 产品诊断实验，RAG 语料和评测样本均为受控实验材料。结果用于分析模型输出问题、发布门槛、人审路由和后续数据流转，不用于法律咨询服务。
-
 ## Evaluation Questions
 
 - Can the model answer directly?
