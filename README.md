@@ -92,6 +92,16 @@ The product-level interpretation uses A0-A5.
   [docs/legal_agent_product_eval_v2_design.md](docs/legal_agent_product_eval_v2_design.md)
 - Model boundary memo: [docs/model_boundary_memo.md](docs/model_boundary_memo.md)
 
+## What Not To Claim
+
+This repository should not be read as:
+
+- a public legal model leaderboard,
+- a production legal advice system,
+- a claim that the 450-output focused run has already been completed,
+- a claim that RAG alone solves legal hallucination,
+- a claim that Qwen-judge scores are final model rankings.
+
 ## Appendix
 
 - Trace-level eval schema: [docs/trace_level_eval_schema.md](docs/trace_level_eval_schema.md)
