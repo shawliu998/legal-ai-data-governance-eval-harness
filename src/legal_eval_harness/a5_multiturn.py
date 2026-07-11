@@ -187,17 +187,25 @@ def _git_value(*args: str) -> str:
 
 
 def _working_tree_state() -> str:
-    status = _git_value(
-        "status",
-        "--porcelain",
-        "--untracked-files=all",
-        "--",
-        ".",
-        ":(exclude)outputs/**",
-    )
-    if status == "unknown":
+    try:
+        result = subprocess.run(
+            [
+                "git",
+                "status",
+                "--porcelain",
+                "--untracked-files=all",
+                "--",
+                ".",
+                ":(exclude)outputs/**",
+            ],
+            cwd=Path(__file__).resolve().parents[2],
+            check=True,
+            capture_output=True,
+            text=True,
+        )
+    except (OSError, subprocess.CalledProcessError):
         return "unknown"
-    return "dirty" if status else "clean"
+    return "dirty" if result.stdout.strip() else "clean"
 
 
 def _a5_run_stage(output_dir: Path) -> str:

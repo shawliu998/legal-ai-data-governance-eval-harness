@@ -73,17 +73,25 @@ def _git_value(*args: str) -> str:
 
 
 def _source_working_tree_state() -> str:
-    value = _git_value(
-        "status",
-        "--porcelain",
-        "--untracked-files=all",
-        "--",
-        ".",
-        ":(exclude)outputs/**",
-    )
-    if value == "unknown":
+    try:
+        result = subprocess.run(
+            [
+                "git",
+                "status",
+                "--porcelain",
+                "--untracked-files=all",
+                "--",
+                ".",
+                ":(exclude)outputs/**",
+            ],
+            cwd=ROOT,
+            check=True,
+            capture_output=True,
+            text=True,
+        )
+    except (OSError, subprocess.CalledProcessError):
         return "unknown"
-    return "dirty" if value else "clean"
+    return "dirty" if result.stdout.strip() else "clean"
 
 
 def _bool_series(series: pd.Series) -> pd.Series:

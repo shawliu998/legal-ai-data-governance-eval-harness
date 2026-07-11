@@ -81,17 +81,25 @@ def _git_value(*args: str) -> str:
 
 
 def _working_tree_state() -> str:
-    value = _git_value(
-        "status",
-        "--porcelain",
-        "--untracked-files=all",
-        "--",
-        ".",
-        ":(exclude)outputs/**",
-    )
-    if value == "unknown":
+    try:
+        result = subprocess.run(
+            [
+                "git",
+                "status",
+                "--porcelain",
+                "--untracked-files=all",
+                "--",
+                ".",
+                ":(exclude)outputs/**",
+            ],
+            cwd=Path(__file__).resolve().parents[2],
+            check=True,
+            capture_output=True,
+            text=True,
+        )
+    except (OSError, subprocess.CalledProcessError):
         return "unknown"
-    return "dirty" if value else "clean"
+    return "dirty" if result.stdout.strip() else "clean"
 
 
 def _case_rows(cases_jsonl: str | Path, focus_cases: list[str]) -> pd.DataFrame:
