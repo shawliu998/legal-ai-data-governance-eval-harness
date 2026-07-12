@@ -29,6 +29,14 @@ jobs:
         run: python -m pytest -q
       - name: Validate portfolio release
         run: python scripts/validate_portfolio_release.py
+      - name: Validate public flywheel release
+        run: python scripts/validate_public_flywheel_release.py
+      - name: Validate legal flywheel release
+        run: |
+          if [ -f outputs/flywheel/legal_flywheel_v0.1.0/release_manifest.yaml ]; then
+            legal-ai-data-loop validate-dataset-release \
+              --release outputs/flywheel/legal_flywheel_v0.1.0
+          fi
       - name: Run deterministic mock pipeline
         if: matrix.python-version == '3.12'
         run: |
