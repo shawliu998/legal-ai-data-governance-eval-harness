@@ -7,10 +7,26 @@ import pandas as pd
 from pandas.errors import EmptyDataError
 
 from .a5_multiturn import run_a5_multiturn_smoke, summarize_a5_trace_log, validate_a5_cases
+from .asset_ai_review import adjudicate_asset, draft_correction, review_asset
+from .asset_audit import (
+    adjudicate_blind_v2,
+    backfill_lineage_and_expert_bindings,
+    run_blind_review_v2,
+)
+from .asset_candidate_builder import build_asset_candidates, build_replacement_candidate
+from .asset_quality import run_asset_qa
+from .asset_service import AssetService
 from .aggregator import build_executive_dashboard
 from .calibration import build_human_review_sample, summarize_human_calibration
 from .config import get_project_default, load_config
 from .dataset_builder import build_normalized_dataset
+from .dataset_release import (
+    apply_expert_review_bundle,
+    build_dataset_release,
+    build_expert_review_bundle,
+    finalize_asset,
+    validate_dataset_release,
+)
 from .io_excel import find_eval_row, load_dataset
 from .judge import run_judge
 from .judge_ensemble import run_judge_ensemble
@@ -21,6 +37,11 @@ from .prompt_builder import PromptBuilder
 from .rag import build_claim_entailment_rows, summarize_claim_entailment
 from .rag_v2 import DEFAULT_RAG_V2_FOCUS_CASES, build_rag_v2_report
 from .release_gate import build_release_gate
+from .regression_runner import (
+    register_regression_assertions_v2,
+    rescore_regression_outputs_v2,
+    run_asset_regressions,
+)
 from .runner import build_run_plan, run_models
 from .router import apply_review_adjudications, route_scores
 from .schemas import PROTECTED_GOLD_FIELDS, VISIBLE_INPUT_FIELDS
@@ -74,6 +95,245 @@ def _load_bundle(input_path: str, config: dict) -> object:
             config, "legal_advice_boundary", "仅用于诊断评测，不构成法律咨询。"
         ),
     )
+
+
+def _model_by_alias(config: dict, alias: str) -> dict:
+    models = config.get("models") or []
+    for model in models:
+        if str(model.get("alias")) == alias:
+            return model
+    raise SystemExit(f"Unknown model alias {alias}; available: {[model.get('alias') for model in models]}")
+
+
+def cmd_build_asset_candidates(args: argparse.Namespace) -> None:
+    rows = build_asset_candidates(
+        data_dir=args.data_dir,
+        cases_path=args.cases,
+        runs_path=args.runs,
+        reviewed_path=args.reviewed,
+        allow_same_source_bug_reproduction=args.allow_same_source_bug_reproduction,
+    )
+    print(f"Prepared {len(rows)} asset candidates in {args.data_dir}")
+
+
+def cmd_build_replacement_candidate(args: argparse.Namespace) -> None:
+    from .asset_schemas import AssetType
+
+    row = build_replacement_candidate(
+        asset_id=args.asset_id,
+        asset_type=AssetType(args.asset_type),
+        case_id=args.case_id,
+        data_dir=args.data_dir,
+        cases_path=args.cases,
+        runs_path=args.runs,
+        reviewed_path=args.reviewed,
+    )
+    print(f"Prepared replacement {row.asset_id} from {row.source_case_id}")
+
+
+def cmd_backfill_asset_lineage(args: argparse.Namespace) -> None:
+    snapshots, bindings = backfill_lineage_and_expert_bindings(
+        AssetService(args.data_dir), review_round_dir=args.review_round_dir
+    )
+    print(f"Lineage ready: {snapshots} source snapshot versions; {bindings} new expert bindings")
+
+
+def cmd_run_blind_reviews_v2(args: argparse.Namespace) -> None:
+    from .llm_client import LLMClient
+
+    config = load_config(args.config)
+    service = AssetService(args.data_dir)
+    client = LLMClient(config, args.mode)
+    reviewer_a_model = _model_by_alias(config, args.reviewer_a_model)
+    reviewer_b_model = _model_by_alias(config, args.reviewer_b_model)
+    adjudicator_model = _model_by_alias(config, args.adjudicator_model)
+    accepted = sorted(
+        [row for row in service.candidates.all() if row.asset_status.value == "accepted"],
+        key=lambda row: row.asset_id,
+    )
+    if len(accepted) != 15:
+        raise SystemExit(f"blind-v2 requires 15 accepted assets; found {len(accepted)}")
+    for candidate in accepted:
+        run_blind_review_v2(
+            service,
+            candidate.asset_id,
+            "reviewer_a",
+            client=client,
+            model_config=reviewer_a_model,
+            raw_output_root=args.raw_output_dir,
+        )
+        run_blind_review_v2(
+            service,
+            candidate.asset_id,
+            "reviewer_b",
+            client=client,
+            model_config=reviewer_b_model,
+            raw_output_root=args.raw_output_dir,
+        )
+        result = adjudicate_blind_v2(
+            service,
+            candidate.asset_id,
+            client=client,
+            model_config=adjudicator_model,
+            raw_output_root=args.raw_output_dir,
+        )
+        print(f"Blind-v2 {candidate.asset_id}: {result.status}/{result.proposed_decision}")
+
+
+def cmd_draft_correction(args: argparse.Namespace) -> None:
+    config = load_config(args.config)
+    service = AssetService(args.data_dir)
+    correction = draft_correction(
+        service,
+        args.asset_id,
+        client=__import__("legal_eval_harness.llm_client", fromlist=["LLMClient"]).LLMClient(config, args.mode),
+        model_config=_model_by_alias(config, args.model_alias),
+    )
+    print(f"Stored {correction.correction_id}")
+
+
+def cmd_review_asset(args: argparse.Namespace) -> None:
+    from .llm_client import LLMClient
+
+    config = load_config(args.config)
+    event = review_asset(
+        AssetService(args.data_dir),
+        args.asset_id,
+        args.role,
+        client=LLMClient(config, args.mode),
+        model_config=_model_by_alias(config, args.model_alias),
+    )
+    print(f"Stored {event.event_id}: {event.decision}")
+
+
+def cmd_adjudicate_asset(args: argparse.Namespace) -> None:
+    from .llm_client import LLMClient
+
+    config = load_config(args.config)
+    result = adjudicate_asset(
+        AssetService(args.data_dir),
+        args.asset_id,
+        client=LLMClient(config, args.mode),
+        model_config=_model_by_alias(config, args.model_alias),
+    )
+    print(f"Stored {result.adjudication_id}: {result.status} / {result.proposed_decision}")
+
+
+def cmd_run_asset_qa(args: argparse.Namespace) -> None:
+    result = run_asset_qa(AssetService(args.data_dir), args.asset_id)
+    print(f"Stored {result.quality_check_id}: {'passed' if result.passed else 'failed'}")
+
+
+def cmd_prepare_flywheel_review(args: argparse.Namespace) -> None:
+    from .llm_client import LLMClient
+
+    config = load_config(args.config)
+    service = AssetService(args.data_dir)
+    client = LLMClient(config, args.mode)
+    correction_model = _model_by_alias(config, args.correction_model)
+    reviewer_a_model = _model_by_alias(config, args.reviewer_a_model)
+    reviewer_b_model = _model_by_alias(config, args.reviewer_b_model)
+    adjudicator_model = _model_by_alias(config, args.adjudicator_model)
+    for candidate in service.candidates.all():
+        if candidate.asset_status.value in {"proposed", "rework_required"}:
+            draft_correction(service, candidate.asset_id, client=client, model_config=correction_model)
+        current = service.candidates.get(candidate.asset_id)
+        if (
+            current
+            and current.asset_status.value == "correction_drafting"
+            and service.latest_correction(candidate.asset_id) is not None
+        ):
+            from .asset_schemas import AssetStatus
+
+            service.transition(
+                candidate.asset_id,
+                AssetStatus.AI_REVIEW_PENDING,
+                reason="resume after stored correction draft",
+            )
+        correction = service.latest_correction(candidate.asset_id)
+        roles = {row.review_role for row in service.current_reviews_for(candidate.asset_id)}
+        if "reviewer_a" not in roles:
+            review_asset(
+                service, candidate.asset_id, "reviewer_a", client=client, model_config=reviewer_a_model
+            )
+        if "reviewer_b" not in roles:
+            review_asset(
+                service, candidate.asset_id, "reviewer_b", client=client, model_config=reviewer_b_model
+            )
+        adjudication = service.current_adjudication_for(candidate.asset_id)
+        if adjudication is None:
+            adjudicate_asset(service, candidate.asset_id, client=client, model_config=adjudicator_model)
+        current = service.candidates.get(candidate.asset_id)
+        if current and current.asset_status.value == "qa_pending":
+            run_asset_qa(service, candidate.asset_id)
+        print(f"Prepared {candidate.asset_id}: {service.candidates.get(candidate.asset_id).asset_status.value}")
+    bundle = build_expert_review_bundle(service, args.output)
+    print(f"Wrote {len(bundle)} expert review rows to {args.output}")
+
+
+def cmd_build_expert_review_bundle(args: argparse.Namespace) -> None:
+    df = build_expert_review_bundle(AssetService(args.data_dir), args.output)
+    print(f"Wrote {len(df)} expert review rows to {args.output}")
+
+
+def cmd_finalize_asset(args: argparse.Namespace) -> None:
+    finalize_asset(
+        AssetService(args.data_dir),
+        args.asset_id,
+        decision=args.decision,
+        reason=args.reason,
+        review_elapsed_seconds=args.review_elapsed_seconds,
+        reviewer_identifier=args.reviewer_identifier,
+        expert_override=args.expert_override == "yes",
+    )
+    print(f"Finalized {args.asset_id}: {args.decision}")
+
+
+def cmd_apply_expert_review_bundle(args: argparse.Namespace) -> None:
+    count = apply_expert_review_bundle(AssetService(args.data_dir), args.input)
+    print(f"Applied {count} legal PhD final review decisions")
+
+
+def cmd_build_dataset_release(args: argparse.Namespace) -> None:
+    release = build_dataset_release(
+        AssetService(args.data_dir), version=args.version, output_dir=args.output_dir or None
+    )
+    print(f"Built {release.dataset_release_id} with {len(release.asset_ids)} accepted assets")
+
+
+def cmd_validate_dataset_release(args: argparse.Namespace) -> None:
+    errors = validate_dataset_release(args.release)
+    if errors:
+        for error in errors:
+            print(f"ERROR: {error}")
+        raise SystemExit(1)
+    print("Dataset release validation OK")
+
+
+def cmd_run_asset_regression(args: argparse.Namespace) -> None:
+    from .llm_client import LLMClient
+
+    config = load_config(args.config)
+    results = run_asset_regressions(
+        AssetService(args.data_dir),
+        client=LLMClient(config, args.mode),
+        model_config=_model_by_alias(config, args.model_alias),
+        output_path=args.output,
+        force=args.force,
+    )
+    counts = pd.Series([row.regression_status for row in results]).value_counts().to_dict()
+    print(f"Wrote {len(results)} real regression reruns to {args.output}: {counts}")
+
+
+def cmd_upgrade_regression_assertions_v2(args: argparse.Namespace) -> None:
+    count = register_regression_assertions_v2(AssetService(args.data_dir))
+    print(f"Registered {count} regression assertion v2 revisions")
+
+
+def cmd_rescore_regression_v2(args: argparse.Namespace) -> None:
+    results = rescore_regression_outputs_v2(AssetService(args.data_dir), output_path=args.output)
+    counts = pd.Series([row.regression_status for row in results]).value_counts().to_dict()
+    print(f"Rescored {len(results)} existing real reruns with scoring v2: {counts}")
 
 
 def cmd_validate(args: argparse.Namespace) -> None:
@@ -438,6 +698,142 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--prompt-dir", default="prompts")
 
     sub = parser.add_subparsers(dest="command")
+
+    asset_candidates = sub.add_parser("build-asset-candidates")
+    asset_candidates.add_argument("--data-dir", default="data/flywheel")
+    asset_candidates.add_argument("--cases", default="data/eval_sets/legal_product_boundary_api_pilot_v1.jsonl")
+    asset_candidates.add_argument("--runs", default="outputs/product_boundary_api_pilot_v1/model_run_log.csv")
+    asset_candidates.add_argument(
+        "--reviewed", default="outputs/product_boundary_api_pilot_v1/human_review_priority_80_reviewed.csv"
+    )
+    asset_candidates.add_argument(
+        "--allow-same-source-bug-reproduction",
+        action="store_true",
+        help="Reuse SFT sources only as disclosed bug reproductions; they are never an independent test split",
+    )
+    asset_candidates.set_defaults(func=cmd_build_asset_candidates)
+
+    replacement_cmd = sub.add_parser("build-replacement-candidate")
+    replacement_cmd.add_argument("--data-dir", default="data/flywheel")
+    replacement_cmd.add_argument("--asset-id", required=True)
+    replacement_cmd.add_argument("--asset-type", choices=["sft", "preference", "regression"], required=True)
+    replacement_cmd.add_argument("--case-id", required=True)
+    replacement_cmd.add_argument("--cases", default="data/eval_sets/legal_product_boundary_api_pilot_v1.jsonl")
+    replacement_cmd.add_argument("--runs", default="outputs/product_boundary_api_pilot_v1/model_run_log.csv")
+    replacement_cmd.add_argument(
+        "--reviewed", default="outputs/product_boundary_api_pilot_v1/human_review_priority_80_reviewed.csv"
+    )
+    replacement_cmd.set_defaults(func=cmd_build_replacement_candidate)
+
+    lineage_cmd = sub.add_parser("backfill-asset-lineage")
+    lineage_cmd.add_argument("--data-dir", default="data/flywheel")
+    lineage_cmd.add_argument("--review-round-dir", default="outputs/flywheel/review_rounds")
+    lineage_cmd.set_defaults(func=cmd_backfill_asset_lineage)
+
+    blind_v2_cmd = sub.add_parser("run-blind-reviews-v2")
+    blind_v2_cmd.add_argument("--data-dir", default="data/flywheel")
+    blind_v2_cmd.add_argument("--config", default="configs/pilots/qianfan_product_boundary_eval.yaml")
+    blind_v2_cmd.add_argument("--mode", choices=["mock", "api"], default="api")
+    blind_v2_cmd.add_argument("--reviewer-a-model", default="qianfan_qwen35_27b")
+    blind_v2_cmd.add_argument("--reviewer-b-model", default="qianfan_ernie_50")
+    blind_v2_cmd.add_argument("--adjudicator-model", default="qianfan_deepseek_v4_pro")
+    blind_v2_cmd.add_argument("--raw-output-dir", default="outputs/flywheel/blind_reviews_v2")
+    blind_v2_cmd.set_defaults(func=cmd_run_blind_reviews_v2)
+
+    correction_cmd = sub.add_parser("draft-correction")
+    correction_cmd.add_argument("--data-dir", default="data/flywheel")
+    correction_cmd.add_argument("--asset-id", required=True)
+    correction_cmd.add_argument("--config", default="configs/pilots/qianfan_product_boundary_eval.yaml")
+    correction_cmd.add_argument("--model-alias", default="qianfan_deepseek_v4_pro")
+    correction_cmd.add_argument("--mode", choices=["mock", "api"], default="api")
+    correction_cmd.set_defaults(func=cmd_draft_correction)
+
+    asset_review_cmd = sub.add_parser("review-asset")
+    asset_review_cmd.add_argument("--data-dir", default="data/flywheel")
+    asset_review_cmd.add_argument("--asset-id", required=True)
+    asset_review_cmd.add_argument("--role", choices=["reviewer_a", "reviewer_b"], required=True)
+    asset_review_cmd.add_argument("--config", default="configs/pilots/qianfan_product_boundary_eval.yaml")
+    asset_review_cmd.add_argument("--model-alias", required=True)
+    asset_review_cmd.add_argument("--mode", choices=["mock", "api"], default="api")
+    asset_review_cmd.set_defaults(func=cmd_review_asset)
+
+    asset_adjudicate_cmd = sub.add_parser("adjudicate-asset")
+    asset_adjudicate_cmd.add_argument("--data-dir", default="data/flywheel")
+    asset_adjudicate_cmd.add_argument("--asset-id", required=True)
+    asset_adjudicate_cmd.add_argument("--config", default="configs/pilots/qianfan_product_boundary_eval.yaml")
+    asset_adjudicate_cmd.add_argument("--model-alias", default="qianfan_qwen35_27b")
+    asset_adjudicate_cmd.add_argument("--mode", choices=["mock", "api"], default="api")
+    asset_adjudicate_cmd.set_defaults(func=cmd_adjudicate_asset)
+
+    asset_qa_cmd = sub.add_parser("run-asset-qa")
+    asset_qa_cmd.add_argument("--data-dir", default="data/flywheel")
+    asset_qa_cmd.add_argument("--asset-id", required=True)
+    asset_qa_cmd.set_defaults(func=cmd_run_asset_qa)
+
+    prepare_review_cmd = sub.add_parser("prepare-flywheel-review")
+    prepare_review_cmd.add_argument("--data-dir", default="data/flywheel")
+    prepare_review_cmd.add_argument("--config", default="configs/pilots/qianfan_product_boundary_eval.yaml")
+    prepare_review_cmd.add_argument("--mode", choices=["mock", "api"], default="api")
+    prepare_review_cmd.add_argument("--correction-model", default="qianfan_deepseek_v4_pro")
+    prepare_review_cmd.add_argument("--reviewer-a-model", default="qianfan_qwen35_27b")
+    prepare_review_cmd.add_argument("--reviewer-b-model", default="qianfan_glm_52")
+    prepare_review_cmd.add_argument("--adjudicator-model", default="qianfan_deepseek_v4_pro")
+    prepare_review_cmd.add_argument("--output", default="outputs/flywheel/expert_review_bundle.csv")
+    prepare_review_cmd.set_defaults(func=cmd_prepare_flywheel_review)
+
+    review_bundle_cmd = sub.add_parser("build-expert-review-bundle")
+    review_bundle_cmd.add_argument("--data-dir", default="data/flywheel")
+    review_bundle_cmd.add_argument("--output", default="outputs/flywheel/expert_review_bundle.csv")
+    review_bundle_cmd.set_defaults(func=cmd_build_expert_review_bundle)
+
+    finalize_cmd = sub.add_parser("finalize-asset")
+    finalize_cmd.add_argument("--data-dir", default="data/flywheel")
+    finalize_cmd.add_argument("--asset-id", required=True)
+    finalize_cmd.add_argument(
+        "--decision", choices=["accepted", "rework_required", "rejected"], required=True
+    )
+    finalize_cmd.add_argument("--reason", required=True)
+    finalize_cmd.add_argument("--review-elapsed-seconds", type=float, required=True)
+    finalize_cmd.add_argument("--reviewer-identifier", default="legal_phd")
+    finalize_cmd.add_argument("--expert-override", choices=["yes", "no"], default="no")
+    finalize_cmd.set_defaults(func=cmd_finalize_asset)
+
+    apply_review_bundle_cmd = sub.add_parser("apply-expert-review-bundle")
+    apply_review_bundle_cmd.add_argument("--data-dir", default="data/flywheel")
+    apply_review_bundle_cmd.add_argument("--input", default="outputs/flywheel/expert_review_bundle.csv")
+    apply_review_bundle_cmd.set_defaults(func=cmd_apply_expert_review_bundle)
+
+    dataset_release_cmd = sub.add_parser("build-dataset-release")
+    dataset_release_cmd.add_argument("--data-dir", default="data/flywheel")
+    dataset_release_cmd.add_argument("--version", default="legal_flywheel_v0.1.0")
+    dataset_release_cmd.add_argument("--output-dir", default="")
+    dataset_release_cmd.set_defaults(func=cmd_build_dataset_release)
+
+    validate_release_cmd = sub.add_parser("validate-dataset-release")
+    validate_release_cmd.add_argument("--release", required=True)
+    validate_release_cmd.set_defaults(func=cmd_validate_dataset_release)
+
+    regression_cmd = sub.add_parser("run-asset-regression")
+    regression_cmd.add_argument("--data-dir", default="data/flywheel")
+    regression_cmd.add_argument("--config", default="configs/pilots/qianfan_product_boundary_eval.yaml")
+    regression_cmd.add_argument("--model-alias", default="qianfan_deepseek_v4_pro")
+    regression_cmd.add_argument("--mode", choices=["mock", "api"], default="api")
+    regression_cmd.add_argument("--force", action="store_true", help="Run a new audited attempt")
+    regression_cmd.add_argument(
+        "--output", default="outputs/flywheel/legal_flywheel_v0.1.0/regression_results.csv"
+    )
+    regression_cmd.set_defaults(func=cmd_run_asset_regression)
+
+    assertion_v2_cmd = sub.add_parser("upgrade-regression-assertions-v2")
+    assertion_v2_cmd.add_argument("--data-dir", default="data/flywheel")
+    assertion_v2_cmd.set_defaults(func=cmd_upgrade_regression_assertions_v2)
+
+    rescore_v2_cmd = sub.add_parser("rescore-regression-v2")
+    rescore_v2_cmd.add_argument("--data-dir", default="data/flywheel")
+    rescore_v2_cmd.add_argument(
+        "--output", default="outputs/flywheel/legal_flywheel_v0.1.0/regression_results.csv"
+    )
+    rescore_v2_cmd.set_defaults(func=cmd_rescore_regression_v2)
 
     prepare = sub.add_parser("prepare-data")
     prepare.add_argument("--input-workbook", default="data/Legal_AI_Data_Governance_Eval_Harness_40_Core.xlsx")

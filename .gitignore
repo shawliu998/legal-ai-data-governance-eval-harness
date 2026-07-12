@@ -6,6 +6,7 @@ __pycache__/
 *.egg-info/
 build/
 dist/
+.DS_Store
 
 data/Legal_Agent_Eval_Harness_20_Samples.xlsx
 
@@ -73,3 +74,7 @@ outputs/a5_multiturn_intake_pilot_v1/*
 outputs_raw/
 
 data/practice_benchmark_pilot/source/
+
+# Legal flywheel restricted evidence. The curated public package lives under release/.
+data/flywheel/
+outputs/flywheel/

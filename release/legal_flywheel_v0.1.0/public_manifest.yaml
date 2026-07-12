@@ -1,0 +1,52 @@
+release_id: legal_flywheel_v0.1.0-public
+source_release_id: legal_flywheel_v0.1.0
+source_release_manifest_sha256: d9f9d19db07a8bca9f996829748deb8bd269cc486c50011d9f7770971233cf1b
+counts:
+  restricted_accepted_assets: 15
+  public_redacted_samples: 3
+official_regression:
+  attempt: 4
+  reruns: 5
+  passed: 0
+  failed: 5
+  workflow: V5/W4
+  evaluation_role: same_source_bug_reproduction
+split_policy:
+  independent_test_assets: 0
+  same_source_bug_reproductions: 5
+  cross_split_contamination_check: not_applicable_no_independent_test_split
+  signals_checked:
+  - source_case_id
+  - source_snapshot_id
+  - normalized_user_prompt_hash
+  - counterfactual_family_id
+included:
+- README.md
+- metrics_report.md
+- metrics_summary.csv
+- public_redacted_samples.jsonl
+- regression_summary.csv
+excluded_restricted_categories:
+- accepted_assets_full_text
+- expert_review_submissions
+- source_snapshot_history
+- blind_review_raw_outputs
+- regression_raw_prompts_and_outputs
+- api_usage_metadata_and_internal_rerun_ids
+license: MIT for repository code; evidence remains subject to stated source boundaries
+files:
+  README.md:
+    sha256: c67ab8791e3753fd6f0d2395e2d3a3c30a625e577c2ca679228caa9ddfaa8956
+    bytes: 1272
+  metrics_report.md:
+    sha256: ef12b2058630958f23a855914748add4ca62f0bb8c4ea0ff4dde6686a690ebc3
+    bytes: 2140
+  metrics_summary.csv:
+    sha256: a7ff39afa740f46b1edd88d321b3f2cb547a4611034b2e61e869d2a0deb5e2b2
+    bytes: 334
+  public_redacted_samples.jsonl:
+    sha256: 31e6178d8592273befd5d6501a17f1f59afb2973e3fe3f2809467234515f97cc
+    bytes: 5332
+  regression_summary.csv:
+    sha256: 6c9e479bc3aef1961aa7ad35c7de19a449778f86809c8807fdb882ed1ae3d1c0
+    bytes: 1203
