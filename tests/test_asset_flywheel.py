@@ -275,6 +275,9 @@ def test_scoring_v2_does_not_treat_structured_refusal_as_endorsement():
 def test_release_manifest_covers_15_assets_and_five_regressions(tmp_path: Path):
     data_dir = tmp_path / "data"
     release_dir = tmp_path / "release"
+    submission_file = tmp_path / "test.csv"
+    submission_file.write_bytes(b"test")
+    blind_raw_root = tmp_path / "blind_raw"
     service = AssetService(data_dir)
     types = [AssetType.SFT] * 5 + [AssetType.PREFERENCE] * 5 + [AssetType.REGRESSION] * 5
     for index, asset_type in enumerate(types, start=1):
@@ -316,6 +319,9 @@ def test_release_manifest_covers_15_assets_and_five_regressions(tmp_path: Path):
 
         answer_hash = hashlib.sha256(chosen.encode()).hexdigest()
         for role in ("reviewer_a", "reviewer_b"):
+            raw_path = blind_raw_root / asset_id / f"{role}.json"
+            raw_path.parent.mkdir(parents=True, exist_ok=True)
+            raw_path.write_text(json.dumps({"output_hash": "b" * 64}), encoding="utf-8")
             service.reviews.append(
                 review(asset_id, role).model_copy(
                     update={
@@ -325,6 +331,7 @@ def test_release_manifest_covers_15_assets_and_five_regressions(tmp_path: Path):
                         "source_snapshot_id": f"SNAP-{index}",
                         "corrected_answer_hash": answer_hash,
                         "review_protocol_version": "blind-v2",
+                        "raw_output_path": str(raw_path),
                     }
                 )
             )
@@ -365,7 +372,7 @@ def test_release_manifest_covers_15_assets_and_five_regressions(tmp_path: Path):
                 corrected_answer_hash=answer_hash,
                 expert_decision="accepted",
                 original_review_event_id=f"REV-{asset_id}-final_expert-01",
-                submission_file="test.csv",
+                submission_file=str(submission_file),
                 submission_file_sha256=hashlib.sha256(b"test").hexdigest(),
                 reconstruction_method="matched_submitted_text_and_reason",
                 created_at=NOW,
@@ -398,15 +405,12 @@ def test_release_manifest_covers_15_assets_and_five_regressions(tmp_path: Path):
                 )
             )
     build_dataset_release(service, output_dir=release_dir)
-    (release_dir / "review_evidence").mkdir()
-    (release_dir / "review_evidence" / "test.csv").write_bytes(b"test")
+    assert (release_dir / "review_evidence" / "test.csv").read_bytes() == b"test"
     for row in service.candidates.all():
         for role in ("reviewer_a", "reviewer_b"):
-            target = release_dir / "blind_review_evidence" / row.asset_id
-            target.mkdir(parents=True, exist_ok=True)
-            (target / f"{role}.json").write_text(
-                __import__("json").dumps({"output_hash": "b" * 64})
-            )
+            assert (
+                release_dir / "blind_review_evidence" / row.asset_id / f"{role}.json"
+            ).exists()
     accepted_rows = [
         __import__("json").loads(line)
         for line in (release_dir / "accepted_assets.jsonl").read_text().splitlines()
@@ -911,3 +915,50 @@ def test_empty_correction_retries_and_old_revision_does_not_count_as_current_dra
     assert revised.revision_number == 2
     assert revised.corrected_answer == "第二版完整答案"
     assert service.candidates.get(item.asset_id).asset_status == AssetStatus.AI_REVIEW_PENDING
+
+
+def test_truncated_correction_retries_before_storing_revision(tmp_path: Path):
+    class RetryClient:
+        def __init__(self) -> None:
+            self.calls = 0
+
+        def generate_with_metadata(self, **_: object):
+            self.calls += 1
+            if self.calls == 1:
+                return "这是一段被截断的答案", {"finish_reason": "length"}
+            return "这是完整答案。", {"finish_reason": "stop"}
+
+    service = AssetService(tmp_path)
+    item = candidate().model_copy(update={"asset_status": AssetStatus.REWORK_REQUIRED})
+    service.add_candidate(item)
+    service.corrections.append(correction())
+    client = RetryClient()
+    revised = draft_correction(
+        service,
+        item.asset_id,
+        client=client,
+        model_config={"alias": "stub", "model": "stub"},
+    )
+    assert client.calls == 2
+    assert revised.revision_number == 2
+    assert revised.corrected_answer == "这是完整答案。"
+
+
+def test_repeated_truncated_correction_is_not_stored(tmp_path: Path):
+    class TruncatedClient:
+        def generate_with_metadata(self, **_: object):
+            return "仍被截断", {"finish_reason": "length"}
+
+    service = AssetService(tmp_path)
+    item = candidate().model_copy(update={"asset_status": AssetStatus.REWORK_REQUIRED})
+    service.add_candidate(item)
+    service.corrections.append(correction())
+    with pytest.raises(ValueError, match="provider reported truncated output"):
+        draft_correction(
+            service,
+            item.asset_id,
+            client=TruncatedClient(),
+            model_config={"alias": "stub", "model": "stub"},
+        )
+    assert len(service.corrections.all()) == 1
+    assert service.candidates.get(item.asset_id).asset_status == AssetStatus.CORRECTION_DRAFTING

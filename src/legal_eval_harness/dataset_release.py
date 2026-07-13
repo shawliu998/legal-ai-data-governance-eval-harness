@@ -3,6 +3,7 @@ from __future__ import annotations
 import csv
 import hashlib
 import json
+import shutil
 import subprocess
 from collections import Counter
 from pathlib import Path
@@ -165,6 +166,33 @@ def select_release_assets(
     else:
         selected_regressions = regression_assets
     return training_assets + selected_regressions
+
+
+def _copy_release_evidence(
+    root: Path,
+    *,
+    asset_id: str,
+    review_events: list[ReviewEvent],
+    expert_binding: dict[str, Any],
+) -> None:
+    for event in review_events:
+        if event.review_protocol_version != "blind-v2":
+            continue
+        source = Path(event.raw_output_path)
+        if not event.raw_output_path or not source.exists():
+            raise ValueError(
+                f"missing blind-v2 raw evidence source: {asset_id}/{event.review_role}"
+            )
+        target = root / "blind_review_evidence" / asset_id / f"{event.review_role}.json"
+        target.parent.mkdir(parents=True, exist_ok=True)
+        shutil.copy2(source, target)
+    submission_file = str(expert_binding.get("submission_file") or "")
+    source = Path(submission_file)
+    if not submission_file or not source.exists():
+        raise ValueError(f"missing expert submission evidence source: {asset_id}")
+    target = root / "review_evidence" / source.name
+    target.parent.mkdir(parents=True, exist_ok=True)
+    shutil.copy2(source, target)
 
 
 def finalize_asset(
@@ -360,12 +388,25 @@ def build_dataset_release(
         correction = service.latest_correction(candidate.asset_id)
         qa = service.current_quality_check_for(candidate.asset_id)
         adjudication = service.current_adjudication_for(candidate.asset_id)
+        current_reviews = service.current_reviews_for(candidate.asset_id)
+        expert_binding = next(
+            (
+                row.model_dump(mode="json")
+                for row in reversed(service.expert_approval_bindings.all())
+                if row.asset_id == candidate.asset_id
+            ),
+            {},
+        )
+        _copy_release_evidence(
+            root,
+            asset_id=candidate.asset_id,
+            review_events=current_reviews,
+            expert_binding=expert_binding,
+        )
         record = {
             **included_candidate.model_dump(mode="json"),
             "correction": correction.model_dump(mode="json") if correction else {},
-            "review_events": [
-                row.model_dump(mode="json") for row in service.current_reviews_for(candidate.asset_id)
-            ],
+            "review_events": [row.model_dump(mode="json") for row in current_reviews],
             "adjudication": adjudication.model_dump(mode="json") if adjudication else {},
             "quality_check": qa.model_dump(mode="json") if qa else {},
             "regression_assertion": (
@@ -378,16 +419,7 @@ def build_dataset_release(
                 for row in service.source_snapshot_versions.all()
                 if row.asset_id == candidate.asset_id
             ],
-            "expert_approval_binding": (
-                next(
-                    (
-                        row.model_dump(mode="json")
-                        for row in reversed(service.expert_approval_bindings.all())
-                        if row.asset_id == candidate.asset_id
-                    ),
-                    {},
-                )
-            ),
+            "expert_approval_binding": expert_binding,
         }
         accepted_rows.append(record)
         if candidate.public_visibility == "public_redacted":
