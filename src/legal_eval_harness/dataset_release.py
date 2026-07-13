@@ -625,6 +625,10 @@ def refresh_release_after_regression(root: str | Path) -> None:
     if len(attempts) != 1:
         raise ValueError("official regression view must contain one attempt number")
     official_attempt = int(next(iter(attempts)))
+    scoring_revisions = set(results["scoring_revision"].astype(str))
+    if len(scoring_revisions) != 1:
+        raise ValueError("official regression view must contain one scoring revision")
+    scoring_revision = next(iter(scoring_revisions))
     attempt_dir = release_root / "regression_attempts" / f"attempt_{official_attempt:02d}"
     run_log_path = attempt_dir / "regression_run_log.jsonl"
     if not run_log_path.exists():
@@ -673,7 +677,7 @@ def refresh_release_after_regression(root: str | Path) -> None:
         f"| Blind-v2 AI conflict rate | {float(metric_map.get('ai_conflict_rate', 0)):.2%} | At least one deterministic conflict field. |",
         f"| Expert vs blind-v2 divergence rate | {float(metric_map.get('expert_vs_blind_v2_divergence_rate', 0)):.2%} | Workflow divergence, not model ranking. |",
         f"| Self-reported review entry median | {metric_map.get('median_self_reported_review_entry_seconds', '')} seconds | Reviewer-entered duration; not instrumented active review time. |",
-        f"| Official {evaluation_label} pass rate | {pass_rate:.2%} | Five real attempt-{official_attempt} reruns; strict product gates, not legal accuracy. |",
+        f"| Official {evaluation_label} pass rate | {pass_rate:.2%} | Five real attempt-{official_attempt} reruns under {scoring_revision}; strict product gates, not legal accuracy. |",
         "",
         f"## Official {evaluation_label} reruns",
         "",
@@ -687,14 +691,24 @@ def refresh_release_after_regression(root: str | Path) -> None:
     report_lines.extend(
         [
             "",
-            f"Attempt {official_attempt} is the official V5/W4 view. Immutable attempt directories and the",
+            f"Attempt {official_attempt} under {scoring_revision} is the official V5/W4 view. Immutable attempt directories and the",
             "append-only `regression_attempt_events.jsonl` are the system of record; `regression_results.csv`",
             "is only the current official view. Failed results are retained and are not legal-correctness scores.",
             "",
             "## Evidence boundary",
             "",
-            "This pilot is not a representative Chinese-law corpus, legal service, independent test estimate,",
-            "or model leaderboard. Full prompts, outputs, expert submissions, and lineage evidence remain restricted.",
+            *(
+                [
+                    "This pilot is not a representative Chinese-law corpus, legal service, statistically reliable",
+                    "legal-accuracy estimate, or model leaderboard. Full prompts, outputs, expert submissions,",
+                    "and lineage evidence remain restricted.",
+                ]
+                if independent_test
+                else [
+                    "This pilot is not a representative Chinese-law corpus, legal service, independent test estimate,",
+                    "or model leaderboard. Full prompts, outputs, expert submissions, and lineage evidence remain restricted.",
+                ]
+            ),
             "",
         ]
     )
