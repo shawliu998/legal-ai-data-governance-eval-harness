@@ -44,7 +44,9 @@ from .rag_v2 import DEFAULT_RAG_V2_FOCUS_CASES, build_rag_v2_report
 from .release_gate import build_release_gate
 from .regression_runner import (
     register_regression_assertions_v2,
+    register_regression_assertions_v3,
     rescore_regression_outputs_v2,
+    rescore_regression_outputs_v3,
     run_asset_regressions,
 )
 from .runner import build_run_plan, run_models
@@ -380,10 +382,21 @@ def cmd_upgrade_regression_assertions_v2(args: argparse.Namespace) -> None:
     print(f"Registered {count} regression assertion v2 revisions")
 
 
+def cmd_upgrade_regression_assertions_v3(args: argparse.Namespace) -> None:
+    count = register_regression_assertions_v3(AssetService(args.data_dir))
+    print(f"Registered {count} regression assertion v3 revisions")
+
+
 def cmd_rescore_regression_v2(args: argparse.Namespace) -> None:
     results = rescore_regression_outputs_v2(AssetService(args.data_dir), output_path=args.output)
     counts = pd.Series([row.regression_status for row in results]).value_counts().to_dict()
     print(f"Rescored {len(results)} existing real reruns with scoring v2: {counts}")
+
+
+def cmd_rescore_regression_v3(args: argparse.Namespace) -> None:
+    results = rescore_regression_outputs_v3(AssetService(args.data_dir), output_path=args.output)
+    counts = pd.Series([row.regression_status for row in results]).value_counts().to_dict()
+    print(f"Rescored {len(results)} existing real reruns with scoring v3: {counts}")
 
 
 def cmd_validate(args: argparse.Namespace) -> None:
@@ -899,12 +912,23 @@ def build_parser() -> argparse.ArgumentParser:
     assertion_v2_cmd.add_argument("--data-dir", default="data/flywheel")
     assertion_v2_cmd.set_defaults(func=cmd_upgrade_regression_assertions_v2)
 
+    assertion_v3_cmd = sub.add_parser("upgrade-regression-assertions-v3")
+    assertion_v3_cmd.add_argument("--data-dir", default="data/flywheel")
+    assertion_v3_cmd.set_defaults(func=cmd_upgrade_regression_assertions_v3)
+
     rescore_v2_cmd = sub.add_parser("rescore-regression-v2")
     rescore_v2_cmd.add_argument("--data-dir", default="data/flywheel")
     rescore_v2_cmd.add_argument(
         "--output", default="outputs/flywheel/legal_flywheel_v0.1.0/regression_results.csv"
     )
     rescore_v2_cmd.set_defaults(func=cmd_rescore_regression_v2)
+
+    rescore_v3_cmd = sub.add_parser("rescore-regression-v3")
+    rescore_v3_cmd.add_argument("--data-dir", default="data/flywheel")
+    rescore_v3_cmd.add_argument(
+        "--output", default="outputs/flywheel/legal_flywheel_v0.2.0/regression_results.csv"
+    )
+    rescore_v3_cmd.set_defaults(func=cmd_rescore_regression_v3)
 
     prepare = sub.add_parser("prepare-data")
     prepare.add_argument("--input-workbook", default="data/Legal_AI_Data_Governance_Eval_Harness_40_Core.xlsx")

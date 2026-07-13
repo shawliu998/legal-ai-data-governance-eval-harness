@@ -45,10 +45,12 @@ from legal_eval_harness.dataset_release import (
     validate_dataset_release,
 )
 from legal_eval_harness.regression_runner import (
+    REQUIRED_TOPIC_ALIASES_V3,
     _evaluate_output,
     _select_official_attempt,
     _write_new_attempt,
     build_regression_prompt,
+    register_regression_assertions_v3,
 )
 
 
@@ -893,6 +895,50 @@ def test_v01_and_v02_select_different_regression_cohorts():
         "ASSET-SFT-001",
         "ASSET-REGRESSION-006",
     }
+
+
+def test_v03_aliases_match_paraphrases_but_preserve_real_omissions(tmp_path: Path):
+    service = AssetService(tmp_path)
+    for asset_id, aliases in REQUIRED_TOPIC_ALIASES_V3.items():
+        service.assertions.append(
+            RegressionAssertion(
+                assertion_id=f"ASSERT-{asset_id}-02",
+                asset_id=asset_id,
+                expected_response_policy=["clarify", "human_review"],
+                required_topics=list(aliases),
+                required_topic_aliases={topic: [topic] for topic in aliases},
+                revision_number=2,
+                created_at=NOW,
+            )
+        )
+    assert register_regression_assertions_v3(service) == 5
+    current = service.assertion_for("ASSET-REGRESSION-006")
+    output = json.dumps(
+        {
+            "answer_now": False,
+            "clarification_questions": [
+                "有没有微信聊天或口头价款约定？",
+                "是否保留材料采购凭证？",
+                "工程是否已完工，甲方是否验收或实际使用？",
+                "工人是谁雇佣的，工资标准如何约定？",
+            ],
+            "initial_risk_assessment": {"human_review_recommended": True},
+        },
+        ensure_ascii=False,
+    )
+    checks, topics = _evaluate_output(output_text=output, assertion=current, source_snapshot={})
+    assert checks["required_topics"] is True
+    assert all(topics.values())
+
+    consumer = service.assertion_for("ASSET-REGRESSION-007")
+    incomplete = "请提供宣传页面截图、说明具体不符之处，并补充与商家的聊天记录。"
+    checks, topics = _evaluate_output(
+        output_text=incomplete,
+        assertion=consumer,
+        source_snapshot={},
+    )
+    assert checks["required_topics"] is False
+    assert topics["检测/鉴定"] is False
 
 
 def test_blind_v2_events_and_raw_evidence_are_revision_scoped(tmp_path: Path):

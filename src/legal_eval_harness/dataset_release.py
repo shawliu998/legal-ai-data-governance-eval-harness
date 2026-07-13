@@ -901,8 +901,16 @@ def validate_dataset_release(path: str | Path) -> list[str]:
             {"passed", "failed"}
         ):
             errors.append("invalid regression_status values")
-        if "scoring_revision" not in results or set(results["scoring_revision"]) != {"scoring-v2"}:
-            errors.append("official regression results are not uniformly scoring-v2")
+        release_version = str(manifest.get("version") or manifest.get("dataset_release_id") or "")
+        expected_scoring_revision = (
+            "scoring-v3" if release_version == "legal_flywheel_v0.2.0" else "scoring-v2"
+        )
+        if "scoring_revision" not in results or set(results["scoring_revision"]) != {
+            expected_scoring_revision
+        }:
+            errors.append(
+                f"official regression results are not uniformly {expected_scoring_revision}"
+            )
         attempt_numbers = set(results.get("rerun_attempt_number", []))
         if len(attempt_numbers) != 1:
             errors.append("official regression results must reference exactly one attempt")
@@ -1075,8 +1083,8 @@ def validate_v02_review_batch(
         if quality is None or not quality.passed:
             errors.append(f"missing passed current QA: {asset_id}")
         assertion = service.assertion_for(asset_id)
-        if assertion is None or assertion.revision_number != 2:
-            errors.append(f"missing regression assertion revision 2: {asset_id}")
+        if assertion is None or assertion.revision_number < 2:
+            errors.append(f"missing regression assertion revision 2 or later: {asset_id}")
         snapshots = [
             row for row in service.source_snapshot_versions.all() if row.asset_id == asset_id
         ]
