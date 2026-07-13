@@ -24,6 +24,10 @@ dataset:
     citation_grounding: 8
     adversarial_trap: 7
     counterfactual_pair: 8
+generation:
+  temperature: 0.2
+  max_output_tokens: 3200
+  timeout_seconds: 90
 models:
 - alias: qianfan_ernie_50
   role: target_vendor_candidate

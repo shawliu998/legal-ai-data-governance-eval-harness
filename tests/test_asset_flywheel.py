@@ -22,20 +22,35 @@ from legal_eval_harness.asset_schemas import (
     ReviewEvent,
 )
 from legal_eval_harness.asset_service import AssetService
-from legal_eval_harness.asset_audit import _blind_payload
-from legal_eval_harness.asset_candidate_builder import build_asset_candidates
+from legal_eval_harness.asset_audit import (
+    _blind_payload,
+    adjudicate_blind_v2,
+    run_blind_review_v2,
+)
+from legal_eval_harness.asset_candidate_builder import (
+    build_asset_candidates,
+    build_independent_regression_candidates,
+)
 from legal_eval_harness.asset_contamination import cross_split_contamination
-from legal_eval_harness.asset_quality import run_asset_qa
+from legal_eval_harness.asset_quality import (
+    correction_completeness_issues,
+    requeue_incomplete_corrections,
+    run_asset_qa,
+)
+from legal_eval_harness.asset_ai_review import draft_correction
 from legal_eval_harness.dataset_release import (
     build_dataset_release,
     refresh_release_after_regression,
+    select_release_assets,
     validate_dataset_release,
 )
 from legal_eval_harness.regression_runner import (
+    REQUIRED_TOPIC_ALIASES_V3,
     _evaluate_output,
     _select_official_attempt,
     _write_new_attempt,
     build_regression_prompt,
+    register_regression_assertions_v3,
 )
 
 
@@ -266,6 +281,9 @@ def test_scoring_v2_does_not_treat_structured_refusal_as_endorsement():
 def test_release_manifest_covers_15_assets_and_five_regressions(tmp_path: Path):
     data_dir = tmp_path / "data"
     release_dir = tmp_path / "release"
+    submission_file = tmp_path / "test.csv"
+    submission_file.write_bytes(b"test")
+    blind_raw_root = tmp_path / "blind_raw"
     service = AssetService(data_dir)
     types = [AssetType.SFT] * 5 + [AssetType.PREFERENCE] * 5 + [AssetType.REGRESSION] * 5
     for index, asset_type in enumerate(types, start=1):
@@ -307,6 +325,9 @@ def test_release_manifest_covers_15_assets_and_five_regressions(tmp_path: Path):
 
         answer_hash = hashlib.sha256(chosen.encode()).hexdigest()
         for role in ("reviewer_a", "reviewer_b"):
+            raw_path = blind_raw_root / asset_id / f"{role}.json"
+            raw_path.parent.mkdir(parents=True, exist_ok=True)
+            raw_path.write_text(json.dumps({"output_hash": "b" * 64}), encoding="utf-8")
             service.reviews.append(
                 review(asset_id, role).model_copy(
                     update={
@@ -316,6 +337,7 @@ def test_release_manifest_covers_15_assets_and_five_regressions(tmp_path: Path):
                         "source_snapshot_id": f"SNAP-{index}",
                         "corrected_answer_hash": answer_hash,
                         "review_protocol_version": "blind-v2",
+                        "raw_output_path": str(raw_path),
                     }
                 )
             )
@@ -356,7 +378,7 @@ def test_release_manifest_covers_15_assets_and_five_regressions(tmp_path: Path):
                 corrected_answer_hash=answer_hash,
                 expert_decision="accepted",
                 original_review_event_id=f"REV-{asset_id}-final_expert-01",
-                submission_file="test.csv",
+                submission_file=str(submission_file),
                 submission_file_sha256=hashlib.sha256(b"test").hexdigest(),
                 reconstruction_method="matched_submitted_text_and_reason",
                 created_at=NOW,
@@ -389,15 +411,12 @@ def test_release_manifest_covers_15_assets_and_five_regressions(tmp_path: Path):
                 )
             )
     build_dataset_release(service, output_dir=release_dir)
-    (release_dir / "review_evidence").mkdir()
-    (release_dir / "review_evidence" / "test.csv").write_bytes(b"test")
+    assert (release_dir / "review_evidence" / "test.csv").read_bytes() == b"test"
     for row in service.candidates.all():
         for role in ("reviewer_a", "reviewer_b"):
-            target = release_dir / "blind_review_evidence" / row.asset_id
-            target.mkdir(parents=True, exist_ok=True)
-            (target / f"{role}.json").write_text(
-                __import__("json").dumps({"output_hash": "b" * 64})
-            )
+            assert (
+                release_dir / "blind_review_evidence" / row.asset_id / f"{role}.json"
+            ).exists()
     accepted_rows = [
         __import__("json").loads(line)
         for line in (release_dir / "accepted_assets.jsonl").read_text().splitlines()
@@ -652,6 +671,69 @@ def test_preference_pii_scans_chosen_rejected_and_reason(tmp_path: Path):
     assert check.pii_check == "failed"
 
 
+@pytest.mark.parametrize(
+    "answer, expected_issue",
+    [
+        (
+            "这是一个足够长的法律分析。" * 20 + "这与劳动关系",
+            "long corrected answer ends without sentence-closing punctuation",
+        ),
+        (
+            "这是一个完整段落。" * 30 + "\n\n**",
+            "unbalanced Markdown bold delimiter",
+        ),
+    ],
+)
+def test_correction_completeness_gate_detects_truncated_outputs(answer: str, expected_issue: str):
+    assert expected_issue in correction_completeness_issues(answer)
+
+
+def test_correction_completeness_gate_accepts_complete_markdown_answer():
+    answer = "这是一个完整的法律分析段落。" * 20 + "*本回答不构成正式法律意见。*"
+    assert correction_completeness_issues(answer) == []
+
+
+def test_incomplete_pending_correction_is_requeued_without_expert_event(tmp_path: Path):
+    service = AssetService(tmp_path)
+    item = candidate()
+    service.add_candidate(item)
+    service.transition(item.asset_id, AssetStatus.CORRECTION_DRAFTING, reason="draft")
+    draft = correction().model_copy(
+        update={"corrected_answer": "这是一个足够长的法律分析。" * 20 + "这与劳动关系"}
+    )
+    service.corrections.append(draft)
+    service.transition(item.asset_id, AssetStatus.AI_REVIEW_PENDING, reason="review")
+    service.reviews.append(review(item.asset_id, "reviewer_a", corrected_answer=draft.corrected_answer))
+    service.reviews.append(review(item.asset_id, "reviewer_b", corrected_answer=draft.corrected_answer))
+    service.transition(item.asset_id, AssetStatus.QA_PENDING, reason="reviews complete")
+    service.quality_checks.append(
+        QualityCheck(
+            quality_check_id=f"QA-{item.asset_id}-01",
+            asset_id=item.asset_id,
+            pii_check="passed",
+            duplicate_check="passed",
+            source_traceability="passed",
+            contamination_check="passed",
+            law_effective_date_check="passed",
+            type_specific_check="passed",
+            correction_id=draft.correction_id,
+            correction_revision=draft.revision_number,
+            source_snapshot_id=item.source_snapshot_id,
+            corrected_answer_hash=hashlib.sha256(draft.corrected_answer.encode()).hexdigest(),
+            created_at=NOW,
+        )
+    )
+    service.transition(item.asset_id, AssetStatus.EXPERT_REVIEW_PENDING, reason="legacy QA passed")
+
+    results = requeue_incomplete_corrections(service)
+
+    assert item.asset_id in results
+    assert service.candidates.get(item.asset_id).asset_status == AssetStatus.REWORK_REQUIRED
+    assert not [row for row in service.reviews_for(item.asset_id) if row.review_role == "final_expert"]
+    assert service.current_quality_check_for(item.asset_id).type_specific_check == "failed"
+    assert service.transitions.all()[-1].actor_type == "qa_system"
+
+
 def test_membership_key_supports_asset_reuse_across_releases(tmp_path: Path):
     service = AssetService(tmp_path)
     service.add_candidate(candidate().model_copy(update={"asset_status": AssetStatus.ACCEPTED}))
@@ -699,3 +781,297 @@ def test_regression_attempt_directory_cannot_be_overwritten(tmp_path: Path):
             [{"asset_id": "A", "rerun_id": "RERUN-A", "output_text": "changed"}],
             service,
         )
+
+
+def test_v02_independent_regression_builder_is_disjoint_and_idempotent(tmp_path: Path):
+    case_ids = tuple(f"CORE-{index:03d}" for index in range(1, 6))
+    eval_rows = []
+    gold_rows = []
+    metadata_rows = []
+    run_rows = []
+    routing_rows = []
+    for index, case_id in enumerate(case_ids, start=1):
+        run_id = f"RUN-{case_id}-Model_A-V0"
+        eval_rows.append(
+            {
+                "sample_id": case_id,
+                "source_dataset": "self_authored_core_40",
+                "task_category": "consultation",
+                "user_question": f"独立问题 {index}",
+                "known_facts": f"独立事实 {index}",
+                "jurisdiction": "中国大陆",
+                "law_snapshot_date": "2026-07-07",
+            }
+        )
+        gold_rows.append(
+            {
+                "sample_id": case_id,
+                "key_missing_facts": "合同；通知；证据；时间",
+                "expected_behavior": "条件化回答并转人工",
+                "expected_answer_points": "识别事实缺口",
+                "risk_points": "避免过度结论",
+            }
+        )
+        metadata_rows.append(
+            {
+                "sample_id": case_id,
+                "risk_level": "high",
+                "human_review_required": "yes",
+            }
+        )
+        run_rows.append(
+            {
+                "run_id": run_id,
+                "sample_id": case_id,
+                "model_alias": "Model_A",
+                "version": "V0",
+                "run_status": "ok",
+                "output_text": "synthetic baseline",
+            }
+        )
+        routing_rows.append(
+            {"run_id": run_id, "main_error_type": "needs_human_review"}
+        )
+    import pandas as pd
+
+    paths = {}
+    for name, rows in {
+        "eval": eval_rows,
+        "gold": gold_rows,
+        "metadata": metadata_rows,
+        "runs": run_rows,
+        "routing": routing_rows,
+    }.items():
+        paths[name] = tmp_path / f"{name}.csv"
+        pd.DataFrame(rows).to_csv(paths[name], index=False)
+    kwargs = {
+        "data_dir": tmp_path / "flywheel",
+        "eval_input_path": paths["eval"],
+        "gold_labels_path": paths["gold"],
+        "metadata_path": paths["metadata"],
+        "runs_path": paths["runs"],
+        "routing_path": paths["routing"],
+        "selected_case_ids": case_ids,
+    }
+    first = build_independent_regression_candidates(**kwargs)
+    second = build_independent_regression_candidates(**kwargs)
+    assert [row.asset_id for row in first] == [f"ASSET-REGRESSION-{i:03d}" for i in range(6, 11)]
+    assert [row.asset_id for row in second] == [row.asset_id for row in first]
+    assert {row.source_case_id for row in first} == set(case_ids)
+    assert {row.source_snapshot["evaluation_role"] for row in first} == {"independent"}
+    assert {row.source_snapshot["source_license_status"] for row in first} == {"self_authored_internal"}
+    service = AssetService(tmp_path / "flywheel")
+    assert len(service.candidates.all()) == 5
+    assert len(service.assertions.all()) == 5
+    assert {row.revision_number for row in service.assertions.all()} == {2}
+
+
+def test_v01_and_v02_select_different_regression_cohorts():
+    training = [
+        candidate("ASSET-SFT-001", AssetType.SFT).model_copy(
+            update={"asset_status": AssetStatus.ACCEPTED}
+        )
+    ]
+    legacy = candidate("ASSET-REGRESSION-001", AssetType.REGRESSION).model_copy(
+        update={"asset_status": AssetStatus.ACCEPTED}
+    )
+    independent = candidate("ASSET-REGRESSION-006", AssetType.REGRESSION).model_copy(
+        update={
+            "asset_status": AssetStatus.ACCEPTED,
+            "source_case_id": "CORE-001",
+            "source_snapshot_id": "SNAP-CORE-001",
+            "source_snapshot": {
+                "law_snapshot_date": "2026-07-07",
+                "evaluation_role": "independent",
+            },
+        }
+    )
+    rows = training + [legacy, independent]
+    assert {row.asset_id for row in select_release_assets(rows, "legal_flywheel_v0.1.0")} == {
+        "ASSET-SFT-001",
+        "ASSET-REGRESSION-001",
+    }
+    assert {row.asset_id for row in select_release_assets(rows, "legal_flywheel_v0.2.0")} == {
+        "ASSET-SFT-001",
+        "ASSET-REGRESSION-006",
+    }
+
+
+def test_v03_aliases_match_paraphrases_but_preserve_real_omissions(tmp_path: Path):
+    service = AssetService(tmp_path)
+    for asset_id, aliases in REQUIRED_TOPIC_ALIASES_V3.items():
+        service.assertions.append(
+            RegressionAssertion(
+                assertion_id=f"ASSERT-{asset_id}-02",
+                asset_id=asset_id,
+                expected_response_policy=["clarify", "human_review"],
+                required_topics=list(aliases),
+                required_topic_aliases={topic: [topic] for topic in aliases},
+                revision_number=2,
+                created_at=NOW,
+            )
+        )
+    assert register_regression_assertions_v3(service) == 5
+    current = service.assertion_for("ASSET-REGRESSION-006")
+    output = json.dumps(
+        {
+            "answer_now": False,
+            "clarification_questions": [
+                "有没有微信聊天或口头价款约定？",
+                "是否保留材料采购凭证？",
+                "工程是否已完工，甲方是否验收或实际使用？",
+                "工人是谁雇佣的，工资标准如何约定？",
+            ],
+            "initial_risk_assessment": {"human_review_recommended": True},
+        },
+        ensure_ascii=False,
+    )
+    checks, topics = _evaluate_output(output_text=output, assertion=current, source_snapshot={})
+    assert checks["required_topics"] is True
+    assert all(topics.values())
+
+    consumer = service.assertion_for("ASSET-REGRESSION-007")
+    incomplete = "请提供宣传页面截图、说明具体不符之处，并补充与商家的聊天记录。"
+    checks, topics = _evaluate_output(
+        output_text=incomplete,
+        assertion=consumer,
+        source_snapshot={},
+    )
+    assert checks["required_topics"] is False
+    assert topics["检测/鉴定"] is False
+
+
+def test_blind_v2_events_and_raw_evidence_are_revision_scoped(tmp_path: Path):
+    class StubClient:
+        def generate_with_metadata(self, **_: object):
+            return (
+                json.dumps(
+                    {
+                        "decision": "approve",
+                        "findings": [],
+                        "response_policy": "clarify",
+                        "legal_conclusion_supported": True,
+                        "critical_facts_covered": True,
+                        "dangerous_action_advice": False,
+                        "unsupported_claims": [],
+                        "citation_support": "not_applicable",
+                        "should_clarify": True,
+                        "should_human_review": True,
+                    }
+                ),
+                {},
+            )
+
+    service = AssetService(tmp_path / "data")
+    item = candidate()
+    service.add_candidate(item)
+    c1 = correction()
+    service.corrections.append(c1)
+    model = {"alias": "stub", "model": "stub"}
+    raw = tmp_path / "raw"
+    first = run_blind_review_v2(
+        service, item.asset_id, "reviewer_a", client=StubClient(), model_config=model, raw_output_root=raw
+    )
+    run_blind_review_v2(
+        service, item.asset_id, "reviewer_b", client=StubClient(), model_config=model, raw_output_root=raw
+    )
+    assert first.event_id.endswith("blind-v2-01")
+    assert "revision_01" in first.raw_output_path
+
+    c2 = c1.model_copy(
+        update={
+            "correction_id": "COR-ASSET-SFT-001-02",
+            "revision_number": 2,
+            "corrected_answer": "第二版答案",
+        }
+    )
+    service.corrections.append(c2)
+    second = run_blind_review_v2(
+        service, item.asset_id, "reviewer_a", client=StubClient(), model_config=model, raw_output_root=raw
+    )
+    run_blind_review_v2(
+        service, item.asset_id, "reviewer_b", client=StubClient(), model_config=model, raw_output_root=raw
+    )
+    adjudication = adjudicate_blind_v2(
+        service, item.asset_id, client=StubClient(), model_config=model, raw_output_root=raw
+    )
+    assert second.event_id.endswith("blind-v2-02")
+    assert "revision_02" in second.raw_output_path
+    assert second.raw_output_path != first.raw_output_path
+    assert adjudication.adjudication_id.endswith("blind-v2-02")
+    assert {row.correction_revision for row in service.current_reviews_for(item.asset_id)} == {2}
+
+
+def test_empty_correction_retries_and_old_revision_does_not_count_as_current_draft(tmp_path: Path):
+    class RetryClient:
+        def __init__(self) -> None:
+            self.calls = 0
+
+        def generate_with_metadata(self, **_: object):
+            self.calls += 1
+            return ("" if self.calls == 1 else "第二版完整答案", {})
+
+    service = AssetService(tmp_path)
+    item = candidate().model_copy(update={"asset_status": AssetStatus.REWORK_REQUIRED})
+    service.add_candidate(item)
+    service.corrections.append(correction())
+    service.transition(item.asset_id, AssetStatus.CORRECTION_DRAFTING, reason="start revision 2")
+    assert service.has_stored_correction_for_current_draft(item.asset_id) is False
+    client = RetryClient()
+    revised = draft_correction(
+        service,
+        item.asset_id,
+        client=client,
+        model_config={"alias": "stub", "model": "stub"},
+    )
+    assert client.calls == 2
+    assert revised.revision_number == 2
+    assert revised.corrected_answer == "第二版完整答案"
+    assert service.candidates.get(item.asset_id).asset_status == AssetStatus.AI_REVIEW_PENDING
+
+
+def test_truncated_correction_retries_before_storing_revision(tmp_path: Path):
+    class RetryClient:
+        def __init__(self) -> None:
+            self.calls = 0
+
+        def generate_with_metadata(self, **_: object):
+            self.calls += 1
+            if self.calls == 1:
+                return "这是一段被截断的答案", {"finish_reason": "length"}
+            return "这是完整答案。", {"finish_reason": "stop"}
+
+    service = AssetService(tmp_path)
+    item = candidate().model_copy(update={"asset_status": AssetStatus.REWORK_REQUIRED})
+    service.add_candidate(item)
+    service.corrections.append(correction())
+    client = RetryClient()
+    revised = draft_correction(
+        service,
+        item.asset_id,
+        client=client,
+        model_config={"alias": "stub", "model": "stub"},
+    )
+    assert client.calls == 2
+    assert revised.revision_number == 2
+    assert revised.corrected_answer == "这是完整答案。"
+
+
+def test_repeated_truncated_correction_is_not_stored(tmp_path: Path):
+    class TruncatedClient:
+        def generate_with_metadata(self, **_: object):
+            return "仍被截断", {"finish_reason": "length"}
+
+    service = AssetService(tmp_path)
+    item = candidate().model_copy(update={"asset_status": AssetStatus.REWORK_REQUIRED})
+    service.add_candidate(item)
+    service.corrections.append(correction())
+    with pytest.raises(ValueError, match="provider reported truncated output"):
+        draft_correction(
+            service,
+            item.asset_id,
+            client=TruncatedClient(),
+            model_config={"alias": "stub", "model": "stub"},
+        )
+    assert len(service.corrections.all()) == 1
+    assert service.candidates.get(item.asset_id).asset_status == AssetStatus.CORRECTION_DRAFTING

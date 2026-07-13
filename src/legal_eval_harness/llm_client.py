@@ -70,7 +70,7 @@ class LLMClient:
         )
 
     @retry(wait=wait_exponential(min=1, max=8), stop=stop_after_attempt(3))
-    def _api_generate(self, *, prompt: str, model_config: dict[str, Any]) -> tuple[str, dict[str, int]]:
+    def _api_generate(self, *, prompt: str, model_config: dict[str, Any]) -> tuple[str, dict[str, Any]]:
         try:
             from openai import OpenAI
         except ImportError as exc:
@@ -101,6 +101,7 @@ class LLMClient:
             "input_tokens": int(getattr(usage, "prompt_tokens", 0) or 0),
             "output_tokens": int(getattr(usage, "completion_tokens", 0) or 0),
             "total_tokens": int(getattr(usage, "total_tokens", 0) or 0),
+            "finish_reason": str(getattr(response.choices[0], "finish_reason", "") or ""),
         }
         return response.choices[0].message.content or "", usage_dict
 
@@ -111,7 +112,7 @@ class LLMClient:
         output_text: str,
         model_config: dict[str, Any],
         latency_ms: int,
-        usage: dict[str, int] | None,
+        usage: dict[str, Any] | None,
     ) -> dict[str, Any]:
         usage = usage or {}
         input_tokens = int(usage.get("input_tokens") or self._estimate_tokens(prompt))
@@ -125,6 +126,7 @@ class LLMClient:
             "estimated_cost": self._estimate_cost(model_config, input_tokens, output_tokens),
             "cost_currency": str(model_config.get("cost_currency") or "USD"),
             "usage_source": "api_usage" if usage else "estimated",
+            "finish_reason": str(usage.get("finish_reason") or ""),
         }
 
     @staticmethod

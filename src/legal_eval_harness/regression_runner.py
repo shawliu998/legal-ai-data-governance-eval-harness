@@ -7,6 +7,7 @@ from pathlib import Path
 from typing import Any
 
 import pandas as pd
+import yaml
 
 from .asset_schemas import AssetStatus, AssetType, RegressionResult
 from .asset_service import AssetService
@@ -47,6 +48,40 @@ REQUIRED_TOPIC_ALIASES_V2: dict[str, dict[str, list[str]]] = {
         "是否存在欺诈宣传": ["欺诈宣传", "宣传", "欺诈", "虚假"],
         "实际发货时间": ["实际发货时间", "发货时间", "约定日期", "迟延发货"],
         "订单金额": ["订单金额", "商品价款", "价款", "金额"],
+    },
+}
+
+
+REQUIRED_TOPIC_ALIASES_V3: dict[str, dict[str, list[str]]] = {
+    "ASSET-REGRESSION-006": {
+        "聊天报价": ["聊天报价", "微信聊天", "聊天记录", "报价记录", "口头约定", "价款约定", "单价", "总价"],
+        "材料单": ["材料单", "材料采购", "采购凭证", "材料凭证"],
+        "验收交付": ["验收交付", "工程是否完工", "是否已完工", "验收", "实际使用", "交付"],
+        "工人雇佣管理": ["工人雇佣管理", "工人是谁雇佣", "谁雇佣", "工资标准", "欠薪金额", "工人管理", "报酬约定"],
+    },
+    "ASSET-REGRESSION-007": {
+        "商品详情截图": ["商品详情截图", "宣传页面截图", "商品页面截图", "宣传页面", "详情页", "宣传内容"],
+        "实际差异": ["实际差异", "具体不符", "宣传不符", "哪些方面与实际不符", "功能、材质", "商品实物照片"],
+        "聊天承诺": ["聊天承诺", "聊天记录", "沟通记录", "商家承认", "商家解释", "销售承诺"],
+        "检测/鉴定": ["检测/鉴定", "检测", "鉴定", "检测报告", "质量报告"],
+    },
+    "ASSET-REGRESSION-008": {
+        "服务合同": ["服务合同", "设计合同", "完整合同", "合同条款", "合同原文"],
+        "素材来源授权": ["素材来源授权", "素材来源", "授权文件", "知识产权担保", "平台许可", "未授权素材", "素材许可"],
+        "验收标准": ["验收标准", "效果验收", "可量化验收", "书面异议", "验收"],
+        "修改记录": ["修改记录", "修改过程", "修改版本", "版本记录", "迭代记录", "修改意见"],
+    },
+    "ASSET-REGRESSION-009": {
+        "借款主体": ["借款主体", "谁借款", "公司借款", "老板个人借款", "债务人是", "借款人"],
+        "质押登记": ["质押登记", "出质登记", "办理登记", "登记情况", "是否登记"],
+        "股东会决议": ["股东会决议", "董事会决议", "公司决议", "内部决议", "有效决议"],
+        "欠薪情况": ["欠薪情况", "工资是否拖欠", "工资拖欠", "欠付工资", "大规模欠薪"],
+    },
+    "ASSET-REGRESSION-010": {
+        "素材授权": ["素材授权", "授权状况", "授权文件", "素材网站", "使用条款", "免费图库", "付费素材", "获取渠道"],
+        "合同 IP 条款": ["合同 IP 条款", "知识产权条款", "知识产权担保", "侵权责任", "风险承担", "素材使用", "合同约定"],
+        "投诉材料": ["投诉材料", "投诉内容", "正式侵权通知", "律师函", "投诉细节", "侵权通知"],
+        "尾款条件": ["尾款条件", "尾款支付条件", "付款条件", "付款节点", "拒付尾款"],
     },
 }
 
@@ -263,6 +298,30 @@ def register_regression_assertions_v2(service: AssetService) -> int:
     return created
 
 
+def register_regression_assertions_v3(service: AssetService) -> int:
+    """Version the independent-regression aliases without changing the required topics."""
+
+    created = 0
+    for asset_id, aliases in REQUIRED_TOPIC_ALIASES_V3.items():
+        current = service.assertion_for(asset_id)
+        if current is None:
+            raise ValueError(f"missing prior regression assertion for {asset_id}")
+        assertion = RegressionAssertion(
+            assertion_id=f"ASSERT-{asset_id}-03",
+            asset_id=asset_id,
+            expected_response_policy=current.expected_response_policy,
+            forbidden_claims=current.forbidden_claims,
+            required_topics=current.required_topics,
+            required_topic_aliases=aliases,
+            citation_required=current.citation_required,
+            revision_number=3,
+            created_at=utc_now_iso(),
+        )
+        if service.assertions.append(assertion):
+            created += 1
+    return created
+
+
 def _write_assertion_audit(
     service: AssetService,
     *,
@@ -352,12 +411,26 @@ def run_asset_regressions(
             refresh_release_after_regression(root)
             return sorted(reconciled, key=lambda row: row.asset_id)
     existing = service.regression_results.all()
+    release_manifest_path = root / "release_manifest.yaml"
+    if not release_manifest_path.exists():
+        raise ValueError("regression execution requires a built dataset release manifest")
+    release_manifest = yaml.safe_load(release_manifest_path.read_text(encoding="utf-8")) or {}
+    release_id = str(release_manifest.get("dataset_release_id", ""))
+    release_asset_ids = set(release_manifest.get("asset_ids") or [])
+    active_regression_members = {
+        row.asset_id
+        for row in service.memberships.all()
+        if row.dataset_release_id == release_id
+        and row.status.value == "included"
+        and row.split in {"test", "bug_reproduction"}
+    }
     candidates = [
         row
         for row in service.candidates.all()
         if row.asset_type == AssetType.REGRESSION
         and row.asset_status == AssetStatus.ACCEPTED
-        and row.dataset_membership_status.value == "included"
+        and row.asset_id in release_asset_ids
+        and row.asset_id in active_regression_members
     ]
     if len(candidates) != 5:
         raise ValueError(f"expected five included accepted regression assets; found {len(candidates)}")
@@ -402,7 +475,7 @@ def run_asset_regressions(
             failure_reason="" if passed else ",".join(key for key, value in checks.items() if not value),
             output_text_hash=hashlib.sha256(output_text.encode()).hexdigest(),
             rerun_attempt_number=attempt_number,
-            scoring_revision="scoring-v2",
+            scoring_revision=f"scoring-v{assertion.revision_number}",
             created_at=utc_now_iso(),
         )
         results.append(result)
@@ -486,6 +559,7 @@ def rescore_regression_outputs_v2(
             source_snapshot=candidate.source_snapshot,
         )
         passed = all(checks.values())
+        scoring_revision = f"scoring-v{assertion.revision_number}"
         source_result = next(
             (
                 row
@@ -501,7 +575,7 @@ def rescore_regression_outputs_v2(
                 if row.asset_id == asset_id
                 and row.rerun_id == str(log["rerun_id"])
                 and row.assertion_results == checks
-                and row.scoring_revision == "scoring-v2"
+                and row.scoring_revision == scoring_revision
             ),
             None,
         )
@@ -521,7 +595,7 @@ def rescore_regression_outputs_v2(
             failure_reason="" if passed else ",".join(key for key, value in checks.items() if not value),
             output_text_hash=str(log.get("output_text_hash", "")),
             rerun_attempt_number=attempt_number,
-            scoring_revision="scoring-v2",
+            scoring_revision=scoring_revision,
             source_regression_id=source_result.regression_id if source_result else "",
             created_at=utc_now_iso(),
         )
@@ -535,16 +609,28 @@ def rescore_regression_outputs_v2(
         run_log_path=run_log_path,
         output_path=root / "regression_assertion_audit.csv",
     )
+    scoring_revisions = {row.scoring_revision for row in results}
+    if len(scoring_revisions) != 1:
+        raise ValueError(f"rescored results must use one scoring revision: {sorted(scoring_revisions)}")
+    scoring_revision = next(iter(scoring_revisions))
     _append_attempt_event(
         root,
         {
-            "event_id": f"REG-ATTEMPT-{attempt_number:02d}-RESCORED-scoring-v2-{file_sha256(output_file)[:12]}",
+            "event_id": f"REG-ATTEMPT-{attempt_number:02d}-RESCORED-{scoring_revision}-{file_sha256(output_file)[:12]}",
             "event_type": "attempt_rescored",
             "attempt_number": attempt_number,
-            "scoring_revision": "scoring-v2",
+            "scoring_revision": scoring_revision,
             "official_results_sha256": file_sha256(output_file),
         },
     )
     _select_official_attempt(root, attempt_number, output_file)
     refresh_release_after_regression(root)
     return results
+
+
+def rescore_regression_outputs_v3(
+    service: AssetService,
+    *,
+    output_path: str | Path,
+) -> list[RegressionResult]:
+    return rescore_regression_outputs_v2(service, output_path=output_path)
